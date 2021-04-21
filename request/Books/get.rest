@@ -1,0 +1,4 @@
+GET http://localhost:3001/books
+
+###
+GET http://localhost:3001/books/606b386d3559187edc6ba7ec

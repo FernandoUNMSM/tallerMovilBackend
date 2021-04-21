@@ -1,0 +1,1 @@
+DELETE http://localhost:3001/books/606b3ecf0c69355ce067062c
