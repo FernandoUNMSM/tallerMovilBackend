@@ -16,14 +16,17 @@ router.post('/login', async (req, res) => {
   // console.log(body)
   const {username, password} = body
 
-  const user = await User.findOne({username})
+  // const user = await User.findOne({username})
+  //Aqui va el query de obtener un usuario
+
+  // console.log(user)
 
   const passwordCorrect = user === null
     ? false
     : await bcrypt.compare(password, user.passwordHash)
 
   if (!(user && passwordCorrect)) {
-    res.status(401).json({
+    return res.status(401).json({
       error: 'invalid user or password'
     })
   }
@@ -32,6 +35,7 @@ router.post('/login', async (req, res) => {
     id: user._id,
     username: user.username
   }
+
   const token = jwt.sign(
     userForToken,
     process.env.JWTSW,
@@ -48,4 +52,3 @@ router.post('/login', async (req, res) => {
 })
 
 module.exports = router
-

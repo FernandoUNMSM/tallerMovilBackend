@@ -1,5 +1,5 @@
 require('dotenv').config()
-require('./mongo')
+// require('./mongo') //Aca estaba la conexcion con mongo
 
 const express = require('express')
 const app = express()

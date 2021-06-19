@@ -4,12 +4,14 @@ const router = express.Router()
 
 const bcrypt = require('bcrypt')
 
-const User = require('../models/User')
+// const User = require('../models/User')
 
 router.get('/users', async (req, res) => {
-  const users = await User.find({}).populate('course', {
-    name: 1
-  })
+  // const users = await User.find({}).populate('courses', {
+  //   name: 1
+  // })
+  //Aqui va el query de obtener todos los usuarios
+
   res.status(200).json({
     users
   })
@@ -17,19 +19,20 @@ router.get('/users', async (req, res) => {
 
 router.post('/register', async (req, res, next) => {
   const {body} = req
-  const {username, name, password} = body
+  const {username, password, userType} = body
 
   const saltRounds = 10
   const passwordHash = await bcrypt.hash(password, saltRounds)
 
-  const user = new User({
-    username,
-    name,
-    passwordHash
-  })
+  // const user = new User({
+  //   username,
+  //   passwordHash,
+  //   userType
+  // })
 
   try {
-    const savedUser = await user.save()
+    // const savedUser = await user.save()
+    //Aqui va el query de guardar un usuario
     res.status(201).json(savedUser)
   } catch (e) {
     // next(e)
