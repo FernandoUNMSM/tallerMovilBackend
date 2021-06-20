@@ -15,6 +15,8 @@ const course = require('./routes/courses')
 const notFound = require('./middleware/notFound')
 const errors = require('./middleware/errors')
 
+
+
 app.use(cors())
 app.use(express.json())
 app.use(login)

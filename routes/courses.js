@@ -47,11 +47,13 @@ router.post('/courses', userExtractor, async (req,  res, next) => {
   //Aqui va el query para guardar un curso
 
   try {
-    const { usuario_id ,categoria_id, curso_nombre, description, conoci_previo, privacidad } = req.body
+    const { usuario_id ,categoria_id,codigo,imagen, curso_nombre, description, conoci_previo, privacidad } = req.body
 
     const newCourse = {
       usuario_id,
       categoria_id,
+      codigo,
+      imagen,
       curso_nombre,
       description,
       conoci_previo,

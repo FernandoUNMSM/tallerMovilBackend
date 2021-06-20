@@ -23,25 +23,30 @@ router.get('/users', async (req, res) => {
 
 router.post('/register', async (req, res, next) => {
   
-  const {nombre, password, correo} = req.body
+  const {usuario_nombre,usuario_apellidos, password, correo,url} = req.body
 
+  console.log(req.body)
   const saltRounds = 10
   const passwordHash = await bcrypt.hash(password, saltRounds)
 
-  const usuario_nombre= nombre
-  const usuario_contrasenia= passwordHash
+
+  const usuario_contrasenia = passwordHash
 
   let newUser = {
     usuario_nombre,
+    usuario_apellidos,
     usuario_contrasenia,
-    correo
+    correo,
+    url
   }
-
+  
+  console.log(newUser)
+  
   try {
     //Aqui va el query de guardar un usuario
-    await pool.query('INSERT INTO heroku_b3e0382f6ba83ba.usuarios SET ? ', newUser);
-    savedUser = await pool.query('SELECT * FROM heroku_b3e0382f6ba83ba.usuarios WHERE usuario_nombre = ?', [newUser.usuario_nombre]);
-    res.status(201).json(savedUser)
+    await pool.query('INSERT INTO heroku_b3e0382f6ba83ba.usuarios  set ? ', newUser);
+    const usuario = await pool.query('SELECT * FROM heroku_b3e0382f6ba83ba.usuarios WHERE usuario_nombre = ?', [newUser.usuario_nombre]);
+    res.status(201).json(usuario[0])
   } catch (e) {
     // next(e)
     res.status(400).json(e)
