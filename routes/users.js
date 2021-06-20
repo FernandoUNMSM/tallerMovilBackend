@@ -7,7 +7,7 @@ const bcrypt = require('bcrypt')
 // const User = require('../models/User')
 
 router.get('/users', async (req, res) => {
-  
+
   //Aqui va el query de obtener todos los usuarios
   
   try{
@@ -24,8 +24,8 @@ router.get('/users', async (req, res) => {
 })
 
 router.post('/register', async (req, res, next) => {
-  const {body} = req
-  const {nombre, password, correo} = body
+  
+  const {nombre, password, correo} = req.body
 
   const saltRounds = 10
   const passwordHash = await bcrypt.hash(password, saltRounds)
