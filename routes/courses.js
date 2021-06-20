@@ -1,7 +1,5 @@
 const express = require('express')
 const router = express.Router()
-// const Course = require('./../models/Courses')
-// const User = require('./../models/User')
 
 const userExtractor = require('./../middleware/userExtractor')
 
@@ -34,10 +32,14 @@ router.post('/courses', userExtractor, async (req,  res, next) => {
   // const user = await User.findById(req.userId)
 
 
-  // const newCourse = new Course({
-  //   name,
-  //   user: user._id
-  // })
+  const newCourse = {
+    user_id,
+    category_id,
+    name,
+    description,
+    conoci_previo,
+    privacidad
+  }
 
   try {
     // const savedCourse = await newCourse.save()

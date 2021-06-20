@@ -3,7 +3,6 @@ const router = express.Router()
 
 const bcrypt = require('bcrypt')
 const jwt = require('jsonwebtoken')
-const User = require('../models/User')
 
 router.get('/login', async (req, res) => {
   res.status(200).json({

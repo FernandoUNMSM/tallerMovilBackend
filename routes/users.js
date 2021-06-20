@@ -4,8 +4,6 @@ const router = express.Router()
 
 const bcrypt = require('bcrypt')
 
-// const User = require('../models/User')
-
 router.get('/users', async (req, res) => {
   // const users = await User.find({}).populate('courses', {
   //   name: 1
