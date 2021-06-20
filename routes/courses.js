@@ -6,17 +6,18 @@ const pool = require('../src/database');
 
 const userExtractor = require('./../middleware/userExtractor')
 
-router.get('/courses', userExtractor, async (req, res, next) => {
+router.get('/cursos/:iduser', userExtractor, async (req, res, next) => {
   
   // const {courses: coursesId} = await User.findById(req.userId)
   //Aqui va el query de buscar los cursos de un usuario
-  const {iduser} = req.body;
+  const {iduser} = req.params;
+  console.log(iduser)
   try{
     let list
 
     list = await pool.query('SELECT * FROM heroku_b3e0382f6ba83ba.cursos WHERE usuario_id = ?', [iduser]);
     res.status(200).json({
-      courses
+      list
     })
 
   }catch(err){
