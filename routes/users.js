@@ -1,7 +1,7 @@
 /* eslint-disable no-unused-vars */
 const express = require('express')
 const router = express.Router()
-
+const pool = require('../src/database');
 const bcrypt = require('bcrypt')
 
 // const User = require('../models/User')
@@ -32,7 +32,6 @@ router.post('/register', async (req, res, next) => {
 
   const usuario_nombre= nombre
   const usuario_contrasenia= passwordHash
-  const correo= correo
 
   let newUser = {
     usuario_nombre,

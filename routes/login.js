@@ -4,17 +4,16 @@ const pool = require('../src/database');
 const bcrypt = require('bcrypt')
 const jwt = require('jsonwebtoken')
 
-let multer = require('multer');
-let upload = multer();
 
 
-router.get('/login', upload.fields([]), async (req, res) => {
+
+router.get('/login', async (req, res) => {
   res.status(200).json({
     gawr: 'gura'
   })
 })
 
-router.post('/login', upload.fields([]), async (req, res) => {
+router.post('/login', async (req, res) => {
   
   
   const {username, password} = req.body

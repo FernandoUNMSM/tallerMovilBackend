@@ -6,9 +6,9 @@ const app = express()
 
 const cors = require('cors')
 
-/*
+
 const users = require('./routes/users')
-const login = require('./routes/login')*/
+const login = require('./routes/login')
 const course = require('./routes/courses')
 
 
@@ -18,9 +18,9 @@ const errors = require('./middleware/errors')
 
 
 
-/*
+
 app.use(login)
-app.use(users)*/
+app.use(users)
 app.use(course)
 
 
