@@ -1,36 +1,46 @@
 /* eslint-disable no-unused-vars */
 const express = require('express')
 const router = express.Router()
-
+const pool = require('../src/database');
 const bcrypt = require('bcrypt')
 
 router.get('/users', async (req, res) => {
-  // const users = await User.find({}).populate('courses', {
-  //   name: 1
-  // })
-  //Aqui va el query de obtener todos los usuarios
 
-  res.status(200).json({
-    users
-  })
+  //Aqui va el query de obtener todos los usuarios
+  
+  try{
+    let list
+
+    list = await pool.query('SELECT * FROM heroku_b3e0382f6ba83ba.usuarios');
+    res.status(200).json({
+      list
+    })
+
+  }catch(err){
+    next(err);
+  }
 })
 
 router.post('/register', async (req, res, next) => {
-  const {body} = req
-  const {username, password, userType} = body
+  
+  const {nombre, password, correo} = req.body
 
   const saltRounds = 10
   const passwordHash = await bcrypt.hash(password, saltRounds)
 
-  // const user = new User({
-  //   username,
-  //   passwordHash,
-  //   userType
-  // })
+  const usuario_nombre= nombre
+  const usuario_contrasenia= passwordHash
+
+  let newUser = {
+    usuario_nombre,
+    usuario_contrasenia,
+    correo
+  }
 
   try {
-    // const savedUser = await user.save()
     //Aqui va el query de guardar un usuario
+    await pool.query('INSERT INTO heroku_b3e0382f6ba83ba.usuarios SET ? ', newUser);
+    savedUser = await pool.query('SELECT * FROM heroku_b3e0382f6ba83ba.usuarios WHERE usuario_nombre = ?', [newUser.usuario_nombre]);
     res.status(201).json(savedUser)
   } catch (e) {
     // next(e)

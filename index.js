@@ -6,23 +6,21 @@ const app = express()
 
 const cors = require('cors')
 
-/*
+
 const users = require('./routes/users')
 const login = require('./routes/login')
-const course = require('./routes/courses')*/
+const course = require('./routes/courses')
 
 
 const notFound = require('./middleware/notFound')
 const errors = require('./middleware/errors')
 
-
-
-
-/*
+app.use(cors())
+app.use(express.json())
 app.use(login)
 app.use(users)
 app.use(course)
-*/
+
 
 app.get('/', (req, res) => {
   res.status(200).json({

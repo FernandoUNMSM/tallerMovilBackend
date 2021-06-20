@@ -1,8 +1,12 @@
 const express = require('express')
 const router = express.Router()
-
+const pool = require('../src/database');
 const bcrypt = require('bcrypt')
 const jwt = require('jsonwebtoken')
+
+// let multer = require('multer');
+// let upload = multer();
+
 
 router.get('/login', async (req, res) => {
   res.status(200).json({
@@ -10,19 +14,20 @@ router.get('/login', async (req, res) => {
   })
 })
 
+
 router.post('/login', async (req, res) => {
-  const {body} = req
-  // console.log(body)
-  const {username, password} = body
-
-  // const user = await User.findOne({username})
+  
+  console.log(req.body)
+  const {username, password} = req.body
+  
+  
   //Aqui va el query de obtener un usuario
-
-  // console.log(user)
-
+  const user = await pool.query('SELECT * FROM heroku_b3e0382f6ba83ba.usuarios WHERE usuario_nombre = ?', [username]);
+  
+  
   const passwordCorrect = user === null
     ? false
-    : await bcrypt.compare(password, user.passwordHash)
+    : await bcrypt.compare(password, user.usuario_contrasenia)
 
   if (!(user && passwordCorrect)) {
     return res.status(401).json({
