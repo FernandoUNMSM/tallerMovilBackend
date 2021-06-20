@@ -17,8 +17,8 @@ const errors = require('./middleware/errors')
 
 
 
-
-
+app.use(express.json())
+app.use(cors())
 app.use(login)
 app.use(users)
 app.use(course)

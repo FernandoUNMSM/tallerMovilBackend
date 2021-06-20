@@ -17,17 +17,20 @@ router.get('/login', async (req, res) => {
 
 router.post('/login', upload.fields([]), async (req, res) => {
   
-  console.log (req.body)
+  
   const {username, password} = req.body
   
   
   //Aqui va el query de obtener un usuario
   const user = await pool.query('SELECT * FROM heroku_b3e0382f6ba83ba.usuarios WHERE usuario_nombre = ?', [username]);
   
-  
+  passwordHash=user[0].usuario_contrasenia
+
+  console.log(passwordHash)
+
   const passwordCorrect = user === null
     ? false
-    : await bcrypt.compare(password, user.usuario_contrasenia)
+    : await bcrypt.compare(password, passwordHash)
 
   if (!(user && passwordCorrect)) {
     return res.status(401).json({
