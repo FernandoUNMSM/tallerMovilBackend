@@ -18,11 +18,11 @@ router.post('/login', upload.fields([]), async (req, res) => {
   const {correo, password} = req.body
   
   const user = await pool.query('SELECT * FROM heroku_b3e0382f6ba83ba.usuarios WHERE correo = ?', [correo]);
+  passwordHash = user[0] ? user[0].usuario_contrasenia : false
+  // console.log(user[0])
   res.status(200).json({
-    user: user[0]
+    user: passwordHash
   })
-  // passwordHash = user[0] ? user[0].usuario_contrasenia : false
-  // // console.log(user[0])
 
   // const passwordCorrect = user[0] === undefined
   //   ? false
