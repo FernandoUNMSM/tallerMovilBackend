@@ -6,8 +6,6 @@ const bcrypt = require('bcrypt')
 const userExtractor = require('./../middleware/userExtractor')
 
 router.get('/users', async (req, res) => {
-
-  //Aqui va el query de obtener todos los usuarios
   
   try{
     let list
@@ -23,16 +21,10 @@ router.get('/users', async (req, res) => {
 })
 
 router.post('/useredit/:id', userExtractor, async (req, res) => {
-
-  //Aqui va el query de updatear el usuario
-
-  
   try{
     const { id } = req.params
     const { usuario_nombre,usuario_apellidos, correo } = req.body;
   
-  
-      
     const newUser = {
       usuario_nombre,
       usuario_apellidos,
@@ -40,15 +32,12 @@ router.post('/useredit/:id', userExtractor, async (req, res) => {
     }
     console.log(newUser)
     
-    
     await pool.query('UPDATE heroku_b3e0382f6ba83ba.usuarios set ? WHERE usuario_id = ?', [newUser, id]);
     const user1 = await pool.query('SELECT * FROM heroku_b3e0382f6ba83ba.usuarios WHERE usuario_id = ?', [id]);
    
     res.status(200).json({
       user1
     })
-    
-
   }catch(err){
     next(err);
   }
@@ -58,8 +47,12 @@ router.post('/useredit/:id', userExtractor, async (req, res) => {
 
 router.post('/register', async (req, res, next) => {
   
-  const {usuario_nombre,usuario_apellidos, password, correo,url} = req.body
-
+  const {usuario_nombre, usuario_apellidos, password, correo,url} = req.body
+  if(!password) {
+    return res.status(400).json({
+      error: 'data invalid'
+    })
+  }
   console.log(req.body)
   const saltRounds = 10
   const passwordHash = await bcrypt.hash(password, saltRounds)
@@ -75,8 +68,6 @@ router.post('/register', async (req, res, next) => {
     correo,
     url
   }
-  
-  console.log(newUser)
   
   try {
     //Aqui va el query de guardar un usuario

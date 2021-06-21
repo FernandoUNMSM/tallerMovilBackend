@@ -8,6 +8,9 @@ const ERROR_HANDLERS = {
   JsonWebTokenError: res => res.status(401).json({
     error: 'token is invalid'
   }),
+  Error: res => res.status(400).json({
+    error: 'data invalid'
+  }),
   defaultError: res => res.status(500).end()
 }
 

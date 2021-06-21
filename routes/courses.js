@@ -6,10 +6,9 @@ const pool = require('../src/database');
 
 const userExtractor = require('./../middleware/userExtractor')
 
+// router.get('router')
+
 router.get('/cursos/:iduser', userExtractor, async (req, res, next) => {
-  
-  // const {courses: coursesId} = await User.findById(req.userId)
-  //Aqui va el query de buscar los cursos de un usuario
   const {iduser} = req.params;
   console.log(iduser)
   try{
@@ -26,9 +25,6 @@ router.get('/cursos/:iduser', userExtractor, async (req, res, next) => {
 })
 
 router.get('/courses/:id', userExtractor, async (req, res, next) => {
-  
-  // const course = await Course.findById(courseId)
-  //Aqui va el query para obtener un curso especifico por su id
   const { id } = req.params;
   try{
     const course = await pool.query('SELECT * FROM heroku_b3e0382f6ba83ba.cursos WHERE curso_id = ?', [id]);
@@ -42,8 +38,6 @@ router.get('/courses/:id', userExtractor, async (req, res, next) => {
 })
 
 router.post('/courses', userExtractor, async (req,  res, next) => {
-  // console.log(req.body)
-  
   const { usuario_id ,categoria_id,codigo,imagen, curso_nombre, descripcion, conoci_previo, privacidad_id } = req.body
 
   const newCourse = {
@@ -56,6 +50,7 @@ router.post('/courses', userExtractor, async (req,  res, next) => {
     conoci_previo,
     privacidad_id
   }
+
   try {
     await pool.query('INSERT INTO heroku_b3e0382f6ba83ba.cursos SET ? ', newCourse);
     const savedCourse = await pool.query('SELECT * FROM heroku_b3e0382f6ba83ba.cursos WHERE curso_nombre = ?', [curso_nombre]);
@@ -63,7 +58,6 @@ router.post('/courses', userExtractor, async (req,  res, next) => {
 
     res.status(201).json(savedCourse)//Aca se debe de enviar el nuevo curso creado
   } catch (e) {
-    console.error(e.name)
     next(e)
   }
 })
