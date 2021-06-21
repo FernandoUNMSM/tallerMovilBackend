@@ -5,7 +5,8 @@ const express = require('express')
 const app = express()
 
 const cors = require('cors')
-
+app.use(cors())
+app.use(express.json())
 
 const users = require('./routes/users')
 const login = require('./routes/login')
@@ -15,14 +16,9 @@ const course = require('./routes/courses')
 const notFound = require('./middleware/notFound')
 const errors = require('./middleware/errors')
 
-
-
-app.use(cors())
-app.use(express.json())
 app.use(login)
 app.use(users)
 app.use(course)
-
 
 app.get('/', (req, res) => {
   res.status(200).json({
@@ -39,8 +35,4 @@ const server = app.listen(PORT, () => {
   console.log(`La api esta en http://localhost:${PORT}`);
 })
 
-
-
 module.exports = { app, server }
-
-
