@@ -44,8 +44,7 @@ router.post('/login', upload.fields([]), async (req, res) => {
   // )
 
   res.status(200).json({
-    msg: 'heroku tu ptmr',
-    // token
+    user: user[0]
   })
 })
 
