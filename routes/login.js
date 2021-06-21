@@ -16,20 +16,14 @@ router.get('/login', async (req, res) => {
 
 
 router.post('/login', async (req, res) => {
-  
-  console.log(req.body)
-  
   const {correo, password} = req.body
   
-  
-  //Aqui va el query de obtener un usuario
   const user = await pool.query('SELECT * FROM heroku_b3e0382f6ba83ba.usuarios WHERE correo = ?', [correo]);
-  console.log(user)
-  passwordHash=user[0].usuario_contrasenia
 
-  console.log(passwordHash)
+  passwordHash = user[0] ? user[0].usuario_contrasenia : false
+  // console.log(user[0])
 
-  const passwordCorrect = user === null
+  const passwordCorrect = user[0] === undefined
     ? false
     : await bcrypt.compare(password, passwordHash)
 
@@ -40,7 +34,7 @@ router.post('/login', async (req, res) => {
   }
 
   const userForToken = {
-    id: user._id,
+    id: user[0].usuario_id,
     username: user.username
   }
 

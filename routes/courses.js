@@ -23,8 +23,6 @@ router.get('/cursos/:iduser', userExtractor, async (req, res, next) => {
   }catch(err){
     next(err);
   }
-
-  
 })
 
 router.get('/courses/:id', userExtractor, async (req, res, next) => {
@@ -44,29 +42,28 @@ router.get('/courses/:id', userExtractor, async (req, res, next) => {
 })
 
 router.post('/courses', userExtractor, async (req,  res, next) => {
+  // console.log(req.body)
   
-  //Aqui va el query para guardar un curso
+  const { usuario_id ,categoria_id,codigo,imagen, curso_nombre, descripcion, conoci_previo, privacidad_id } = req.body
 
+  const newCourse = {
+    usuario_id,
+    categoria_id,
+    codigo,
+    imagen,
+    curso_nombre,
+    descripcion,
+    conoci_previo,
+    privacidad_id
+  }
   try {
-    const { usuario_id ,categoria_id,codigo,imagen, curso_nombre, description, conoci_previo, privacidad } = req.body
-
-    const newCourse = {
-      usuario_id,
-      categoria_id,
-      codigo,
-      imagen,
-      curso_nombre,
-      description,
-      conoci_previo,
-      privacidad
-    }
-    
     await pool.query('INSERT INTO heroku_b3e0382f6ba83ba.cursos SET ? ', newCourse);
     const savedCourse = await pool.query('SELECT * FROM heroku_b3e0382f6ba83ba.cursos WHERE curso_nombre = ?', [curso_nombre]);
-    
+    console.log(savedCourse)
 
     res.status(201).json(savedCourse)//Aca se debe de enviar el nuevo curso creado
   } catch (e) {
+    console.error(e.name)
     next(e)
   }
 })
