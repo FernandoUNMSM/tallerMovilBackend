@@ -4,9 +4,8 @@ const pool = require('../src/database');
 const bcrypt = require('bcrypt')
 const jwt = require('jsonwebtoken')
 
-// let multer = require('multer');
-// let upload = multer();
-
+let multer = require('multer');
+let upload = multer();
 
 router.get('/login', async (req, res) => {
   res.status(200).json({
@@ -15,7 +14,7 @@ router.get('/login', async (req, res) => {
 })
 
 
-router.post('/login', async (req, res) => {
+router.post('/login', upload.fields([]), async (req, res) => {
   const {correo, password} = req.body
   
   const user = await pool.query('SELECT * FROM heroku_b3e0382f6ba83ba.usuarios WHERE correo = ?', [correo]);
