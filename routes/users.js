@@ -6,7 +6,6 @@ const bcrypt = require('bcrypt')
 const userExtractor = require('./../middleware/userExtractor')
 
 router.get('/users', async (req, res) => {
-  
   try{
     let list
 
@@ -23,7 +22,7 @@ router.get('/users', async (req, res) => {
 router.post('/useredit/:id', async (req, res) => {
   try{
     const { id } = req.params
-    const { usuario_nombre,usuario_apellidos, correo } = req.body;
+    const { usuario_nombre, usuario_apellidos, correo } = req.body;
   
     const newUser = {
       usuario_nombre,

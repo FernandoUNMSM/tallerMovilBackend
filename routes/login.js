@@ -2,7 +2,7 @@ const express = require('express')
 const router = express.Router()
 const pool = require('../src/database');
 const bcrypt = require('bcrypt')
-const jwt = require('jsonwebtoken')
+// const jwt = require('jsonwebtoken')
 
 let multer = require('multer');
 let upload = multer();
@@ -29,19 +29,6 @@ router.post('/login', upload.fields([]), async (req, res) => {
       error: 'invalid user or password'
     })
   }
-
-  // const userForToken = {
-  //   id: user[0].usuario_id,
-  //   username: user.username
-  // }
-
-  // const token = jwt.sign(
-  //   userForToken,
-  //   process.env.JWTSW,
-  //   {
-  //     expiresIn: 60 * 60 * 24 * 7
-  //   }
-  // )
 
   res.status(200).json({
     user: user[0]
