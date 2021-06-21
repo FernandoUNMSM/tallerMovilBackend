@@ -34,22 +34,22 @@ router.post('/login', upload.fields([]), async (req, res) => {
     })
   }
 
-  // const userForToken = {
-  //   id: user[0].usuario_id,
-  //   username: user.username
-  // }
+  const userForToken = {
+    id: user[0].usuario_id,
+    username: user.username
+  }
 
-  // const token = jwt.sign(
-  //   userForToken,
-  //   process.env.JWTSW,
-  //   {
-  //     expiresIn: 60 * 60 * 24 * 7
-  //   }
-  // )
+  const token = jwt.sign(
+    userForToken,
+    process.env.JWTSW,
+    {
+      expiresIn: 60 * 60 * 24 * 7
+    }
+  )
 
   res.status(200).json({
-    msg: 'heroku tu ptmr'
-    // token
+    msg: 'heroku tu ptmr',
+    token
   })
 })
 
