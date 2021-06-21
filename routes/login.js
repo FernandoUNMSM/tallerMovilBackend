@@ -19,11 +19,11 @@ router.post('/login', async (req, res) => {
   
   console.log(req.body)
   
-  const {username, password} = req.body
+  const {correo, password} = req.body
   
   
   //Aqui va el query de obtener un usuario
-  const user = await pool.query('SELECT * FROM heroku_b3e0382f6ba83ba.usuarios WHERE usuario_nombre = ?', [username]);
+  const user = await pool.query('SELECT * FROM heroku_b3e0382f6ba83ba.usuarios WHERE correo = ?', [correo]);
   console.log(user)
   passwordHash=user[0].usuario_contrasenia
 
