@@ -3,7 +3,7 @@ const express = require('express')
 const router = express.Router()
 const pool = require('../src/database');
 const bcrypt = require('bcrypt')
-//const userExtractor = require('./../middleware/userExtractor')
+const userExtractor = require('./../middleware/userExtractor')
 
 router.get('/users', async (req, res) => {
 
@@ -22,7 +22,7 @@ router.get('/users', async (req, res) => {
   }
 })
 
-router.post('/useredit/:id', async (req, res) => {
+router.post('/useredit/:id', userExtractor, async (req, res) => {
 
   //Aqui va el query de updatear el usuario
 
