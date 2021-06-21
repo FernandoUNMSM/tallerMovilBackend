@@ -18,6 +18,7 @@ router.get('/login', async (req, res) => {
 router.post('/login', async (req, res) => {
   
   console.log(req.body)
+  
   const {username, password} = req.body
   
   
@@ -26,7 +27,7 @@ router.post('/login', async (req, res) => {
   console.log(user)
   passwordHash=user[0].usuario_contrasenia
 
-  //console.log(passwordHash)
+  console.log(passwordHash)
 
   const passwordCorrect = user === null
     ? false
