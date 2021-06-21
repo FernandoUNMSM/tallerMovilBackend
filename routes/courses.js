@@ -8,7 +8,7 @@ const userExtractor = require('./../middleware/userExtractor')
 
 // router.get('router')
 
-router.get('/cursos/:iduser', userExtractor, async (req, res, next) => {
+router.get('/cursos/:iduser', async (req, res, next) => {
   const {iduser} = req.params;
   console.log(iduser)
   try{
@@ -24,7 +24,7 @@ router.get('/cursos/:iduser', userExtractor, async (req, res, next) => {
   }
 })
 
-router.get('/courses/:id', userExtractor, async (req, res, next) => {
+router.get('/courses/:id', async (req, res, next) => {
   const { id } = req.params;
   try{
     const course = await pool.query('SELECT * FROM heroku_b3e0382f6ba83ba.cursos WHERE curso_id = ?', [id]);
@@ -37,7 +37,7 @@ router.get('/courses/:id', userExtractor, async (req, res, next) => {
   
 })
 
-router.post('/courses', userExtractor, async (req,  res, next) => {
+router.post('/courses', async (req,  res, next) => {
   const { usuario_id ,categoria_id,codigo,imagen, curso_nombre, descripcion, conoci_previo, privacidad_id } = req.body
 
   const newCourse = {

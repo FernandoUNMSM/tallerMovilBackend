@@ -20,7 +20,7 @@ router.get('/users', async (req, res) => {
   }
 })
 
-router.post('/useredit/:id', userExtractor, async (req, res) => {
+router.post('/useredit/:id', async (req, res) => {
   try{
     const { id } = req.params
     const { usuario_nombre,usuario_apellidos, correo } = req.body;

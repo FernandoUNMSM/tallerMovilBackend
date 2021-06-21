@@ -19,10 +19,6 @@ router.post('/login', upload.fields([]), async (req, res) => {
   
   const user = await pool.query('SELECT * FROM heroku_b3e0382f6ba83ba.usuarios WHERE correo = ?', [correo]);
   passwordHash = user[0] ? user[0].usuario_contrasenia : false
-  // console.log(user[0])
-  // res.status(200).json({
-  //   user: passwordHash
-  // })
 
   const passwordCorrect = user[0] === undefined
     ? false
@@ -34,22 +30,22 @@ router.post('/login', upload.fields([]), async (req, res) => {
     })
   }
 
-  const userForToken = {
-    id: user[0].usuario_id,
-    username: user.username
-  }
+  // const userForToken = {
+  //   id: user[0].usuario_id,
+  //   username: user.username
+  // }
 
-  const token = jwt.sign(
-    userForToken,
-    process.env.JWTSW,
-    {
-      expiresIn: 60 * 60 * 24 * 7
-    }
-  )
+  // const token = jwt.sign(
+  //   userForToken,
+  //   process.env.JWTSW,
+  //   {
+  //     expiresIn: 60 * 60 * 24 * 7
+  //   }
+  // )
 
   res.status(200).json({
     msg: 'heroku tu ptmr',
-    token
+    // token
   })
 })
 
