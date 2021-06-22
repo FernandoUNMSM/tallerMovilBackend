@@ -6,7 +6,7 @@ const pool = require('../src/database');
 
 const userExtractor = require('./../middleware/userExtractor')
 
-router.get('/cursos/:iduser', userExtractor, async (req, res, next) => {
+router.get('/cursos/:iduser', async (req, res, next) => {
   
   // const {courses: coursesId} = await User.findById(req.userId)
   //Aqui va el query de buscar los cursos de un usuario
@@ -27,11 +27,12 @@ router.get('/cursos/:iduser', userExtractor, async (req, res, next) => {
   
 })
 
-router.get('/courses/:id', userExtractor, async (req, res, next) => {
+router.get('/courses/:id', async (req, res, next) => {
   
   // const course = await Course.findById(courseId)
   //Aqui va el query para obtener un curso especifico por su id
   const { id } = req.params;
+  console.log(id)
   try{
     const course = await pool.query('SELECT * FROM heroku_b3e0382f6ba83ba.cursos WHERE curso_id = ?', [id]);
     res.status(200).json({
@@ -43,7 +44,7 @@ router.get('/courses/:id', userExtractor, async (req, res, next) => {
   
 })
 
-router.post('/courses', userExtractor, async (req,  res, next) => {
+router.post('/courses', async (req,  res, next) => {
   
   //Aqui va el query para guardar un curso
 
