@@ -3,7 +3,8 @@ const router = express.Router()
 const pool = require('../src/database');
 
 const userExtractor = require('./../middleware/userExtractor')
-
+let multer = require('multer');
+let upload = multer();
 router.get('/courses', async (req, res, next) => {
   try{
     let list
@@ -47,9 +48,9 @@ router.get('/courses/:id', async (req, res, next) => {
   
 })
 
-router.post('/courses', async (req,  res, next) => {
+router.post('/courses', upload.fields([]),  async (req,  res, next) => {
   const { usuario_id, categoria_id, codigo,imagen, curso_nombre, descripcion, conoci_previo, privacidad_id } = req.body
-
+  console.log(req.body)
   const newCourse = {
     usuario_id,
     categoria_id,

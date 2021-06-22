@@ -6,7 +6,9 @@ const app = express()
 
 const cors = require('cors')
 app.use(cors())
+app.use(express.urlencoded({extended: true}));
 app.use(express.json())
+
 
 const users = require('./routes/users')
 const login = require('./routes/login')
