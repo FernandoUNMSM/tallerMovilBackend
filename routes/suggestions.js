@@ -6,8 +6,6 @@ const pool = require('../src/database');
 router.get('/suggestions', async (req, res, next) => {
   
   //Aqui va el query para ver todas las sugerencias
-  const {iduser} = req.params;
-  console.log(iduser)
   try{
     let list
 
