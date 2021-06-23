@@ -36,7 +36,7 @@ router.post('/suggestions', async (req,  res, next) => {
       }
       
       await pool.query('INSERT INTO heroku_b3e0382f6ba83ba.sugerencias SET ? ', newSugesstion);
-      const savedSugesstion = await pool.query('SELECT * FROM heroku_b3e0382f6ba83ba.cursos WHERE curso_nombre = ?', [sugerencia_nombre_curso]);
+      const savedSugesstion = await pool.query('SELECT * FROM heroku_b3e0382f6ba83ba.sugerencias WHERE curso_nombre = ?', [sugerencia_nombre_curso]);
       
   
       res.status(201).json(savedSugesstion)//Aca se debe de enviar la sugerenia creada
