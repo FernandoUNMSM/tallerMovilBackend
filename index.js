@@ -10,6 +10,7 @@ const cors = require('cors')
 const users = require('./routes/users')
 const login = require('./routes/login')
 const course = require('./routes/courses')
+const suggestions = require('./routes/suggestions')
 
 
 const notFound = require('./middleware/notFound')
@@ -22,6 +23,7 @@ app.use(express.json())
 app.use(login)
 app.use(users)
 app.use(course)
+app.use(suggestions)
 
 
 app.get('/', (req, res) => {
