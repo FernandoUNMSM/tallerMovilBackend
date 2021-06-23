@@ -9,11 +9,21 @@ router.get('/courses', async (req, res, next) => {
   try{
     let list
 
-    list = await pool.query('SELECT * FROM heroku_b3e0382f6ba83ba.cursos');
+    list = await pool.query('SELECT * FROM heroku_b3e0382f6ba83ba.cursos WHERE');
     res.status(200).json({
       list
     })
 
+  }catch(err){
+    next(err);
+  }
+})
+router.get('/coursespublic', async (req, res, next) => {
+  try{
+    let cursos = await pool.query('SELECT * FROM heroku_b3e0382f6ba83ba.cursos WHERE privacidad_id = 1');
+    res.status(200).json({
+      cursos
+    })
   }catch(err){
     next(err);
   }
