@@ -76,13 +76,17 @@ router.get('/course-user/:idcurso', async (req, res, next) => {
   const { idcurso } = req.params;
 
   try{
-    let courseUser = await pool.query('SELECT * FROM heroku_b3e0382f6ba83ba.curso_usuario WHERE curso_id = ?', [idcurso]);
+
+    
+    let listUser = await pool.query('SELECT usuarios.usuario_id, usuario_nombre,usuario_apellidos, correo, url FROM heroku_b3e0382f6ba83ba.usuarios INNER JOIN heroku_b3e0382f6ba83ba.curso_usuario ON usuarios.usuario_id = curso_usuario.usuario_id WHERE curso_id = ? ', [idcurso]);
+        
 
     res.status(200).json({
-      message: "lista de usarios de un curso: "+[idcurso],
-      data: courseUser
+      message: "Lista del curso: " + idcurso,
+      data: listUser
     });
   }catch(err){
+    console.log(err)
     next(err)
   }
   
