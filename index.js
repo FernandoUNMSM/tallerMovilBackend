@@ -13,6 +13,7 @@ app.use(express.json())
 const users = require('./routes/users')
 const login = require('./routes/login')
 const course = require('./routes/courses')
+const suggestions = require('./routes/suggestions')
 
 
 const notFound = require('./middleware/notFound')
@@ -21,6 +22,7 @@ const errors = require('./middleware/errors')
 app.use(login)
 app.use(users)
 app.use(course)
+app.use(suggestions)
 
 app.get('/', (req, res) => {
   res.status(200).json({
