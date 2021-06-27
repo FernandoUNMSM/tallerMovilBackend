@@ -91,6 +91,15 @@ router.get('/course-user/:idcurso', async (req, res, next) => {
   }
   
 })
-
+router.get('/coursespublic', async (req, res, next) => {
+  try{
+    let cursos = await pool.query('SELECT * FROM heroku_b3e0382f6ba83ba.cursos WHERE privacidad_id = 1');
+    res.status(200).json({
+      cursos
+    })
+  }catch(err){
+    next(err);
+  }
+})
 
 module.exports = router
