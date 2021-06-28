@@ -74,6 +74,28 @@ router.post('/courses', async (req,  res, next) => {
   }
 })
 
+router.post('/coursesUsers', userExtractor, async (req,  res, next) => {
+  // Aqui va el query para guardar un curso
+
+  try {
+    const {curso_id, correo} = req.body
+
+    await pool.query('CALL crear_usuario_curso (?, ?) ', [curso_id, correo], function (err, result) {
+      if (err) {
+          console.log('err:', err)
+      } else {
+          console.log('results:', result)
+      }
+  })
+
+    const savedCourseUser = await pool.query('SELECT * FROM heroku_b3e0382f6ba83ba.curso_usuario')
+
+    res.status(201).json(savedCourseUser) // Aca se debe de enviar el nuevo curso creado
+  } catch (e) {
+    next(e)
+  }
+})
+
 router.get('/course-user/:idcurso', async (req, res, next) => {
   
   //Aqui va el query para obtener la lista de usuarios de un curso
