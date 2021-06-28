@@ -47,7 +47,7 @@ router.post('/courses', async (req,  res, next) => {
   //Aqui va el query para guardar un curso
 
   try {
-    const { usuario_id ,categoria_id,codigo,imagen, curso_nombre, description, conoci_previo, privacidad } = req.body
+    const { usuario_id ,categoria_id,codigo,imagen, curso_nombre, description, conoci_previo, privacidad_id } = req.body
 
     const newCourse = {
       usuario_id,
@@ -57,7 +57,7 @@ router.post('/courses', async (req,  res, next) => {
       curso_nombre,
       description,
       conoci_previo,
-      privacidad
+      privacidad_id
     }
     
     await pool.query('INSERT INTO heroku_b3e0382f6ba83ba.cursos SET ? ', newCourse);
