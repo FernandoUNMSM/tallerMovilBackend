@@ -47,9 +47,9 @@ router.post('/courses', async (req,  res, next) => {
   //Aqui va el query para guardar un curso
 
   try {
-    const {curso_id, usuario_id ,categoria_id,codigo,imagen, curso_nombre, descripcion, conoci_previo, privacidad_id, curso_fecha_creacion } = req.body
+    const {curso_id, usuario_id ,categoria_id, codigo, imagen, curso_nombre, descripcion, conoci_previo, privacidad_id, curso_fecha_creacion } = req.body
 
-    const newCourse = {
+    let newCourse = {
       curso_id,
       usuario_id,
       categoria_id,
@@ -63,10 +63,12 @@ router.post('/courses', async (req,  res, next) => {
     }
     
     await pool.query('INSERT INTO heroku_b3e0382f6ba83ba.cursos SET ? ', newCourse);
-    const savedCourse = await pool.query('SELECT * FROM heroku_b3e0382f6ba83ba.cursos WHERE curso_id = ?', [curso_id]);
+    const savedCourse = await pool.query('SELECT * FROM heroku_b3e0382f6ba83ba.cursos WHERE curso_nombre = ?', [curso_nombre]);
     
 
-    res.status(201).json(savedCourse)//Aca se debe de enviar el nuevo curso creado
+    res.status(201).json({
+      msg: "Curso creado"
+    })//Aca se debe de enviar el nuevo curso creado
   } catch (e) {
     next(e)
   }
