@@ -47,21 +47,23 @@ router.post('/courses', async (req,  res, next) => {
   //Aqui va el query para guardar un curso
 
   try {
-    const { usuario_id ,categoria_id,codigo,imagen, curso_nombre, description, conoci_previo, privacidad_id } = req.body
+    const {curso_id, usuario_id ,categoria_id,codigo,imagen, curso_nombre, descripcion, conoci_previo, privacidad_id, curso_fecha_creacion } = req.body
 
     const newCourse = {
+      curso_id,
       usuario_id,
       categoria_id,
       codigo,
       imagen,
       curso_nombre,
-      description,
+      descripcion,
       conoci_previo,
-      privacidad_id
+      privacidad_id,
+      curso_fecha_creacion
     }
     
     await pool.query('INSERT INTO heroku_b3e0382f6ba83ba.cursos SET ? ', newCourse);
-    const savedCourse = await pool.query('SELECT * FROM heroku_b3e0382f6ba83ba.cursos WHERE curso_nombre = ?', [curso_nombre]);
+    const savedCourse = await pool.query('SELECT * FROM heroku_b3e0382f6ba83ba.cursos WHERE curso_id = ?', [curso_id]);
     
 
     res.status(201).json(savedCourse)//Aca se debe de enviar el nuevo curso creado
