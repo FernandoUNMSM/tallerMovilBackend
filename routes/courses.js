@@ -74,7 +74,7 @@ router.post('/courses', async (req,  res, next) => {
   }
 })
 
-router.post('/coursesUsers', userExtractor, async (req,  res, next) => {
+router.post('/coursesUsers', async (req,  res, next) => {
   // Aqui va el query para guardar un curso
 
   try {
