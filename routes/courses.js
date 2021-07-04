@@ -162,4 +162,34 @@ router.get('/coursespublic/:iduser', async (req, res, next) => {
   }
 })
 
+router.post('/coursesEdit/:idcurso', async (req,  res, next) => {
+  // Aqui va el query para editar un curso
+
+
+  try {
+    const { idcurso } = req.params
+    const { categoria_id, codigo, imagen, curso_nombre, descripcion, conoci_previo, privacidad_id} = req.body;
+
+
+    const newCourse = {
+      categoria_id, 
+      codigo, 
+      imagen, 
+      curso_nombre,
+      descripcion, 
+      conoci_previo,
+      privacidad_id
+
+    }
+    await pool.query('UPDATE heroku_b3e0382f6ba83ba.cursos set ? WHERE curso_id = ?', [newCourse, idcurso]);
+    let list = await pool.query('SELECT * FROM heroku_b3e0382f6ba83ba.cursos WHERE curso_id = ?', [idcurso]);
+    
+
+    
+    res.status(201).json(list) 
+  } catch (e) {
+    next(e)
+  }
+})
+
 module.exports = router
