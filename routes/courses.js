@@ -117,9 +117,43 @@ router.get('/course-user/:idcurso', async (req, res, next) => {
   }
   
 })
+
+router.get('/coursesofuser/:iduser', async (req, res, next) => {
+  const { iduser } = req.params;
+
+  try{
+    let listUser = await pool.query(`
+    SELECT c.curso_nombre, c.curso_id 
+    FROM heroku_b3e0382f6ba83ba.curso_usuario AS cu 
+    INNER JOIN heroku_b3e0382f6ba83ba.cursos AS c 
+    ON cu.curso_id = c.curso_id 
+    WHERE cu.usuario_id = ?
+    `, [iduser])
+
+    res.status(200).json({
+      message: "Lista de cursos del usuario: " + iduser,
+      data: listUser
+    })
+  } catch(err){
+    console.log(err)
+    next(err)
+  }
+})
+
 router.get('/coursespublic', async (req, res, next) => {
   try{
     let cursos = await pool.query('SELECT * FROM heroku_b3e0382f6ba83ba.cursos WHERE privacidad_id = 1');
+    res.status(200).json({
+      cursos
+    })
+  }catch(err){
+    next(err);
+  }
+})
+router.get('/coursespublic/:iduser', async (req, res, next) => {
+  const {iduser} = req.params
+  try{ 
+    let cursos = await pool.query('SELECT * FROM heroku_b3e0382f6ba83ba.cursos WHERE privacidad_id = 1 AND usuario_id = ?', [iduser]);
     res.status(200).json({
       cursos
     })
