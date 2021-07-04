@@ -4,7 +4,7 @@ const pool = require('../src/database');
 // const Course = require('./../models/Courses')
 // const User = require('./../models/User')
 
-const userExtractor = require('./../middleware/userExtractor')
+// const userExtractor = require('./../middleware/userExtractor')
 
 router.get('/cursos/:iduser', async (req, res, next) => {
   

@@ -14,6 +14,7 @@ const users = require('./routes/users')
 const login = require('./routes/login')
 const course = require('./routes/courses')
 const suggestions = require('./routes/suggestions')
+const categories = require('./routes/categories')
 
 
 const notFound = require('./middleware/notFound')
@@ -23,6 +24,7 @@ app.use(login)
 app.use(users)
 app.use(course)
 app.use(suggestions)
+app.use(categories)
 
 app.get('/', (req, res) => {
   res.status(200).json({
