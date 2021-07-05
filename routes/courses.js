@@ -168,11 +168,10 @@ router.post('/coursesEdit/:idcurso', async (req,  res, next) => {
 
   try {
     const { idcurso } = req.params
-    const { categoria_id, codigo, imagen, curso_nombre, descripcion, conoci_previo, privacidad_id} = req.body;
+    const { codigo, imagen, curso_nombre, descripcion, conoci_previo, privacidad_id} = req.body;
 
 
-    const newCourse = {
-      categoria_id, 
+    const newCourse = { 
       codigo, 
       imagen, 
       curso_nombre,
