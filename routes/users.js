@@ -18,6 +18,20 @@ router.get('/users', async (req, res) => {
     next(err);
   }
 })
+router.get('/users/:id', async (req, res) => {
+  const {id } = req.params
+  try{
+    let user
+
+    user = await pool.query('SELECT * FROM heroku_b3e0382f6ba83ba.usuarios WHERE usuario_id = ?', [id]);
+    res.status(200).json({
+      user
+    })
+
+  }catch(err){
+    next(err);
+  }
+})
 
 router.post('/useredit/:id', async (req, res) => {
   try{
