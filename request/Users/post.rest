@@ -1,8 +1,0 @@
-POST http://localhost:3001/users
-content-type: application/json
-
-{
-  "name": "amelia",
-  "username": "watson",
-  "password": "bestdetective"
-}

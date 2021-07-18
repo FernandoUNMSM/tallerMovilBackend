@@ -10,7 +10,6 @@ module.exports = (req, res, next) => {
   let decodedToken = {}
   try {
     decodedToken = jwt.verify(token, process.env.JWTSW)
-    // console.log(decodedToken)
   } catch (e) {
     next(e)
   }

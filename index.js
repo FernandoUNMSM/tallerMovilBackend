@@ -1,5 +1,4 @@
 require('dotenv').config()
-// require('./mongo') //Aca estaba la conexcion con mongo
 
 const express = require('express')
 const app = express()
@@ -32,8 +31,10 @@ app.get('/', (req, res) => {
   })
 })
 
-app.use(notFound)// Control del 404
-app.use(errors)// Control de errores
+// Control del 404
+app.use(notFound)
+// Control de errores
+app.use(errors)
 
 const PORT = process.env.PORT
 

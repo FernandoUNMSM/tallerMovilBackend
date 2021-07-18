@@ -1,16 +1,11 @@
 const express = require('express')
 const router = express.Router()
 const pool = require('../src/database');
-// const Course = require('./../models/Courses')
-// const User = require('./../models/User')
-
-// const userExtractor = require('./../middleware/userExtractor')
 
 router.get('/cursos/:iduser', async (req, res, next) => {
   
   //Aqui va el query de buscar los cursos de un usuario
   const {iduser} = req.params;
-  console.log(iduser)
   try{
     let list
 
@@ -30,7 +25,6 @@ router.get('/courses/:id', async (req, res, next) => {
   
   //Aqui va el query para obtener un curso especifico por su id
   const { id } = req.params;
-  console.log(id)
   try{
     const course = await pool.query('SELECT * FROM heroku_b3e0382f6ba83ba.cursos WHERE curso_id = ?', [id]);
     res.status(200).json({
@@ -135,7 +129,6 @@ router.get('/coursesofuser/:iduser', async (req, res, next) => {
       data: listUser
     })
   } catch(err){
-    console.log(err)
     next(err)
   }
 })

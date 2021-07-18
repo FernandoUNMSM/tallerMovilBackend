@@ -3,7 +3,6 @@ const express = require('express')
 const router = express.Router()
 const pool = require('../src/database');
 const bcrypt = require('bcrypt')
-const userExtractor = require('./../middleware/userExtractor')
 
 router.get('/users', async (req, res) => {
   try{
@@ -43,7 +42,6 @@ router.post('/useredit/:id', async (req, res) => {
       usuario_apellidos,
       correo,
     }
-    console.log(newUser)
     
     await pool.query('UPDATE heroku_b3e0382f6ba83ba.usuarios set ? WHERE usuario_id = ?', [newUser, id]);
     const user1 = await pool.query('SELECT * FROM heroku_b3e0382f6ba83ba.usuarios WHERE usuario_id = ?', [id]);
@@ -66,11 +64,8 @@ router.post('/register', async (req, res, next) => {
       error: 'data invalid'
     })
   }
-  console.log(req.body)
   const saltRounds = 10
   const passwordHash = await bcrypt.hash(password, saltRounds)
-
-  console.log(passwordHash)
 
   const usuario_contrasenia = passwordHash
 
@@ -88,7 +83,6 @@ router.post('/register', async (req, res, next) => {
     const usuario = await pool.query('SELECT * FROM heroku_b3e0382f6ba83ba.usuarios WHERE usuario_nombre = ?', [newUser.usuario_nombre]);
     res.status(201).json(usuario[0])
   } catch (e) {
-    // next(e)
     res.status(400).json(e)
   }
 })
