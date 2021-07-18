@@ -96,7 +96,7 @@ router.post('/coursesUsers', async (req,  res, next) => {
   }
 })
 
-router.get('/course-user/:idcurso', async (req, res, next) => {
+router.get('  ', async (req, res, next) => {
   
   //Aqui va el query para obtener la lista de usuarios de un curso
   const { idcurso } = req.params;
