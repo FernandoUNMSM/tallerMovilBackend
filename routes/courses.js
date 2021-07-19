@@ -103,6 +103,31 @@ router.post('/coursesUsers', async (req,  res, next) => {
   }
 })
 
+router.post('/notificacion', async (req,  res, next) => {
+  // Ruta para añadir una notificacion a una tarea
+
+  try {
+    //Obtenemos los datos del cuerpo de la peticion
+    const {tarea_asignada_id, notificacion} = req.body
+
+    //Aqui va el query para añadir la notificacion
+    await pool.query('CALL notificacion_curso (?, ?) ', [tarea_asignada_id, notificacion], function (err, result) {
+      if (err) {
+          console.log('err:', err)
+      } else {
+          console.log('results:', result)
+      }
+  })
+
+    const savedCourseUser = await pool.query('SELECT mensaje_notificacion FROM heroku_b3e0382f6ba83ba.tarea_asignada  ')
+
+    //Respuesta a la peticion
+    res.status(201).json(savedCourseUser) 
+  } catch (e) {
+    next(e)
+  }
+})
+
 router.get('/course-user/:idcurso', async (req, res, next) => {
   // Ruta para obtener la lista de usuarios de un curso
   
