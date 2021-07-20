@@ -26,7 +26,7 @@ router.post('/suggestions', async (req,  res, next) => {
   
     try {
       //Parámetros necesarios para guardar las sugerencias
-      const { categoria_id,sugerencia_nombre_curso, sugerencia_puntuacion_curso,numero_votos, sugerencia_estado } = req.body
+      const { categoria_id,sugerencia_nombre_curso, sugerencia_puntuacion_curso,numero_votos, sugerencia_estado, descripcion } = req.body
       //Se crea a la variable newSugesstion con los parámetros recogidos
       const newSugesstion = {
         categoria_id,
@@ -34,6 +34,7 @@ router.post('/suggestions', async (req,  res, next) => {
         sugerencia_puntuacion_curso,
         numero_votos,
         sugerencia_estado,
+        descripcion
       }
       
       //Se accede a la BD y se inserta o guarda newSuggestion en la BD
