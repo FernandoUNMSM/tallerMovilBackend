@@ -40,12 +40,14 @@ router.post('/suggestions', async (req,  res, next) => {
       //Se accede a la BD y se inserta o guarda newSuggestion en la BD
       await pool.query('INSERT INTO heroku_b3e0382f6ba83ba.sugerencias SET ? ', newSugesstion);
       //Se selecciona la sugerencia previamente guardada a través del parámetro sugerencia_nombre_curso
-      const savedSugesstion = await pool.query('SELECT * FROM heroku_b3e0382f6ba83ba.sugerencias WHERE curso_nombre = ?', [sugerencia_nombre_curso]);
+      // const savedSugesstion = await pool.query('SELECT * FROM heroku_b3e0382f6ba83ba.sugerencias WHERE curso_nombre = ?', [sugerencia_nombre_curso]);
       
       
       //Aca se debe de enviar la sugerenia creada
       //Se envia las sugerencia guardada al Frontend
-      res.status(201).json(savedSugesstion)
+      res.status(201).json({
+        msg: "sugerencia guardada"
+      })
     } catch (e) {
       //Se maneja el error en caso de haberlo
       next(e)
