@@ -81,15 +81,16 @@ router.post('/courses', async (req,  res, next) => {
 /**
  * @param {Number} curso_id
  * @param {String} correo
+ * @param {String} mensaje
  */
 router.post('/coursesUsers', async (req,  res, next) => {
   // Ruta para añadir un usuario a un curso
   try {
-    // Obtenemos los datos del cuerpo de la peticion
     const {curso_id, correo} = req.body
-    await pool.query('CALL heroku_b3e0382f6ba83ba.crear_usuario_curso (?, ?) ', [curso_id, correo])
+    const a = await pool.query('CALL heroku_b3e0382f6ba83ba.crear_usuario_curso (?, ?, @mensaje)', [curso_id, correo])
+    console.log(a[0][0]['@mensaje'])
     res.status(201).json({
-      msg: 'Usuario Asignado'
+      msg: a[0][0]['@mensaje']
     })
   } catch (e) {
     next(e)
