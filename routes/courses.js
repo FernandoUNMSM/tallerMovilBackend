@@ -124,6 +124,30 @@ router.post('/notificacion', async (req,  res, next) => {
   }
 })
 
+/**
+ * @param {Number} iduser
+ */
+router.get('/notificacionPorUsuario/:iduser', async (req, res, next) => {
+  // Ruta para obtener la lista de cursos de un usuario
+
+  // Obtenemos el id del usuario de los parametros de la ruta de la peticion
+  const { iduser } = req.params
+
+  try {
+    // Aqui va el query para obtener la lista de cursos de un usuario
+
+    let listNotificacion = await pool.query(`select mensaje_notificacion from heroku_b3e0382f6ba83ba.tarea_asignada where usuario_id = ?;`, [iduser])
+
+    // Respuesta a la peticion
+    res.status(200).json({
+      message: 'Notificacion para el usuario: ' + iduser,
+      data: listNotificacion
+    })
+  } catch (err) {
+    next(err)
+  }
+})
+
 router.get('/course-user/:idcurso', async (req, res, next) => {
   // Ruta para obtener la lista de usuarios de un curso
   
