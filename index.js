@@ -15,7 +15,6 @@ const course = require('./routes/courses')
 const suggestions = require('./routes/suggestions')
 const categories = require('./routes/categories')
 
-
 const notFound = require('./middleware/notFound')
 const errors = require('./middleware/errors')
 

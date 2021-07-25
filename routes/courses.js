@@ -136,7 +136,6 @@ router.get('/course-user/:idcurso', async (req, res, next) => {
   
   try{
     
-    
     //Aqui va el query para obtener la lista de usuarios de un curso
     let listUser = await pool.query('SELECT usuarios.usuario_id, usuario_nombre,usuario_apellidos, correo, url FROM heroku_b3e0382f6ba83ba.usuarios INNER JOIN heroku_b3e0382f6ba83ba.curso_usuario ON usuarios.usuario_id = curso_usuario.usuario_id WHERE curso_id = ? ', [idcurso]);
         
@@ -219,7 +218,6 @@ router.post('/coursesEdit/:idcurso', async (req,  res, next) => {
     //Obtenemos los datos del cuerpo de la peticion
 
     const { codigo, imagen, curso_nombre, descripcion, conoci_previo, privacidad_id} = req.body;
-    
     
     const newCourse = { 
       codigo, 
