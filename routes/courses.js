@@ -78,26 +78,23 @@ router.post('/courses', async (req,  res, next) => {
   }
 })
 
+/**
+ * @param {Number} curso_id
+ * @param {String} correo
+ * @param {Boolean} error
+ * @param {String} mensaje
+ */
 router.post('/coursesUsers', async (req,  res, next) => {
   // Ruta para añadir un usuario a un curso
-
   try {
-    //Obtenemos los datos del cuerpo de la peticion
     const {curso_id, correo} = req.body
-
-    //Aqui va el query para añadir un uaurio a un curso
-    await pool.query('CALL crear_usuario_curso (?, ?) ', [curso_id, correo], function (err, result) {
-      if (err) {
-          console.log('err:', err)
-      } else {
-          console.log('results:', result)
-      }
-  })
-
-    const savedCourseUser = await pool.query('SELECT * FROM heroku_b3e0382f6ba83ba.curso_usuario')
-
-    //Respuesta a la peticion
-    res.status(201).json(savedCourseUser) 
+    await pool.query('CALL heroku_b3e0382f6ba83ba.crear_usuario_curso (?, ?, @error, @mensaje)', [curso_id, correo])
+    const a = await pool.query('CALL heroku_b3e0382f6ba83ba.crear_usuario_curso (?, ?, @error, @mensaje)', [curso_id, correo])
+    console.log(a[0][0]['@mensaje'])
+    res.status(201).json({
+      error: a[0][0]['@error'],
+      msg: a[0][0]['@mensaje']
+    })
   } catch (e) {
     next(e)
   }
@@ -125,6 +122,30 @@ router.post('/notificacion', async (req,  res, next) => {
     res.status(201).json(savedCourseUser) 
   } catch (e) {
     next(e)
+  }
+})
+
+/**
+ * @param {Number} iduser
+ */
+router.get('/notificacionPorUsuario/:iduser', async (req, res, next) => {
+  // Ruta para obtener la lista de cursos de un usuario
+
+  // Obtenemos el id del usuario de los parametros de la ruta de la peticion
+  const { iduser } = req.params
+
+  try {
+    // Aqui va el query para obtener la lista de cursos de un usuario
+
+    let listNotificacion = await pool.query(`select mensaje_notificacion from heroku_b3e0382f6ba83ba.tarea_asignada where usuario_id = ?;`, [iduser])
+
+    // Respuesta a la peticion
+    res.status(200).json({
+      message: 'Notificacion para el usuario: ' + iduser,
+      data: listNotificacion
+    })
+  } catch (err) {
+    next(err)
   }
 })
 
