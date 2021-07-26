@@ -54,6 +54,24 @@ router.post('/suggestions', async (req,  res, next) => {
     }
   })
 
+  router.get('/suggestions/:idsuggestions', async (req, res, next) => {
+    try{
+      //Obtenemos el id de la sugerencia de los parametros de la ruta de la peticion
+      const { idsuggestions } = req.params
+
+      //Se accede a la BD para listar una sola sugerencia 
+      let list = await pool.query('SELECT * FROM heroku_b3e0382f6ba83ba.sugerencias WHERE sugerencia_id = ?', [idsuggestions]);
+      res.status(200).json({
+        //Se devuelve la lista de sugerencias al Forntend
+        list
+      })
+  
+    }catch(err){
+      //Se maneja el error en caso de haberlo
+      next(err);
+    }
+  })
+
 
 //Se exporta el modulo para poder ser usado
 module.exports = router

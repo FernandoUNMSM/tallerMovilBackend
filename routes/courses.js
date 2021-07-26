@@ -262,4 +262,54 @@ router.post('/coursesEdit/:idcurso', async (req,  res, next) => {
   }
 })
 
+router.post('/course-material/:idcurso', async (req,  res, next) => {
+  // Ruta para crear un nuevo material de un curso
+  
+  try {
+    //Obtenemos el id del curso de los parametros de la ruta de la peticion
+    const { idcurso } = req.params
+
+    //Obtenemos los datos del cuerpo de la peticion
+
+    const { nombre, descripcion, fecha_creacion} = req.body;
+    
+    let curso_id = idcurso;
+    
+    const newMaterial = { 
+      nombre, 
+      descripcion, 
+      fecha_creacion,
+      curso_id
+      
+    }
+    // Aqui va el query para guardar un nuevo material de un curso
+    await pool.query('INSERT INTO heroku_b3e0382f6ba83ba.material SET ? ', newMaterial);
+    let list = await pool.query('SELECT * FROM heroku_b3e0382f6ba83ba.material WHERE curso_id = ?', [idcurso]);
+    
+    //Respuesta a la peticion
+    res.status(201).json(list) 
+  } catch (e) {
+    next(e)
+  }
+})
+
+router.get('/list-task/:idcurso', async (req,  res, next) => {
+  // Ruta para listar las tareas de un curso
+  
+  try {
+    //Obtenemos el id del curso de los parametros de la ruta de la peticion
+    const { idcurso } = req.params
+ 
+    // Aqui va el query para listar las tareas de un curso
+    let list = await pool.query('SELECT * FROM heroku_b3e0382f6ba83ba.tareas WHERE curso_id = ?', [idcurso]);
+    
+    //Respuesta a la peticion
+    res.status(201).json(list) 
+  } catch (e) {
+    next(e)
+  }
+})
+
+
+
 module.exports = router
