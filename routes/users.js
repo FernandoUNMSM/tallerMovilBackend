@@ -51,13 +51,14 @@ router.post('/useredit/:id', async (req, res) => {
     //Parámetro id extraido de la ruta
     const { id } = req.params
     //Parámetros extraidos del cuerpo  enviado por el frontend
-    const { usuario_nombre, usuario_apellidos, correo, descripcion } = req.body;
+    const { usuario_nombre, usuario_apellidos, url, correo, descripcion } = req.body;
   
     //Constante newUser user donde se guardan los parámetros del cuerpo
     const newUser = {
       usuario_nombre,
       usuario_apellidos,
       correo,
+      url,
       descripcion
     }
     
