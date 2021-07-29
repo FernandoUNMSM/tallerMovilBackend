@@ -99,6 +99,37 @@ router.post('/coursesUsers', async (req,  res, next) => {
     next(e)
   }
 })
+router.post('/coursesUsers', async (req,  res, next) => {
+  // Ruta para añadir un usuario a un curso
+  try {
+    const {curso_id, correo} = req.body
+    await pool.query('CALL heroku_b3e0382f6ba83ba.crear_usuario_curso (?, ?, @error, @mensaje)', [curso_id, correo])
+    const a = await pool.query('CALL heroku_b3e0382f6ba83ba.crear_usuario_curso (?, ?, @error, @mensaje)', [curso_id, correo])
+    console.log(a[0][0]['@mensaje'])
+    res.status(201).json({
+      error: a[0][0]['@error'],
+      msg: a[0][0]['@mensaje']
+    })
+  } catch (e) {
+    next(e)
+  }
+})
+
+router.post('/deletecoursesUsers', async (req,  res, next) => {
+  // Ruta para eliminar un usuario a un curso
+  try {
+    const {curso_id, usuario_id} = req.body
+    await pool.query(`DELETE FROM heroku_b3e0382f6ba83ba.curso_usuario WHERE curso_id = ${curso_id} AND usuario_id = ${usuario_id}`);
+    // await pool.query('CALL heroku_b3e0382f6ba83ba.crear_usuario_curso (?, ?, @error, @mensaje)', [curso_id, correo])
+    // const a = await pool.query('CALL heroku_b3e0382f6ba83ba.crear_usuario_curso (?, ?, @error, @mensaje)', [curso_id, correo])
+    // console.log(a[0][0]['@mensaje'])
+    res.status(201).json({
+      msg: 'Usuario eliminado del curso'
+    })
+  } catch (e) {
+    next(e)
+  }
+})
 
 router.post('/notificacion', async (req,  res, next) => {
   // Ruta para añadir una notificacion a una tarea
