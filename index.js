@@ -1,5 +1,4 @@
 require('dotenv').config()
-// require('./mongo') //Aca estaba la conexcion con mongo
 
 const express = require('express')
 const app = express()
@@ -14,7 +13,7 @@ const users = require('./routes/users')
 const login = require('./routes/login')
 const course = require('./routes/courses')
 const suggestions = require('./routes/suggestions')
-
+const categories = require('./routes/categories')
 
 const notFound = require('./middleware/notFound')
 const errors = require('./middleware/errors')
@@ -23,6 +22,7 @@ app.use(login)
 app.use(users)
 app.use(course)
 app.use(suggestions)
+app.use(categories)
 
 app.get('/', (req, res) => {
   res.status(200).json({
@@ -30,8 +30,10 @@ app.get('/', (req, res) => {
   })
 })
 
-app.use(notFound)// Control del 404
-app.use(errors)// Control de errores
+// Control del 404
+app.use(notFound)
+// Control de errores
+app.use(errors)
 
 const PORT = process.env.PORT
 
