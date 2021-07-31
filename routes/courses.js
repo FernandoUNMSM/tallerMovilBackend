@@ -151,8 +151,36 @@ router.post('/solicitarCursoPrivado', async (req,  res, next) => {
 })
 
 
+//Mostrar todos los alumnos que tengan solicitud. 
+router.get('/AcceptarSolicitudPrivado/:idcurso', async (req, res, next) => {
+  const { idcurso } = req.params;
+  //console.log(idcurso)
+  const situacion_id = "3";
+  try{
+    let alumnosPendientes
+    alumnosPendientes = await pool.query('SELECT * FROM heroku_b3e0382f6ba83ba.curso_usuario WHERE curso_id = ? AND situacion_id = ?', [idcurso, situacion_id]);
+    res.status(200).json(alumnosPendientes)
+  }catch(err){
+    next(err)
+  }
+})
 
 
+router.put('/AcceptarSolicitudPrivado/:idcurso', async (req, res, next) => {
+  const { idcurso } = req.params;
+  //console.log(idcurso)
 
+  const {usuario_id, situacion_id} = req.body
+  //situacion_id = "1": acceptado;
+  //situacion_id = "2": rechazado;
+  try{
+    await pool.query('UPDATE heroku_b3e0382f6ba83ba.curso_usuario SET situacion_id = ? WHERE curso_id = ? AND usuario_id = ?', [situacion_id, idcurso, usuario_id]) ;
+    const aceptarsolictudPrivate = await pool.query('SELECT * FROM heroku_b3e0382f6ba83ba.curso_usuario WHERE curso_id = ? AND usuario_id = ?', [idcurso, usuario_id])
+
+    res.status(200).json(aceptarsolictudPrivate)
+  }catch(err){
+    next(err)
+  }
+})
 
 module.exports = router
