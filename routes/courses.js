@@ -128,4 +128,31 @@ router.get('/coursespublic', async (req, res, next) => {
   }
 })
 
+
+router.post('/solicitarCursoPrivado', async (req,  res, next) => {
+  // Aqui el query para solicitar acceso a un curso privado
+  try {
+    const {curso_id, usuario_id, situacion_id} = req.body
+
+    let solicitudPrivate = {
+      curso_id, 
+      usuario_id, 
+      situacion_id
+    }
+
+    await pool.query('INSERT INTO heroku_b3e0382f6ba83ba.curso_usuario SET ? ', solicitudPrivate);
+    
+    const savedSocitudPrivate = await pool.query('SELECT * FROM heroku_b3e0382f6ba83ba.curso_usuario WHERE curso_id = ?', curso_id)
+
+    res.status(201).json(savedSocitudPrivate) // Aca se debe de enviar el nuevo curso creado
+  } catch (e) {
+    next(e)
+  }
+})
+
+
+
+
+
+
 module.exports = router
