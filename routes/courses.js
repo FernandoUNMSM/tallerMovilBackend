@@ -345,7 +345,9 @@ router.get('/list-task/:idcurso', async (req,  res, next) => {
 router.post('/solicitarCursoPrivado', async (req,  res, next) => {
   // Aqui el query para solicitar acceso a un curso privado
   try {
-    const {curso_id, usuario_id, situacion_id} = req.body
+    const {curso_id, usuario_id} = req.body
+
+    situacion_id = "3";
 
     let solicitudPrivate = {
       curso_id, 
