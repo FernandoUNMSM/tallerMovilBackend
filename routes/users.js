@@ -29,14 +29,16 @@ router.get('/users', async (req, res) => {
 //Metodo get para listar a un solo usuarios
 router.get('/users/:id', async (req, res) => {
   //Parámetro id del usuario para listarlo
-  const {id } = req.params
+  const {id} = req.params
   try{
     //Se accede a la BD y se seleciona  al usuarios a través de su id única
     //Los datos del usuario se guarda en la variable user
     let user = await pool.query('SELECT * FROM heroku_b3e0382f6ba83ba.usuarios WHERE usuario_id = ?', [id]);
+    let cursos = await pool.query('SELECT * FROM heroku_b3e0382f6ba83ba.cursos WHERE privacidad_id = 1 AND usuario_id = ?', [id]);
     res.status(200).json({
       //Se devuelve el usuario al Frontend
-      user
+      user,
+      cantidad: cursos.length
     })
 
   }catch(err){

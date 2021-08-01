@@ -236,9 +236,11 @@ router.get('/coursespublic', async (req, res, next) => {
   try{
     // Query para obtener la lista de cursos publicos
     let cursos = await pool.query('SELECT * FROM heroku_b3e0382f6ba83ba.cursos WHERE privacidad_id = 1');
+    let cantCursos = await pool.query('SELECT count(cursos_id) FROM heroku_b3e0382f6ba83ba.cursos WHERE privacidad_id = 1');
     //Respuesta a la peticion
     res.status(200).json({
-      cursos
+      cursos,
+      cantidad: cantCursos
     })
   }catch(err){
     next(err);
