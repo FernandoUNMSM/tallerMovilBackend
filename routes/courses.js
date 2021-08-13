@@ -349,7 +349,7 @@ router.post('/solicitarCursoPrivado', async (req,  res, next) => {
   try {
     const {curso_id, usuario_id} = req.body
 
-    situacion_id = "3";
+    let situacion_id = "3";
 
     let solicitudPrivate = {
       curso_id, 
