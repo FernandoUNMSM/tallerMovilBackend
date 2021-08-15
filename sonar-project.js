@@ -1,12 +1,12 @@
-const sonarqubeScanner = require('sonarqube-scanner');
+const sonarqubeScanner = require('sonarqube-scanner')
 sonarqubeScanner(
   {
     serverUrl: 'http://localhost:9000',
     options: {
       'sonar.sources': '.',
       'sonar.tests': 'tests',
-      "sonar.host.url": "http://localhost:9000",
-      "sonar.projectKey": "backendaprende",
+      'sonar.host.url': 'http://localhost:9000',
+      'sonar.projectKey': 'aprendeenlineabackend',
       'sonar.inclusions': '**', // Entry point of your code
       'sonar.test.inclusions': 'src/**/*.spec.js,src/**/*.spec.jsx,src/**/*.test.js,src/**/*.test.jsx,tests/*.test.js',
       'sonar.javascript.lcov.reportPaths': 'coverage/lcov.info',
@@ -14,4 +14,4 @@ sonarqubeScanner(
       'sonar.login': 'admin',
       'sonar.password': 'root81018'
     }
-  }, () => { });
+  }, () => { })
