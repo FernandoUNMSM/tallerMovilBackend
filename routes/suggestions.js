@@ -73,5 +73,29 @@ router.post('/suggestions', async (req,  res, next) => {
   })
 
 
+
+
+
+  //Metodo para votar sugerencias 
+  router.post('/votarSugerencias', async (req,  res, next) => {
+    try{
+      const {usuario_id, sugerencia_id} = req.body
+
+        let VotarPorSugerencia = {
+          usuario_id, 
+          sugerencia_id
+        }
+      await pool.query('INSERT INTO heroku_b3e0382f6ba83ba.votos SET ? ', VotarPorSugerencia);
+      
+      res.status(200).json(
+        "Se registro el voto correctamente "
+      )
+    }
+    catch (e) {
+      next(e)
+    }
+  });
+
+  
 //Se exporta el modulo para poder ser usado
 module.exports = router
