@@ -31,4 +31,32 @@ router.post('/crearTarea', async (req, res, next) => {
 
 })
 
+//Metodo para subir archivos
+router.post('/subirArchivo', async (req, res, next) => {
+
+  const {archivo_id, origen_id, url, nombre_archivo, tipo} = req.body;
+ 
+  const newArchivo = {
+    archivo_id,
+    origen_id,
+    url,
+    nombre_archivo,
+    tipo
+  }
+
+  try{
+    //Aqui va el query para crear una nueva tarea
+    await pool.query('INSERT INTO heroku_b3e0382f6ba83ba.archivos set ? ', newArchivo);
+    
+    //Respuesta a la peticion
+    res.status(200).json({
+      msg: 'Archivo subido'
+    })
+
+  }catch(err){
+    next(err);
+  }
+
+})
+
 module.exports = router

@@ -87,9 +87,10 @@ router.post('/suggestions', async (req,  res, next) => {
         }
       await pool.query('INSERT INTO heroku_b3e0382f6ba83ba.votos SET ? ', VotarPorSugerencia);
       
-      res.status(200).json(
-        "Se registro el voto correctamente "
-      )
+      //Respuesta a la peticion
+      res.status(200).json({
+        msg: 'Voto Registrado'
+      })
     }
     catch (e) {
       next(e)
