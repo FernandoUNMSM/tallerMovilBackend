@@ -64,7 +64,7 @@ router.post('/courses', async (req, res, next) => {
 
     // Aqui va el query para guardar un curso
     await pool.query('INSERT INTO heroku_b3e0382f6ba83ba.cursos SET ? ', newCourse)
-    const savedCourse = await pool.query('SELECT * FROM heroku_b3e0382f6ba83ba.cursos WHERE curso_nombre = ?', [curso_nombre])
+    //const savedCourse = await pool.query('SELECT * FROM heroku_b3e0382f6ba83ba.cursos WHERE curso_nombre = ?', [curso_nombre])
 
     // Respuesta a la peticion
     res.status(201).json({
