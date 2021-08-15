@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testExecutions version="1">
+    <file path="D:\tizon\Documents\Proyectos\cosmere_api\tests\cursos.test.js">
+        <testCase name="tests de Cursos Get course by ID" duration="503"/>
+    </file>
+    <file path="D:\tizon\Documents\Proyectos\cosmere_api\tests\logintes.test.js">
+        <testCase name="Login" duration="555"/>
+        <testCase name="Registro" duration="855"/>
+    </file>
+</testExecutions>

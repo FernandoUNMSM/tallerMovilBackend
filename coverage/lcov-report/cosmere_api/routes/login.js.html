@@ -23,30 +23,30 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">46.67% </span>
+                <span class="strong">86.67% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>7/15</span>
+                <span class='fraction'>13/15</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">62.5% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/8</span>
+                <span class='fraction'>5/8</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">50% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/2</span>
+                <span class='fraction'>1/2</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">46.67% </span>
+                <span class="strong">86.67% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>7/15</span>
+                <span class='fraction'>13/15</span>
             </div>
         
             
@@ -55,7 +55,7 @@
             Press <em>n</em> or <em>j</em> to go to the next uncovered block, <em>b</em>, <em>p</em> or <em>k</em> for the previous block.
         </p>
     </div>
-    <div class='status-line low'></div>
+    <div class='status-line high'></div>
     <pre><table class="coverage">
 <tr><td class="line-count quiet"><a name='L1'></a><a href='#L1'>1</a>
 <a name='L2'></a><a href='#L2'>2</a>
@@ -130,29 +130,29 @@
 <span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -179,32 +179,32 @@ router.get('/login', <span class="fstat-no" title="function not covered" >as</sp
 })
 &nbsp;
 //Método post para logear al usuario
-router.post('/login', <span class="fstat-no" title="function not covered" >as</span>ync (req, res) =&gt; {
+router.post('/login', async (req, res) =&gt; {
   
   //Parámetros del login con el correo y el password.
-  const {correo, password} = <span class="cstat-no" title="statement not covered" >req.body</span>
+  const {correo, password} = req.body
 &nbsp;
   //Se realiza la petición para seleccionar todos campos del usuario a la BD
   //Se guarda los datos en la constante user
-  const user = <span class="cstat-no" title="statement not covered" >await pool.query('SELECT * FROM heroku_b3e0382f6ba83ba.usuarios WHERE correo = ?', [correo]);</span>
+  const user = await pool.query('SELECT * FROM heroku_b3e0382f6ba83ba.usuarios WHERE correo = ?', [correo]);
 &nbsp;
   //Se guarda el passord encriptado de la base de datos en la variable passwordHash 
-<span class="cstat-no" title="statement not covered" >  passwordHash = user[0] ? user[0].usuario_contrasenia : false</span>
+  passwordHash = user[0] ? user[0].usuario_contrasenia : <span class="branch-1 cbranch-no" title="branch not covered" >false</span>
 &nbsp;
   //Se compara el passwordHash con el el password  del parámetro del login
-  const passwordCorrect = <span class="cstat-no" title="statement not covered" >user[0] === undefined</span>
-    ? false
+  const passwordCorrect = user[0] === undefined
+    ? <span class="branch-0 cbranch-no" title="branch not covered" >false</span>
     : await bcrypt.compare(password, passwordHash)
 &nbsp;
   //Si el usuario o password son incorrectos se notificará el error
-<span class="cstat-no" title="statement not covered" >  if (!(user &amp;&amp; passwordCorrect)) {</span>
+  <span class="missing-if-branch" title="if path not taken" >I</span>if (!(user &amp;&amp; passwordCorrect)) {
 <span class="cstat-no" title="statement not covered" >    return res.status(401).json({</span>
       error: 'invalid user or password'
     })
   }
   
   //En caso de que los datos sean correctos se devolverán todos los datos del usuario
-<span class="cstat-no" title="statement not covered" >  res.status(200).json({</span>
+  res.status(200).json({
     //Se envia los datos del usuario validado al Frontend
     user: user[0]
   })
@@ -220,7 +220,7 @@ module.exports = router
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank">istanbul</a>
-                at Sun Aug 15 2021 11:44:47 GMT-0500 (hora estándar de Perú)
+                at Sun Aug 15 2021 15:52:16 GMT-0500 (hora estándar de Perú)
             </div>
         </div>
         <script src="../../prettify.js"></script>

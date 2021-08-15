@@ -4,10 +4,10 @@
   "description": "\"An unofficial api from cosmere\"",
   "main": "index.js",
   "scripts": {
+    "sonar": "node sonar-project.js",
     "dev": "cross-env NODE_ENV=development nodemon index.js",
     "start": "cross-env NODE_ENV=production node index.js",
-    "test": "cross-env NODE_ENV=test PORT=3002 jest --silent=false --verbose",
-    "test:watch": "npm run test -- --watch"
+    "test": "cross-env NODE_ENV=test jest --coverage --no-cache"
   },
   "keywords": [
     "cosmere"
@@ -23,12 +23,14 @@
     "dotenv": "^8.2.0",
     "express": "^4.17.1",
     "express-mysql-session": "^2.1.6",
+    "jest-sonar-reporter": "^2.0.0",
     "jsonwebtoken": "^8.5.1",
     "mongoose": "5.12.3",
     "mongoose-unique-validator": "2.0.3",
     "morgan": "^1.10.0",
     "mysql": "^2.18.1",
     "node": "^16.3.0",
+    "sonarqube-scanner": "^2.8.1",
     "timeago.js": "^4.0.2"
   },
   "devDependencies": {
@@ -44,6 +46,12 @@
     }
   },
   "jest": {
-    "testEnvironment": "node"
+    "testEnvironment": "node",
+    "testResultsProcessor": "jest-sonar-reporter"
+  },
+  "jestSonar": {
+    "reportPath": "coverage",
+    "reportFile": "test-reporter.xml",
+    "indent": 4
   }
 }

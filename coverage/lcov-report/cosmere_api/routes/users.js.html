@@ -23,30 +23,30 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">23.08% </span>
+                <span class="strong">48.72% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>9/39</span>
+                <span class='fraction'>19/39</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">50% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/2</span>
+                <span class='fraction'>1/2</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">25% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/4</span>
+                <span class='fraction'>1/4</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">23.08% </span>
+                <span class="strong">48.72% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>9/39</span>
+                <span class='fraction'>19/39</span>
             </div>
         
             
@@ -277,26 +277,10 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -304,16 +288,32 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -407,12 +407,12 @@ router.post('/useredit/:id', <span class="fstat-no" title="function not covered"
 &nbsp;
 &nbsp;
 //Metodo POST para crear un nuevo usuario
-router.post('/register', <span class="fstat-no" title="function not covered" >as</span>ync (req, res, next) =&gt; {
+router.post('/register', async (req, res, next) =&gt; {
   //Parámetros necesarios para crear al nuevo usuario
-  const {usuario_nombre, usuario_apellidos, password, correo,url} = <span class="cstat-no" title="statement not covered" >req.body</span>
+  const {usuario_nombre, usuario_apellidos, password, correo,url} = req.body
 &nbsp;
   //Si el password es nulo la data es inválida
-<span class="cstat-no" title="statement not covered" >  if(!password) {</span>
+  <span class="missing-if-branch" title="if path not taken" >I</span>if(!password) {
 <span class="cstat-no" title="statement not covered" >    return res.status(400).json({</span>
       //Se notifica al frontend que la data es inválida
       error: 'data invalid'
@@ -420,16 +420,16 @@ router.post('/register', <span class="fstat-no" title="function not covered" >as
   }
 &nbsp;
   //Constante para el numero de encriptaciones del password
-  const saltRounds = <span class="cstat-no" title="statement not covered" >10</span>
+  const saltRounds = 10
   //Se encripta el password a través de la libreria bcrypt
   //Se guarda el password encriptado en la variable passwordHash
-  const passwordHash = <span class="cstat-no" title="statement not covered" >await bcrypt.hash(password, saltRounds)</span>
+  const passwordHash = await bcrypt.hash(password, saltRounds)
 &nbsp;
   //Se crea la variable usuario_contrasenia con el password previamente encriptado
-  const usuario_contrasenia = <span class="cstat-no" title="statement not covered" >passwordHash</span>
+  const usuario_contrasenia = passwordHash
 &nbsp;
   //se crear la variable newUser con los campos necesarios para guardarla en la BD
-  let newUser = <span class="cstat-no" title="statement not covered" >{</span>
+  let newUser = {
     usuario_nombre,
     usuario_apellidos,
     usuario_contrasenia,
@@ -437,15 +437,15 @@ router.post('/register', <span class="fstat-no" title="function not covered" >as
     url
   }
   
-<span class="cstat-no" title="statement not covered" >  try {</span>
+  try {
     //Se accede a la BD y se inserta o guarda al muevo usuario
-<span class="cstat-no" title="statement not covered" >    await pool.query('INSERT INTO heroku_b3e0382f6ba83ba.usuarios  set ? ', newUser);</span>
+    await pool.query('INSERT INTO heroku_b3e0382f6ba83ba.usuarios  set ? ', newUser);
 &nbsp;
     //Se accede a la BD y se seleciona al usuario de previamente creado a través del usuario_nombre
     //Se guardan los datos usuario en la variable usuario
-    const usuario = <span class="cstat-no" title="statement not covered" >await pool.query('SELECT * FROM heroku_b3e0382f6ba83ba.usuarios WHERE usuario_nombre = ?', [newUser.usuario_nombre]);</span>
+    const usuario = await pool.query('SELECT * FROM heroku_b3e0382f6ba83ba.usuarios WHERE usuario_nombre = ?', [newUser.usuario_nombre]);
     //Se devuelve el usuario creado al Frontend
-<span class="cstat-no" title="statement not covered" >    res.status(201).json(usuario[0])</span>
+    res.status(201).json(usuario[0])
   } catch (e) {
     //Se maneja los errores en caso de haberlo
 <span class="cstat-no" title="statement not covered" >    res.status(400).json(e)</span>
@@ -460,7 +460,7 @@ module.exports = router
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank">istanbul</a>
-                at Sun Aug 15 2021 11:44:47 GMT-0500 (hora estándar de Perú)
+                at Sun Aug 15 2021 15:52:16 GMT-0500 (hora estándar de Perú)
             </div>
         </div>
         <script src="../../prettify.js"></script>

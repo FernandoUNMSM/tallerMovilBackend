@@ -246,6 +246,24 @@ router.get('/coursespublic', async (req, res, next) => {
     next(err);
   }
 })
+
+router.get('/coursespublicmax', async (req, res, next) => {
+  // Ruta para obtener la lista de cursos publicos
+  try{
+    // Query para obtener la lista de cursos publicos
+    let cursos = await pool.query('SELECT * FROM heroku_b3e0382f6ba83ba.cursos WHERE privacidad_id = 1');
+    let cantCursos = await pool.query('SELECT count(curso_id) FROM heroku_b3e0382f6ba83ba.cursos WHERE privacidad_id = 1');
+    console.log(cantCursos)
+    //Respuesta a la peticion
+    res.status(200).json({
+      cursos,
+      cantidad: cantCursos
+    })
+  }catch(err){
+    next(err);
+  }
+})
+
 router.get('/coursespublic/:iduser', async (req, res, next) => {
   // Ruta para obtener la lista de cursos publicos de un usuario
   
