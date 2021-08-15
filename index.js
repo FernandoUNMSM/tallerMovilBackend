@@ -36,13 +36,6 @@ app.get('/', (req, res) => {
 app.use(notFound)
 // Control de errores
 app.use(errors)
-
-const PORT = process.env.PORT
-
-const server = app.listen(PORT, () => {
-  console.log(`La api esta en http://localhost:${PORT}`);
-})
-
 app.use((req, res, next) => {
   res.header('Access-Control-Allow-Origin', '*');
   res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE');
@@ -50,4 +43,13 @@ app.use((req, res, next) => {
   next();
 });
 
-module.exports = { app, server }
+const PORT = process.env.PORT || 3001
+if (process.env.NODE_ENV !== 'test') {
+  app.listen(PORT, () => {
+    console.log(`La api esta en http://localhost:${PORT}`);
+  })
+
+}
+
+
+module.exports = { app }
