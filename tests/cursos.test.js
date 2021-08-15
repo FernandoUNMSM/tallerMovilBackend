@@ -1,6 +1,5 @@
 const supertest = require('supertest')
 const { app } = require('../index')
-// const srv = app.listen()
 const api = supertest(app)
 
 describe('tests de Cursos', () => {
@@ -12,8 +11,6 @@ describe('tests de Cursos', () => {
     expect(response.body.data.curso_id).toBe(5)
   })
 })
-
-// afterAll(async (done) => {
-//   // pool.end()
-//   await server.close(done)
-// })
+afterAll(async () => {
+	await new Promise(resolve => setTimeout(() => resolve(), 500));
+});

@@ -1,6 +1,5 @@
 const supertest = require('supertest')
 const { app } = require('../index')
-// const srv = app.listen()
 const api = supertest(app)
 
 test('Login', async () => {
@@ -15,10 +14,9 @@ test('Login', async () => {
     .expect(200)
     .expect('Content-Type', /application\/json/)
 
-  console.log(response.body.data)
+  expect(response.body.user).toBeDefined()
 })
 
-// afterAll(async (done) => {
-//   // pool.end()
-//   await server.close(done)
-// })
+afterAll(async () => {
+	await new Promise(resolve => setTimeout(() => resolve(), 500));
+});
