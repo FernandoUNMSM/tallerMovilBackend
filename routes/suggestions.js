@@ -67,8 +67,9 @@ router.get('/suggestions/:idsuggestions', async (req, res, next) => {
   }
 })
 
-// Metodo para votar sugerencias
+
 router.post('/votarSugerencias', async (req, res, next) => {
+  // Metodo para votar sugerencias
   try {
     const { usuario_id, sugerencia_id } = req.body
 
@@ -76,6 +77,7 @@ router.post('/votarSugerencias', async (req, res, next) => {
       usuario_id,
       sugerencia_id
     }
+
     await pool.query('INSERT INTO heroku_b3e0382f6ba83ba.votos SET ? ', VotarPorSugerencia)
 
     // Respuesta a la peticion
@@ -86,6 +88,38 @@ router.post('/votarSugerencias', async (req, res, next) => {
     next(e)
   }
 })
+
+router.get('/listarSugerenciasVotos', async(req,res,next)=>{
+  // Metodo para listar el numero de votos de TODAS las sugerencias
+  try{
+    // Se accede a la BD para listar la sugerencias con su cantidad de votos
+    let list = await pool.query('SELECT sugerencia_id, COUNT(sugerencia_id) FROM votos GROUP BY sugerencia_id ')
+    res.status(200).json({
+      // Se devuelve la lista de sugerencias con su cantidad de votos al Frontend
+      list
+    })
+
+  }catch(e){
+    next(e)
+  }
+})
+
+router.get('/listarSugerenciasMasVotos', async(req,res,next)=>{
+  // Metodo para listar el numero votos de 3 sugerencias mas votadas
+  try{
+    // Se accede a la BD para listar la sugerencias con su cantidad de votos
+    let list = await pool.query('    SELECT sugerencia_id, COUNT(sugerencia_id) FROM votos GROUP BY sugerencia_id ORDER BY COUNT(sugerencia_id) DESC LIMIT 3')
+    res.status(200).json({
+      // Se devuelve la lista de sugerencias con su cantidad de "3" votos al Frontend
+      list
+    })
+
+  }catch(e){
+    next(e)
+  }
+})
+
+
 
 // Se exporta el modulo para poder ser usado
 module.exports = router
