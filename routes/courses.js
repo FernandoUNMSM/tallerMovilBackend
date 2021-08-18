@@ -237,7 +237,7 @@ router.get('/coursesofuser/:iduser', async (req, res, next) => {
     // Aqui va el query para obtener la lista de cursos de un usuario
 
     let listUser = await pool.query(`
-    SELECT c.curso_nombre, c.curso_id 
+    SELECT c.*
     FROM heroku_b3e0382f6ba83ba.curso_usuario AS cu 
     INNER JOIN heroku_b3e0382f6ba83ba.cursos AS c 
     ON cu.curso_id = c.curso_id 
@@ -258,8 +258,8 @@ router.get('/coursespublic', async (req, res, next) => {
   // Ruta para obtener la lista de cursos publicos
   try {
     // Query para obtener la lista de cursos publicos
-    let cursos = await pool.query('SELECT * FROM heroku_b3e0382f6ba83ba.cursos WHERE privacidad_id = 1 AND privacidad_id = 5')
-    let cantCursos = await pool.query('SELECT count(curso_id) FROM heroku_b3e0382f6ba83ba.cursos WHERE privacidad_id = 1 AND privacidad_id = 5')
+    let cursos = await pool.query('SELECT * FROM heroku_b3e0382f6ba83ba.cursos WHERE privacidad_id IN (1, 5)')
+    let cantCursos = await pool.query('SELECT count(curso_id) FROM heroku_b3e0382f6ba83ba.cursos WHERE privacidad_id IN (1, 5)')
     console.log(cantCursos)
     // Respuesta a la peticion
     res.status(200).json({

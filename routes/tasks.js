@@ -20,8 +20,8 @@ router.post('/creartarea', async (req, res, next) => {
 
   try{
     //Aqui va el query para crear una nueva tarea
-    await pool.query('INSERT INTO heroku_b3e0382f6ba83ba.tareas set ? ', newTarea);
-    
+    const tareaCreated = await pool.query('INSERT INTO heroku_b3e0382f6ba83ba.tareas set ? ', newTarea);
+    await pool.query('CALL asignartareas(?, ?);',[curso_id, tareaCreated.insertId])
     //Respuesta a la peticion
     res.status(200).json({
       msg: 'tarea creada'
