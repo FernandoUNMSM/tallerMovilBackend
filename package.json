@@ -30,6 +30,7 @@
     "morgan": "^1.10.0",
     "mysql": "^2.18.1",
     "node": "^16.3.0",
+    "node-code-generator": "^1.0.3",
     "sonarqube-scanner": "^2.8.1",
     "timeago.js": "^4.0.2"
   },

@@ -1,6 +1,10 @@
 const express = require('express')
 const router = express.Router()
 const pool = require('../src/database')
+var CodeGenerator = require('node-code-generator');
+
+var generator = new CodeGenerator();
+var pattern = '***#**##';
 
 router.get('/cursos/:iduser', async (req, res, next) => {
   // Esta es la ruta para obtener los cursos de un usuario
@@ -48,11 +52,13 @@ router.post('/courses', async (req, res, next) => {
     // Obtenemos los datos del cuerpo de la peticion
     const { curso_id, usuario_id, categoria_id, codigo, imagen, curso_nombre, descripcion, conoci_previo, privacidad_id, curso_fecha_creacion } = req.body
 
+    var code = generator.generateCodes(pattern, 1, {});
+
     let newCourse = {
       curso_id,
       usuario_id,
       categoria_id,
-      codigo,
+      codigo: code,
       imagen,
       curso_nombre,
       descripcion,
@@ -252,8 +258,8 @@ router.get('/coursespublic', async (req, res, next) => {
   // Ruta para obtener la lista de cursos publicos
   try {
     // Query para obtener la lista de cursos publicos
-    let cursos = await pool.query('SELECT * FROM heroku_b3e0382f6ba83ba.cursos WHERE privacidad_id = 1')
-    let cantCursos = await pool.query('SELECT count(curso_id) FROM heroku_b3e0382f6ba83ba.cursos WHERE privacidad_id = 1')
+    let cursos = await pool.query('SELECT * FROM heroku_b3e0382f6ba83ba.cursos WHERE privacidad_id = 1 AND privacidad_id = 5')
+    let cantCursos = await pool.query('SELECT count(curso_id) FROM heroku_b3e0382f6ba83ba.cursos WHERE privacidad_id = 1 AND privacidad_id = 5')
     console.log(cantCursos)
     // Respuesta a la peticion
     res.status(200).json({
@@ -269,13 +275,11 @@ router.get('/coursespublicmax', async (req, res, next) => {
   // Ruta para obtener la lista de cursos publicos
   try {
     // Query para obtener la lista de cursos publicos
-    let cursos = await pool.query('SELECT * FROM heroku_b3e0382f6ba83ba.cursos WHERE privacidad_id = 1')
-    let cantCursos = await pool.query('SELECT count(curso_id) FROM heroku_b3e0382f6ba83ba.cursos WHERE privacidad_id = 1')
-    console.log(cantCursos)
+    let cursos = await pool.query('SELECT c.* FROM cursos as c JOIN curso_usuario as cu ON c.curso_id = cu.curso_id WHERE c.privacidad_id IN (1,5) GROUP BY c.curso_id ORDER BY COUNT(*) DESC LIMIT 4;')
+    console.log(cursos)
     // Respuesta a la peticion
     res.status(200).json({
       cursos,
-      cantidad: cantCursos
     })
   } catch (err) {
     next(err)
