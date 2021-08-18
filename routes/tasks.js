@@ -80,6 +80,25 @@ router.post('/subirArchivo', async (req, res, next) => {
 
 })
 
+router.get('/mostrarArchivo/:id_archivo', async(req, res, next)=>{
+  
+  try {
+    // Obtenemos el id de los archivos de los parametros de la ruta de la peticion
+    const { id_archivo } = req.params
+
+    // Se accede a la BD para listar un solo Archivo 
+    let list = await pool.query('SELECT * FROM heroku_b3e0382f6ba83ba.archivos WHERE archivo_id = ?', [id_archivo])
+    res.status(200).json({
+      list
+    })
+  } catch (err) {
+    // Se maneja el error en caso de haberlo
+    next(err)
+  }
+
+})
+
+
 router.get('/listarTareasCurso/:idcurso', async (req, res, next) => {
 
   const {idcurso} = req.params;
