@@ -13,12 +13,14 @@ router.post('/crearTarea', async (req, res, next) => {
     nombre,
     descripcion,
     tarea_fecha_creacion,
-    tarea_fecha_entrega
+    tarea_fecha_entrega,
+    imagen,
+    enlace
   }
 
   try{
     //Aqui va el query para crear una nueva tarea
-    await pool.query('INSERT INTO heroku_b3e0382f6ba83ba.tareas  set ? ', newTarea);
+    await pool.query('INSERT INTO heroku_b3e0382f6ba83ba.tareas set ? ', newTarea);
     
     //Respuesta a la peticion
     res.status(200).json({

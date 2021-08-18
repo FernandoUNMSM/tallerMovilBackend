@@ -13,7 +13,6 @@ router.get('/cursos/:iduser', async (req, res, next) => {
 
     // Aqui va el query de buscar los cursos de un usuario
     list = await pool.query('SELECT * FROM heroku_b3e0382f6ba83ba.cursos WHERE usuario_id = ?', [iduser])
-
     // Respuesta a la peticion
     res.status(200).json({
       list
