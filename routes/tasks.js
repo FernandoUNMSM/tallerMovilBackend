@@ -37,13 +37,12 @@ router.post('/creartarea', async (req, res, next) => {
 router.put('/editarTarea/:idTarea', async (req, res, next) => {
   //MEtodo para editar tarea
   const { idTarea } = req.params
-  const {curso_id, nombre, descripcion, tarea_fecha_creacion, tarea_fecha_entrega} = req.body;
+  const {curso_id, nombre, descripcion, tarea_fecha_creacion, tarea_fecha_entrega, imagen, enlace} = req.body;
 
   try {
     //guarda los datos de ediccion
-    await pool.query('UPDATE heroku_b3e0382f6ba83ba.tareas SET nombre = ?, descripcion = ?, tarea_fecha_creacion = ?, tarea_fecha_entrega = ?  WHERE tarea_id = ? AND curso_id = ?', [nombre, descripcion, tarea_fecha_creacion, tarea_fecha_entrega, idTarea, curso_id])
+    await pool.query('UPDATE heroku_b3e0382f6ba83ba.tareas SET nombre = ?, descripcion = ?, tarea_fecha_creacion = ?, tarea_fecha_entrega = ?, imagen = ?, enlace = ? WHERE tarea_id = ? AND curso_id = ?', [nombre, descripcion, tarea_fecha_creacion, tarea_fecha_entrega, imagen, enlace, idTarea, curso_id])
    
-
     const TareaEditada = await pool.query('SELECT * FROM heroku_b3e0382f6ba83ba.tareas WHERE tarea_id = ? AND curso_id = ?', [idTarea, curso_id])
     //Envia los datos de la ediccion de como quedo al fronted
     res.status(200).json(TareaEditada)
