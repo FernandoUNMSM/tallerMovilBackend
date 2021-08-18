@@ -115,24 +115,50 @@ router.post('/deletecoursesUsers', async (req, res, next) => {
 
 router.post('/notificacion', async (req, res, next) => {
   // Ruta para añadir una notificacion a una tarea
-
   try {
     // Obtenemos los datos del cuerpo de la peticion
     const { tarea_asignada_id, notificacion } = req.body
 
     // Aqui va el query para añadir la notificacion
-    await pool.query('CALL notificacion_curso (?, ?) ', [tarea_asignada_id, notificacion], function(err, result) {
-      if (err) {
-        console.log('err:', err)
-      } else {
-        console.log('results:', result)
-      }
-    })
-
-    const savedCourseUser = await pool.query('SELECT mensaje_notificacion FROM heroku_b3e0382f6ba83ba.tarea_asignada  ')
+    await pool.query('CALL heroku_b3e0382f6ba83ba.notificacion_curso (?, ?) ', [tarea_asignada_id, notificacion])
+    const savedCourseUser = await pool.query('select * from  heroku_b3e0382f6ba83ba.tarea_asignada where tarea_asignada_id = ? ', tarea_asignada_id)
 
     // Respuesta a la peticion
-    res.status(201).json(savedCourseUser)
+    res.status(200).json(savedCourseUser)
+  } catch (e) {
+    next(e)
+  }
+})
+
+router.get('/listarCursosAgregadosPorProfesor', async (req, res, next) => {
+  // Ruta para añadir una notificacion a una tarea
+  try {
+    // Obtenemos los datos del cuerpo de la peticion
+    const { usuario_id } = req.body
+
+    // Aqui va el query para añadir la notificacion
+    await pool.query('CALL heroku_b3e0382f6ba83ba.listarCursosAgregadosPorProfesor (?) ', [usuario_id])
+    const listaCursos = await pool.query('CALL heroku_b3e0382f6ba83ba.listarCursosAgregadosPorProfesor (?)  ', usuario_id)
+
+    // Respuesta a la peticion
+    res.status(200).json(listaCursos)
+  } catch (e) {
+    next(e)
+  }
+})
+
+router.get('/listarCursosConSolicicitudAcceso', async (req, res, next) => {
+  // Ruta para añadir una notificacion a una tarea
+  try {
+    // Obtenemos los datos del cuerpo de la peticion
+    const { usuario_id } = req.body
+
+    // Aqui va el query para añadir la notificacion
+    await pool.query('CALL heroku_b3e0382f6ba83ba.listarCursosConSolicicitudAcceso (?) ', [usuario_id])
+    const listaCursos = await pool.query('CALL heroku_b3e0382f6ba83ba.listarCursosConSolicicitudAcceso (?)  ', usuario_id)
+
+    // Respuesta a la peticion
+    res.status(200).json(listaCursos)
   } catch (e) {
     next(e)
   }
@@ -142,7 +168,7 @@ router.post('/aceptarInvitacionDeProfesor', async (req, res, next) => {
   try {
     const { usuario_id, curso_id } = req.body
     await pool.query('CALL heroku_b3e0382f6ba83ba.aceptar_invitacion_profesor (?, ?) ', [usuario_id, curso_id])
-    const cursoAceptado = await pool.query('SELECT * FROM heroku_b3e0382f6ba83ba.curso_usuario where curso_id = ? and usuario_id = ?  ', [curso_id, usuario_id])
+    const cursoAceptado = await pool.query('SELECT * FROM heroku_b3e0382f6ba83ba.curso_usuario where curso_id = ? and usuario_id = ?  ', [usuario_id, curso_id])
 
     // Respuesta a la peticion
     res.status(201).json(cursoAceptado)
