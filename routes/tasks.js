@@ -61,4 +61,25 @@ router.post('/subirArchivo', async (req, res, next) => {
 
 })
 
+router.get('/listarTareasCurso/:idcurso', async (req, res, next) => {
+
+  const {idcurso} = req.params;
+
+  try{
+    //Aqui va el query para crear una nueva tarea
+    const tareas = await pool.query('SELECT * FROM tareas WHERE curso_id = ? ', [idcurso]);
+    console.log(tareas)
+    //Respuesta a la peticion
+    res.status(200).json({
+      tareas,
+      msg: `Tareas del curso: ${idcurso} listadas`
+    })
+
+  }catch(err){
+    next(err);
+  }
+
+})
+
+
 module.exports = router
