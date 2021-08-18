@@ -180,12 +180,11 @@ router.get('/course-user/:idcurso', async (req, res, next) => {
   
   //Obtenemos el id del curso de los parametros de la ruta de la peticion
   const { idcurso } = req.params;
-  
+  console.log(idcurso)
   try{
     
     //Aqui va el query para obtener la lista de usuarios de un curso
-    let listUser = await pool.query('SELECT usuarios.usuario_id, usuario_nombre,usuario_apellidos, correo, url, curso_usuario.situacion_id FROM heroku_b3e0382f6ba83ba.usuarios INNER JOIN heroku_b3e0382f6ba83ba.curso_usuario ON usuarios.usuario_id = curso_usuario.usuario_id WHERE curso_id = ? ', [idcurso]);
-        
+    let listUser = await pool.query('CALL listarUsuariosPorCurso(?);', [idcurso]);
     //Respuesta a la peticion
     res.status(200).json({
       message: 'Lista del curso: ' + idcurso,
