@@ -2,11 +2,11 @@ const express = require('express')
 const router = express.Router()
 const pool = require('../src/database');
 
-router.post('/crearTarea', async (req, res, next) => {
+router.post('/creartarea', async (req, res, next) => {
   //Esta es la ruta para crear una nueva tarea
 
   //Obtenemos los datos de la nueva tarea del cuerpo de la peticion
-  const {curso_id, nombre, descripcion, tarea_fecha_creacion, tarea_fecha_entrega} = req.body;
+  const {curso_id, nombre, descripcion, tarea_fecha_creacion, tarea_fecha_entrega, imagen, enlace} = req.body;
 
   const newTarea = {
     curso_id,
