@@ -52,5 +52,11 @@ describe('Test de Notificaciones', () => {
         expect(response.status).toBe(200)
         expect(response.body.body).not.toBeNull()
   })
+  test('GET /listarNotificacionesPorUsuario', async() => {
+    const response = await request(app).get('/listarNotificacionesPorUsuario/1635')
+        expect(response.error).toBe(false)
+        expect(response.status).toBe(200)
+        expect(response.body.body).not.toBeNull()
+  })
 })
 
