@@ -7,6 +7,7 @@ const pool = require('../src/database');
 
 //encriptacion del password
 const bcrypt = require('bcrypt')
+
 let multer = require('multer');
 let upload = multer();
 
@@ -60,7 +61,7 @@ router.get('/users/:id', async (req, res, next) => {
 })
 
 //Metodo get para editar al usuario
-router.post('/useredit/:id', upload.fields([]),async (req, res) => {
+router.post('/useredit/:id', upload.fields([]),async (req, res, next) => {
   try {
     //Parámetro id extraido de la ruta
     const { id } = req.params
