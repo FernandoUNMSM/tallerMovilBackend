@@ -1,10 +1,10 @@
 const express = require('express')
 const router = express.Router()
 const pool = require('../src/database')
-var CodeGenerator = require('node-code-generator');
+var CodeGenerator = require('node-code-generator')
 
-var generator = new CodeGenerator();
-var pattern = '***#**##';
+var generator = new CodeGenerator()
+var pattern = '***#**##'
 
 router.get('/cursos/:iduser', async (req, res, next) => {
   // Esta es la ruta para obtener los cursos de un usuario
@@ -156,7 +156,7 @@ router.get('/listarCursosConSolicicitudAcceso/:usuario_id', async (req, res, nex
   // Ruta para añadir una notificacion a una tarea
   try {
     // Obtenemos los datos del cuerpo de la peticion
-    const { usuario_id } = req.body
+    const { usuario_id } = req.params
 
     // Aqui va el query para añadir la notificacion
     await pool.query('CALL heroku_b3e0382f6ba83ba.listarCursosConSolicicitudAcceso (?) ', [usuario_id])
