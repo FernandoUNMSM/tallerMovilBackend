@@ -152,7 +152,7 @@ router.get('/listarCursosAgregadosPorProfesor', async (req, res, next) => {
   }
 })
 
-router.get('/listarCursosConSolicicitudAcceso', async (req, res, next) => {
+router.get('/listarCursosConSolicicitudAcceso/:usuario_id', async (req, res, next) => {
   // Ruta para añadir una notificacion a una tarea
   try {
     // Obtenemos los datos del cuerpo de la peticion
