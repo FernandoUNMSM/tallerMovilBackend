@@ -119,6 +119,12 @@ router.post('/deletecoursesUsers', async (req, res, next) => {
   }
 })
 
+/**
+ * @param {Number} curso_id
+ * @param {String} correo
+ * @param {Boolean} error
+ * @param {String} mensaje
+ */
 router.post('/notificacion', async (req, res, next) => {
   // Ruta para añadir una notificacion a una tarea
   try {
@@ -147,6 +153,22 @@ router.post('/aceptarSolicitudAcceso', async (req, res, next) => {
     const solicitud = await pool.query('CALL heroku_b3e0382f6ba83ba.aceptarSolicitudAcceso (?, ?, ?) ', [usuario_id, curso_id, situacion_id])
     // Respuesta a la peticion
     res.status(200).json(solicitud)
+  } catch (e) {
+    next(e)
+  }
+})
+
+router.post('/unirPorCodigo', async (req, res, next) => {
+  // Ruta para añadir un usuario a un curso
+  try {
+    const { codigo, usuario_id } = req.body
+    await pool.query('CALL heroku_b3e0382f6ba83ba.unirseCursoPorCodigo (?, ?, @error, @mensaje)', [codigo, usuario_id])
+    const a = await pool.query('CALL heroku_b3e0382f6ba83ba.unirseCursoPorCodigo (?, ?, @error, @mensaje)', [codigo, usuario_id])
+    console.log(a[0][0]['@mensaje'])
+    res.status(201).json({
+      error: a[0][0]['@error'],
+      msg: a[0][0]['@mensaje']
+    })
   } catch (e) {
     next(e)
   }
