@@ -34,7 +34,7 @@ router.get('/courses/:id', async (req, res, next) => {
 
   try {
     // Aqui va el query para obtener un curso especifico por su id
-    const course = await pool.query('SELECT * FROM heroku_b3e0382f6ba83ba.cursos WHERE curso_id = ?', [id])
+    const course = await pool.query('SELECT * FROM heroku_b3e0382f6ba83ba.cursos WHERE curso_id = ? AND situacion_id = 1', [id])
     const alumnos = await pool.query('SELECT COUNT(*) FROM curso_usuario WHERE curso_id = ?', [id])
     // Respuesta a la peticion
     res.status(200).json({
