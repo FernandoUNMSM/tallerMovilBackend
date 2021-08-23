@@ -406,4 +406,46 @@ router.put('/AcceptarSolicitudPrivado/:idcurso', async (req, res, next) => {
   }
 })
 
+router.post('/join-public-course/:idcurso', async (req, res, next) => {
+  const { idcurso } = req.params
+
+  const { iduser } = req.body
+  
+  try {
+    const curso = await pool.query('SELECT * FROM heroku_b3e0382f6ba83ba.cursos WHERE curso_id = ?', [idcurso])
+    const privacidad_publico = '1'
+    const situacion = '1'
+    const newUser = {
+      curso_id : idcurso,
+      usuario_id : iduser,
+      situacion_id : situacion
+    }
+
+    var existe = ""
+    
+    if (curso[0].privacidad_id == privacidad_publico){
+      const curso_usuario = await pool.query('SELECT * FROM heroku_b3e0382f6ba83ba.curso_usuario WHERE usuario_id = ?', [iduser])
+      console.log(curso_usuario)
+      for (i=0 ; i<curso_usuario.length ;i++){
+        console.log(i)
+        if(curso_usuario[i].curso_id == idcurso && curso_usuario[i].usuario_id == iduser){
+          existe = "existe"
+          break;
+        }
+      }
+
+      if (existe != "existe" ){
+        await pool.query('INSERT INTO heroku_b3e0382f6ba83ba.curso_usuario SET ? ', newUser)
+        res.status(200).json("usuario unido al curso Publico")
+      }else{
+        res.status(200).json("usuario ya existe")
+      }
+    }
+  } catch (err) {
+    console.log(err)
+    next(err)
+  }
+})
+
+
 module.exports = router
