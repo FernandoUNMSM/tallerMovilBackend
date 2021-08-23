@@ -345,7 +345,7 @@ router.post('/coursesEdit/:idcurso', async (req, res, next) => {
     const { idcurso } = req.params
     // Obtenemos los datos del cuerpo de la peticion
 
-    const { codigo, imagen, curso_nombre, descripcion, conoci_previo, privacidad_id } = req.body
+    const { codigo, imagen, curso_nombre, descripcion, conoci_previo, privacidad_id, categoria_id } = req.body
 
     const newCourse = {
       codigo,
@@ -353,8 +353,8 @@ router.post('/coursesEdit/:idcurso', async (req, res, next) => {
       curso_nombre,
       descripcion,
       conoci_previo,
-      privacidad_id
-
+      privacidad_id,
+      categoria_id
     }
     // Aqui va el query para editar un curso
     await pool.query('UPDATE heroku_b3e0382f6ba83ba.cursos set ? WHERE curso_id = ?', [newCourse, idcurso])
