@@ -449,7 +449,7 @@ router.post('/join-public-course/:idcurso', async (req, res, next) => {
 router.post('/list-task-submissions/:idcurso', async (req, res, next) => {
   const { idcurso } = req.params
   try {
-    const listaTareas = await pool.query('SELECT ta.tarea_id, ta.usuario_id, ta.url, ta.fecha_entrega, ta.calificacion FROM heroku_b3e0382f6ba83ba.tarea_asignada ta INNER JOIN heroku_b3e0382f6ba83ba.tareas t ON ta.tarea_id = t.tarea_id WHERE t.curso_id = ?',[idcurso])
+    const listaTareas = await pool.query('SELECT ta.tarea_id, ta.usuario_id, ta.url, ta.fecha_entrega, u.usuario_nombre, u.usuario_apellidos FROM heroku_b3e0382f6ba83ba.tarea_asignada ta INNER JOIN heroku_b3e0382f6ba83ba.tareas t ON ta.tarea_id = t.tarea_id INNER JOIN heroku_b3e0382f6ba83ba.usuarios u ON ta.usuario_id = u.usuario_id   WHERE t.curso_id = ?',[idcurso])
     res.status(200).json(listaTareas)
   } catch (err) {
     next(err)
