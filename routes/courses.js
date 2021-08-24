@@ -43,6 +43,7 @@ router.get('/courses/:id', async (req, res, next) => {
       alumnos: Object.values(alumnos[0])[0]
     })
   } catch (err) {
+    console.log(err)
     next(err)
   }
 })
