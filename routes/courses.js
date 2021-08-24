@@ -511,9 +511,7 @@ router.post('/join-public-course/:idcurso', async (req, res, next) => {
     
     if (curso[0].privacidad_id == privacidad_publico){
       const curso_usuario = await pool.query('SELECT * FROM heroku_b3e0382f6ba83ba.curso_usuario WHERE usuario_id = ?', [iduser])
-      console.log(curso_usuario)
       for (i=0 ; i<curso_usuario.length ;i++){
-        console.log(i)
         if(curso_usuario[i].curso_id == idcurso && curso_usuario[i].usuario_id == iduser){
           existe = "existe"
           break;
