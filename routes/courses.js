@@ -210,6 +210,23 @@ router.get('/listarCursosConSolicicitudAcceso/:usuario_id', async (req, res, nex
   }
 })
 
+router.get('/listarCursosConSolicicitudAccesoParaAlumnos/:usuario_id', async (req, res, next) => {
+  // Ruta para añadir una notificacion a una tarea
+  try {
+    // Obtenemos los datos del cuerpo de la peticion
+    const { usuario_id } = req.params
+
+    // Aqui va el query para añadir la notificacion
+    await pool.query('CALL heroku_b3e0382f6ba83ba.listarCursosConSolicicitudAccesoParaAlumnos (?) ', [usuario_id])
+    const listaCursos = await pool.query('CALL heroku_b3e0382f6ba83ba.listarCursosConSolicicitudAccesoParaAlumnos (?)  ', usuario_id)
+
+    // Respuesta a la peticion
+    res.status(200).json(listaCursos)
+  } catch (e) {
+    next(e)
+  }
+})
+
 router.get('/listarNotificacionesPorUsuario', async (req, res, next) => {
   // Ruta para añadir una notificacion a una tarea
   try {
