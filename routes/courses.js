@@ -1,10 +1,10 @@
 const express = require('express')
 const router = express.Router()
 const pool = require('../src/database')
-var CodeGenerator = require('node-code-generator');
+var CodeGenerator = require('node-code-generator')
 
-var generator = new CodeGenerator();
-var pattern = '***#**##';
+var generator = new CodeGenerator()
+var pattern = '***#**##'
 
 router.get('/cursos/:iduser', async (req, res, next) => {
   // Esta es la ruta para obtener los cursos de un usuario
@@ -34,13 +34,16 @@ router.get('/courses/:id', async (req, res, next) => {
 
   try {
     // Aqui va el query para obtener un curso especifico por su id
-    const course = await pool.query('SELECT * FROM heroku_b3e0382f6ba83ba.cursos WHERE curso_id = ?', [id])
+    const course = await pool.query('SELECT * FROM cursos WHERE curso_id = ?', [id])
 
+    const alumnos = await pool.query('SELECT COUNT(*) FROM curso_usuario WHERE curso_id = ? situacion_id = 1', [id])
     // Respuesta a la peticion
     res.status(200).json({
-      data: course[0]
+      data: course[0],
+      alumnos: Object.values(alumnos[0])[0]
     })
   } catch (err) {
+    console.log(err)
     next(err)
   }
 })
@@ -86,18 +89,28 @@ router.post('/courses', async (req, res, next) => {
  * @param {Boolean} error
  * @param {String} mensaje
  */
+// Metodo post para agregar un alumno a un curso.
+// Se especifica el id del curso al que se va agregar al usuario.
+// Se especifica el correo del usuario que va unirse al curso.
 router.post('/coursesUsers', async (req, res, next) => {
-  // Ruta para añadir un usuario a un curso
+  // Usamos un try-catch para capturar posibles errores al momento de mandar las consultas
   try {
+    // Especificamos que usaremos un objeto para poder enviar una consulta.
+    // Especificamos que la consulta se hara con un body.
     const { curso_id, correo } = req.body
+    // Hacemos la consulta a base de datos mediante el pool pasando como parametros el objeto creado lineas arriba
     await pool.query('CALL heroku_b3e0382f6ba83ba.crear_usuario_curso (?, ?, @error, @mensaje)', [curso_id, correo])
+    // Guardamos el resultado de otra consulta para mostrarlo como mensaje de salida
     const a = await pool.query('CALL heroku_b3e0382f6ba83ba.crear_usuario_curso (?, ?, @error, @mensaje)', [curso_id, correo])
+    // Prueba de la salida en consola
     console.log(a[0][0]['@mensaje'])
+    // Se muestra la respuesta exitosa a la consulta y los mensajes de salida del procedimiento almacenado
     res.status(201).json({
       error: a[0][0]['@error'],
       msg: a[0][0]['@mensaje']
     })
   } catch (e) {
+    // Se muestra el error que genero la consulta
     next(e)
   }
 })
@@ -118,83 +131,203 @@ router.post('/deletecoursesUsers', async (req, res, next) => {
   }
 })
 
+/**
+ * @param {Number} tarea_asignada_id
+ * @param {String} notificacion
+ */
+// Metodo post para mostrar notificacion de tarea asignaada a un usuario
+// Se especifica el id de la tarea asignada al usuario.
+// Se especifica el mensaje de notificacion
 router.post('/notificacion', async (req, res, next) => {
-  // Ruta para añadir una notificacion a una tarea
+  // Usamos un try-catch para capturar posibles errores al momento de mandar las consultas
   try {
-    // Obtenemos los datos del cuerpo de la peticion
+    // Especificamos que uaremos un objeto para poder enviar una consulta.
+    // Especificamos que la consulta se hara con un body.
     const { tarea_asignada_id, notificacion } = req.body
-
-    // Aqui va el query para añadir la notificacion
+    // Hacemos la consulta a base de datos mediante el pool pasando como parametros el objeto creado lineas arriba
     await pool.query('CALL heroku_b3e0382f6ba83ba.notificacion_curso (?, ?) ', [tarea_asignada_id, notificacion])
+    // Guardamos el resultado de otra consulta para mostrarlo como mensaje de salida
     const savedCourseUser = await pool.query('select * from  heroku_b3e0382f6ba83ba.tarea_asignada where tarea_asignada_id = ? ', tarea_asignada_id)
-
-    // Respuesta a la peticion
+    // Se muestra la respuesta exitosa a la consulta
     res.status(200).json(savedCourseUser)
   } catch (e) {
+    // Se muestra el error que genero la consulta
     next(e)
   }
 })
 
+/**
+ * @param {Number} usuario_id
+ * @param {Number} curso_id
+ * @param {Number} situacion_id
+ */
+// Metodo post para aceptar la solicitud de acceso de un alumno
+// Se especifica el id del usuario quien manda la solucitud
+// Se especifica el id del curso al que se solicita acceso
+// Se especifica el id de la situacion con la que se acepta el curso
+router.post('/aceptarSolicitudAcceso', async (req, res, next) => {
+  // Usamos un try-catch para capturar posibles errores al momento de mandar las consultas
+  try {
+    // Especificamos que usaremos un objeto para poder enviar una consulta.
+    // Especificamos que la consulta se hara con un body.
+    const { usuario_id, curso_id, situacion_id } = req.body
+    // Hacemos la consulta a base de datos mediante el pool pasando como parametros el objeto creado lineas arriba
+    await pool.query('CALL heroku_b3e0382f6ba83ba.aceptarSolicitudAcceso (?, ?, ?) ', [usuario_id, curso_id, situacion_id])
+    // Guardamos el resultado de otra consulta para mostrarlo como mensaje de salida
+    const solicitud = await pool.query('CALL heroku_b3e0382f6ba83ba.aceptarSolicitudAcceso (?, ?, ?) ', [usuario_id, curso_id, situacion_id])
+    // Se muestra la respuesta exitosa a la consulta
+    res.status(200).json(solicitud)
+  } catch (e) {
+    // Se muestra el error que genero la consulta
+    next(e)
+  }
+})
+
+/**
+ * @param {String} codigo
+ * @param {Number} usuario_id
+ */
+// Metodo post para unirse a un curso mediante un codigo
+// Se especifica el codigo del curso a acceder
+// Se especifica el id del usuario que se unira al curso
+router.post('/unirPorCodigo', async (req, res, next) => {
+  // Usamos un try-catch para capturar posibles errores al momento de mandar las consultas
+  try {
+    // Especificamos que usaremos un objeto para poder enviar una consulta.
+    // Especificamos que la consulta se hara con un body.
+    const { codigo, usuario_id } = req.body
+    // Hacemos la consulta a base de datos mediante el pool pasando como parametros el objeto creado lineas arriba
+    await pool.query('CALL heroku_b3e0382f6ba83ba.unirseCursoPorCodigo (?, ?, @error, @mensaje)', [codigo, usuario_id])
+    // Guardamos el resultado de otra consulta para mostrarlo como mensaje de salida
+    const a = await pool.query('CALL heroku_b3e0382f6ba83ba.unirseCursoPorCodigo (?, ?, @error, @mensaje)', [codigo, usuario_id])
+    // Prueba de la salida en consola
+    console.log(a[0][0]['@mensaje'])
+    // Se muestra la respuesta exitosa a la consulta y los mensajes de salida del procedimiento almacenado
+    res.status(201).json({
+      error: a[0][0]['@error'],
+      msg: a[0][0]['@mensaje']
+    })
+  } catch (e) {
+    // Se muestra el error que genero la consulta
+    next(e)
+  }
+})
+
+/**
+ * @param {Number} usuario_id
+ */
+// Metodo get para listar los cursos agregados por un profesor
+// Se especifica el id del usuario profesor quien agrego alumnos a su curso
 router.get('/listarCursosAgregadosPorProfesor', async (req, res, next) => {
-  // Ruta para añadir una notificacion a una tarea
+  // Usamos un try-catch para capturar posibles errores al momento de mandar las consultas
   try {
-    // Obtenemos los datos del cuerpo de la peticion
+    // Especificamos que usaremos un objeto para poder enviar una consulta.
+    // Especificamos que la consulta se hara con un body.
     const { usuario_id } = req.body
-
-    // Aqui va el query para añadir la notificacion
+    // Hacemos la consulta a base de datos mediante el pool pasando como parametros el objeto creado lineas arriba
     await pool.query('CALL heroku_b3e0382f6ba83ba.listarCursosAgregadosPorProfesor (?) ', [usuario_id])
+    // Guardamos el resultado de otra consulta para mostrarlo como mensaje de salida
     const listaCursos = await pool.query('CALL heroku_b3e0382f6ba83ba.listarCursosAgregadosPorProfesor (?)  ', usuario_id)
-
-    // Respuesta a la peticion
+    // Se muestra la respuesta exitosa a la consulta
     res.status(200).json(listaCursos)
   } catch (e) {
+    // Se muestra el error que genero la consulta
     next(e)
   }
 })
 
-router.get('/listarCursosConSolicicitudAcceso', async (req, res, next) => {
-  // Ruta para añadir una notificacion a una tarea
+/**
+ * @param {Number} usuario_id
+ */
+// Metodo get para listar los cursos con solicitud de acceso que tiene un profesor
+// Se especifica el id del usuario profesor quien creo los cursos con solcicitud de acceso
+router.get('/listarCursosConSolicicitudAcceso/:usuario_id', async (req, res, next) => {
+  // Usamos un try-catch para capturar posibles errores al momento de mandar las consultas
   try {
-    // Obtenemos los datos del cuerpo de la peticion
-    const { usuario_id } = req.body
-
-    // Aqui va el query para añadir la notificacion
+    // Especificamos que usaremos un objeto para poder enviar una consulta.
+    // Especificamos que la consulta se hara con un oarametro.
+    const { usuario_id } = req.params
+    // Hacemos la consulta a base de datos mediante el pool pasando como parametros el objeto creado lineas arriba
     await pool.query('CALL heroku_b3e0382f6ba83ba.listarCursosConSolicicitudAcceso (?) ', [usuario_id])
+    // Guardamos el resultado de otra consulta para mostrarlo como mensaje de salida
     const listaCursos = await pool.query('CALL heroku_b3e0382f6ba83ba.listarCursosConSolicicitudAcceso (?)  ', usuario_id)
-
-    // Respuesta a la peticion
+    // Se muestra la respuesta exitosa a la consulta
     res.status(200).json(listaCursos)
   } catch (e) {
+    // Se muestra el error que genero la consulta
     next(e)
   }
 })
 
+/**
+ * @param {Number} usuario_id
+ */
+// Metodo get para listar los cursos con solicitud de acceso que tiene un alumno
+// Se especifica el id del usuario alumno quien tiene cursos con solicitud de acceso
+router.get('/listarCursosConSolicicitudAccesoParaAlumnos/:usuario_id', async (req, res, next) => {
+  // Usamos un try-catch para capturar posibles errores al momento de mandar las consultas
+  try {
+    // Especificamos que usaremos un objeto para poder enviar una consulta.
+    // Especificamos que la consulta se hara con un oarametro.
+    const { usuario_id } = req.params
+    // Hacemos la consulta a base de datos mediante el pool pasando como parametros el objeto creado lineas arriba
+    await pool.query('CALL heroku_b3e0382f6ba83ba.listarCursosConSolicicitudAccesoParaAlumnos (?) ', [usuario_id])
+    // Guardamos el resultado de otra consulta para mostrarlo como mensaje de salida
+    const listaCursos = await pool.query('CALL heroku_b3e0382f6ba83ba.listarCursosConSolicicitudAccesoParaAlumnos (?)  ', usuario_id)
+    // Se muestra la respuesta exitosa a la consulta
+    res.status(200).json(listaCursos)
+  } catch (e) {
+    // Se muestra el error que genero la consulta
+    next(e)
+  }
+})
+
+/**
+ * @param {Number} usuario_id
+ */
+// Metodo get para listar las notificaciones de un usuario
+// Se especifica el id del usuario del cual queremos listar sus notificaciones
 router.get('/listarNotificacionesPorUsuario', async (req, res, next) => {
-  // Ruta para añadir una notificacion a una tarea
+  // Usamos un try-catch para capturar posibles errores al momento de mandar las consultas
   try {
-    // Obtenemos los datos del cuerpo de la peticion
+    // Especificamos que usaremos un objeto para poder enviar una consulta.
+    // Especificamos que la consulta se hara con un body.
     const { usuario_id } = req.body
-
-    // Aqui va el query para añadir la notificacion
+    // Hacemos la consulta a base de datos mediante el pool pasando como parametros el objeto creado lineas arriba
     await pool.query('CALL heroku_b3e0382f6ba83ba.listarNotificacionesPorUsuario (?) ', [usuario_id])
+    // Guardamos el resultado de otra consulta para mostrarlo como mensaje de salida
     const listaCursos = await pool.query('CALL heroku_b3e0382f6ba83ba.listarNotificacionesPorUsuario (?)  ', usuario_id)
-
-    // Respuesta a la peticion
+    // Se muestra la respuesta exitosa a la consulta
     res.status(200).json(listaCursos)
   } catch (e) {
+    // Se muestra el error que genero la consulta
     next(e)
   }
 })
 
+/**
+ * @param {Number} usuario_id
+ * @param {Number} curso_id
+ * @param {Number} situacion_id
+ */
+// Metodo post para aceptar la invitacion para acceder a un curso
+// Se especifica el id del usuario a quien se le manda la invitacion
+// Se especifica el id del curso al que invita al usuario
+// Se especifica el id de la situacion con la que se acepta el curso
 router.post('/aceptarInvitacionDeProfesor', async (req, res, next) => {
+  // Usamos un try-catch para capturar posibles errores al momento de mandar las consultas
   try {
-    const { usuario_id, curso_id } = req.body
-    await pool.query('CALL heroku_b3e0382f6ba83ba.aceptar_invitacion_profesor (?, ?) ', [usuario_id, curso_id])
-    const cursoAceptado = await pool.query('SELECT * FROM heroku_b3e0382f6ba83ba.curso_usuario where curso_id = ? and usuario_id = ?  ', [usuario_id, curso_id])
-
-    // Respuesta a la peticion
+    // Especificamos que usaremos un objeto para poder enviar una consulta.
+    // Especificamos que la consulta se hara con un body.
+    const { usuario_id, curso_id, situacion_id } = req.body
+    // Hacemos la consulta a base de datos mediante el pool pasando como parametros el objeto creado lineas arriba
+    await pool.query('CALL heroku_b3e0382f6ba83ba.aceptar_invitacion_profesor (?, ?, ?) ', [usuario_id, curso_id, situacion_id])
+    // Guardamos el resultado de otra consulta para mostrarlo como mensaje de salida
+    const cursoAceptado = await pool.query('SELECT * FROM heroku_b3e0382f6ba83ba.curso_usuario where curso_id = ? and usuario_id = ?', [usuario_id, curso_id])
+    // Se muestra la respuesta exitosa a la consulta
     res.status(201).json(cursoAceptado)
   } catch (e) {
+    // Se muestra el error que genero la consulta
     next(e)
   }
 })
@@ -202,12 +335,10 @@ router.post('/aceptarInvitacionDeProfesor', async (req, res, next) => {
 /**
  * @param {Number} iduser
  */
+// Metodo get obtener las notificaciones de un usuario
+// Se especifica el id del usuario del cual se quiere listar sus notificaciones
 router.get('/notificacionPorUsuario/:iduser', async (req, res, next) => {
-  // Ruta para obtener la lista de cursos de un usuario
-
-  // Obtenemos el id del usuario de los parametros de la ruta de la peticion
   const { iduser } = req.params
-
   try {
     // Aqui va el query para obtener la lista de cursos de un usuario
 
@@ -254,7 +385,7 @@ router.get('/coursesofuser/:iduser', async (req, res, next) => {
     // Aqui va el query para obtener la lista de cursos de un usuario
 
     let listUser = await pool.query(`
-    SELECT c.curso_nombre, c.curso_id 
+    SELECT c.*
     FROM heroku_b3e0382f6ba83ba.curso_usuario AS cu 
     INNER JOIN heroku_b3e0382f6ba83ba.cursos AS c 
     ON cu.curso_id = c.curso_id 
@@ -275,8 +406,8 @@ router.get('/coursespublic', async (req, res, next) => {
   // Ruta para obtener la lista de cursos publicos
   try {
     // Query para obtener la lista de cursos publicos
-    let cursos = await pool.query('SELECT * FROM heroku_b3e0382f6ba83ba.cursos WHERE privacidad_id = 1 AND privacidad_id = 5')
-    let cantCursos = await pool.query('SELECT count(curso_id) FROM heroku_b3e0382f6ba83ba.cursos WHERE privacidad_id = 1 AND privacidad_id = 5')
+    let cursos = await pool.query('SELECT * FROM heroku_b3e0382f6ba83ba.cursos WHERE privacidad_id IN (1, 5)')
+    let cantCursos = await pool.query('SELECT count(curso_id) FROM heroku_b3e0382f6ba83ba.cursos WHERE privacidad_id IN (1, 5)')
     console.log(cantCursos)
     // Respuesta a la peticion
     res.status(200).json({
@@ -328,7 +459,7 @@ router.post('/coursesEdit/:idcurso', async (req, res, next) => {
     const { idcurso } = req.params
     // Obtenemos los datos del cuerpo de la peticion
 
-    const { codigo, imagen, curso_nombre, descripcion, conoci_previo, privacidad_id } = req.body
+    const { codigo, imagen, curso_nombre, descripcion, conoci_previo, privacidad_id, categoria_id } = req.body
 
     const newCourse = {
       codigo,
@@ -336,8 +467,8 @@ router.post('/coursesEdit/:idcurso', async (req, res, next) => {
       curso_nombre,
       descripcion,
       conoci_previo,
-      privacidad_id
-
+      privacidad_id,
+      categoria_id
     }
     // Aqui va el query para editar un curso
     await pool.query('UPDATE heroku_b3e0382f6ba83ba.cursos set ? WHERE curso_id = ?', [newCourse, idcurso])
@@ -448,6 +579,56 @@ router.put('/AcceptarSolicitudPrivado/:idcurso', async (req, res, next) => {
 
     res.status(200).json(aceptarsolictudPrivate)
   } catch (err) {
+    next(err)
+  }
+})
+
+
+router.post('/join-public-course/:idcurso', async (req, res, next) => {
+  const { idcurso } = req.params
+
+  const { iduser } = req.body
+  
+  try {
+    const curso = await pool.query('SELECT * FROM heroku_b3e0382f6ba83ba.cursos WHERE curso_id = ?', [idcurso])
+    const privacidad_publico = '1'
+    const situacion = '1'
+    const newUser = {
+      curso_id : idcurso,
+      usuario_id : iduser,
+      situacion_id : situacion
+    }
+
+    var existe = ""
+    
+    if (curso[0].privacidad_id == privacidad_publico){
+      const curso_usuario = await pool.query('SELECT * FROM heroku_b3e0382f6ba83ba.curso_usuario WHERE usuario_id = ?', [iduser])
+      for (i=0 ; i<curso_usuario.length ;i++){
+        if(curso_usuario[i].curso_id == idcurso && curso_usuario[i].usuario_id == iduser){
+          existe = "existe"
+          break;
+        }
+      }
+
+      if (existe != "existe" ){
+        await pool.query('INSERT INTO heroku_b3e0382f6ba83ba.curso_usuario SET ? ', newUser)
+        res.status(200).json("usuario unido al curso Publico")
+      }else{
+        res.status(200).json("usuario ya existe")
+      }
+    }
+  } catch (err) {
+    next(err)
+  }
+})
+
+router.get('/list-task-submissions/:idtarea', async (req, res, next) => {
+  const { idtarea } = req.params
+  try {
+    const listaTareas = await pool.query('SELECT ta.tarea_id, ta.usuario_id, ta.url, ta.fecha_entrega, u.usuario_nombre, u.usuario_apellidos FROM heroku_b3e0382f6ba83ba.tarea_asignada ta  INNER JOIN heroku_b3e0382f6ba83ba.usuarios u ON ta.usuario_id = u.usuario_id   WHERE ta.tarea_id = ?',[idtarea])
+    res.status(200).json(listaTareas)
+  } catch (err) {
+    console.log(err)
     next(err)
   }
 })
