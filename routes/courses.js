@@ -89,6 +89,9 @@ router.post('/courses', async (req, res, next) => {
  * @param {Boolean} error
  * @param {String} mensaje
  */
+// Metodo post para agregar un alumno a un curso.
+// Se especifica el id del curso al que se va agregar al usuario.
+// Se especifica el correo del usuario que va unirse al curso.
 router.post('/coursesUsers', async (req, res, next) => {
   // Ruta para añadir un usuario a un curso
   try {
@@ -246,9 +249,9 @@ router.get('/listarNotificacionesPorUsuario', async (req, res, next) => {
 
 router.post('/aceptarInvitacionDeProfesor', async (req, res, next) => {
   try {
-    const { usuario_id, curso_id } = req.body
-    await pool.query('CALL heroku_b3e0382f6ba83ba.aceptar_invitacion_profesor (?, ?) ', [usuario_id, curso_id])
-    const cursoAceptado = await pool.query('SELECT * FROM heroku_b3e0382f6ba83ba.curso_usuario where curso_id = ? and usuario_id = ?  ', [usuario_id, curso_id])
+    const { usuario_id, curso_id, situacion_id } = req.body
+    await pool.query('CALL heroku_b3e0382f6ba83ba.aceptar_invitacion_profesor (?, ?, ?) ', [usuario_id, curso_id, situacion_id])
+    const cursoAceptado = await pool.query('SELECT * FROM heroku_b3e0382f6ba83ba.curso_usuario where curso_id = ? and usuario_id = ?', [usuario_id, curso_id])
 
     // Respuesta a la peticion
     res.status(201).json(cursoAceptado)
