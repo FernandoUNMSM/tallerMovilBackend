@@ -531,54 +531,82 @@ router.get('/list-task/:idcurso', async (req, res, next) => {
 
 router.post('/solicitarCursoPrivado', async (req, res, next) => {
   // Aqui el query para solicitar acceso a un curso privado
+  //Metodo para que el alumno pueda solicitad un notificacion al profesor que quiere unirse a su curso privado
+
+  //En caso que sea todo correcto
   try {
+
+    //Se solicita el id_curso y id_usuario a traves de body.
     const { curso_id, usuario_id } = req.body
 
+    //Se crea y se le asigna la situacion_id "3"
     let situacion_id = '3'
 
+    //Se guarda en una variable, los datos de curso_id, usuario_id, situacion_id
     let solicitudPrivate = {
       curso_id,
       usuario_id,
       situacion_id
     }
 
+    //Se solicita a un query que inserte en la tabla curso_usuario los datos.
     await pool.query('INSERT INTO heroku_b3e0382f6ba83ba.curso_usuario SET ? ', solicitudPrivate)
 
+    //Se guarda en una variable constante los datos que fueron solictados en el query
     const savedSocitudPrivate = await pool.query('SELECT * FROM heroku_b3e0382f6ba83ba.curso_usuario WHERE curso_id = ?', curso_id)
 
-    res.status(201).json(savedSocitudPrivate) // Aca se debe de enviar el nuevo curso creado
-  } catch (e) {
+    //Se manda en forma de json al fronted los datos encontrados en la tabla 
+    res.status(201).json(savedSocitudPrivate) 
+  
+  } //En caso que haya un error
+    catch (e) {
     next(e)
   }
 })
 
-// Mostrar todos los alumnos que tengan solicitud.
 router.get('/AcceptarSolicitudPrivado/:idcurso', async (req, res, next) => {
+  //Metodo que le muestra al profesor una lista de alumnos que han mandado solicitud
+  
+  //Se solicita el id_curso a traves de enlace.
   const { idcurso } = req.params
+
   // console.log(idcurso)
+  //Si coloca como que la situacion_id siempre va ser 3
   const situacion_id = '3'
+
+  //En caso que sea todo correcto
   try {
+    //Se declara una variable
     let alumnosPendientes
+    //Se guarda en la varibale una lista de alumnos que tengan la situacion_id de 3
     alumnosPendientes = await pool.query('SELECT * FROM heroku_b3e0382f6ba83ba.curso_usuario WHERE curso_id = ? AND situacion_id = ?', [idcurso, situacion_id])
+    //Manda al fronted en forma de json la varible
     res.status(200).json(alumnosPendientes)
-  } catch (err) {
+  } //En caso que haya un error
+  catch (err) {
     next(err)
   }
 })
 
 router.put('/AcceptarSolicitudPrivado/:idcurso', async (req, res, next) => {
+  //Metodo para que el profesor pueda aceptar y mandar las solicitud de los cursos  Privado
   const { idcurso } = req.params
   // console.log(idcurso)
 
   const { usuario_id, situacion_id } = req.body
   // situacion_id = "1": acceptado;
   // situacion_id = "2": rechazado;
+  
+  //En caso se encuentra los datos ingresados perfectamente
   try {
+    //Actualizar el la situacion de los alumnos en la tabla curso_usario, dependiendo del curso y usuario.
     await pool.query('UPDATE heroku_b3e0382f6ba83ba.curso_usuario SET situacion_id = ? WHERE curso_id = ? AND usuario_id = ?', [situacion_id, idcurso, usuario_id])
+    //Se guarda en una variable los datos de la tabla curso_usuario depeniendo el curso_id y usuario_id. 
     const aceptarsolictudPrivate = await pool.query('SELECT * FROM heroku_b3e0382f6ba83ba.curso_usuario WHERE curso_id = ? AND usuario_id = ?', [idcurso, usuario_id])
-
+    //Se manda la variable sobre como se encuentra actualizada
     res.status(200).json(aceptarsolictudPrivate)
-  } catch (err) {
+  } 
+  catch (err) { //En caso que haya un error
     next(err)
   }
 })
