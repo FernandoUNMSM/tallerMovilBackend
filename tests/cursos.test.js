@@ -9,8 +9,9 @@ const pool = require('../src/database');
 //Nos trae el metodo para hacer querys a la BD
 
 //Declaracion de un describe de tests
+// Suit de pruebas para cursos
 describe('tests de Cursos', () => {
-  //Declaracion del test
+  // Prueba para obtener cursos
   test('Get course by ID', async () => {
     //Hacemos la llamada a la ruta de la api
     const response = await api
@@ -70,7 +71,7 @@ describe('tests de Cursos', () => {
   //Declaracion del test
   test('GET /listarCursosAgregadosPorProfesor', async () => {
     //Hacemos la llamada a la ruta de la api
-    const response = await api
+    await api
       .get('/listarCursosAgregadosPorProfesor/1645')
       .expect(200)
       .expect('Content-Type', /application\/json/)
@@ -78,9 +79,28 @@ describe('tests de Cursos', () => {
   //Declaracion del test
   test('GET /listarCursosConSolicicitudAcceso', async () => {
     //Hacemos la llamada a la ruta de la api
-    const response = await api.
-      get('/listarCursosConSolicicitudAcceso/8205')
+    await api
+      .get('/listarCursosConSolicicitudAcceso/8205')
       .expect(200)
+      .expect('Content-Type', /application\/json/)
+  })
+  // Prueba para verificar la lista de cursos con solicitud de acceso para el alumno
+  test('GET /listarCursosConSolicicitudAccesoParaAlumnos', async () => {
+    await api
+      .get('/listarCursosConSolicicitudAccesoParaAlumnos/23285')
+      .expect(200)
+      .expect('Content-Type', /application\/json/)
+  })
+  // Prueba para verificar la union a un curso por codigo
+  test('POST /unirPorCodigo', async () => {
+    let nuevo = {
+      codigo: 'HLS31M87',
+      usuario_id: 1735
+    }
+    const response = await api
+      .post('/unirPorCodigo')
+      .send(nuevo)
+      .expect(201)
       .expect('Content-Type', /application\/json/)
   })
 })
@@ -131,6 +151,8 @@ describe('Suggestions test', () => {
 })
 
 //Declaracion de un describe de tests
+// Suit de pruebas para Curso - Usuario
+// Prueba para verificar la inscripcion de un alumno a un curso
 describe('USERS tests', () => {
   //Declaracion del test
   test('Get all users', async () => {
@@ -206,11 +228,39 @@ describe('Test de Curso -Usuario', () => {
       .expect(201)
       .expect('Content-Type', /application\/json/)
   })
+  // Prueba para verificar la inscripcion de un alumno a un curso
+  test('POST /aceptarInvitacionDeProfesor ', async () => {
+    let nuevo = {
+      usuario_id: 1735,
+      curso_id: 4935,
+      situacion_id: 5
+    }
+    const response = await api
+      .post('/aceptarInvitacionDeProfesor ')
+      .send(nuevo)
+      .expect(201)
+      .expect('Content-Type', /application\/json/)
+  })
+  // Prueba para verificar la aceptacion de una solicitud de acceso
+  test('POST /aceptarSolicitudAcceso', async () => {
+    let nuevo = {
+      usuario_id: 1735,
+      curso_id: 6025,
+      situacion_id: 1
+    }
+    const response = await api
+      .post('/aceptarSolicitudAcceso')
+      .send(nuevo)
+      .expect(200)
+      .expect('Content-Type', /application\/json/)
+  })
 })
 
 //Declaracion de un describe de tests
+//Declaracion del test
+// Suit de pruebas para Notificaciones
 describe('Test de Notificaciones', () => {
-  //Declaracion del test
+  // Prueba para verficar la crecion de una notificacion
   test('POST /notificacion', async () => {
     let nuevaNotificacion = {
       tarea_asignada_id: 5,
@@ -231,46 +281,6 @@ describe('Test de Notificaciones', () => {
       .expect(200)
       .expect('Content-Type', /application\/json/)
 
-  })
-})
-
-//Declaracion de un describe de tests
-describe('Material test', () => {
-  //Declaracion del test
-  test('List Material by course', async () => {
-    //Hacemos la llamada a la ruta de la api
-    await api
-      .get('/listMaterials/35')
-      .expect(200)
-      .expect('Content-Type', /application\/json/)
-  })
-})
-
-//Declaracion de un describe de tests
-describe('Categories test', () => {
-  //Declaracion del test
-  test('GET all categories', async () => {
-    //Hacemos la llamada a la ruta de la api
-    await api
-      .get('/categories')
-      .expect(200)
-      .expect('Content-Type', /application\/json/)
-  })
-  //Declaracion del test
-  test('GET one categories', async () => {
-    //Hacemos la llamada a la ruta de la api
-    await api
-      .get('/categories/15')
-      .expect(200)
-      .expect('Content-Type', /application\/json/)
-  })
-  //Declaracion del test
-  test('GET one categories fail', async () => {
-    //Hacemos la llamada a la ruta de la api
-    await api
-      .get('/categories/12')
-      .expect(200)
-      .expect('Content-Type', /application\/json/)
   })
 })
 

@@ -61,7 +61,76 @@ test('Create sugerences', async () => {
 
   await pool.query('DELETE FROM sugerencias WHERE sugerencia_id = ?', [idSuggestionCreated])
 })
+//Declaracion de un describe de tests
+describe('Material test', () => {
+  //Declaracion del test
+  test('List Material by course', async () => {
+    //Hacemos la llamada a la ruta de la api
+    await api
+      .get('/listMaterials/35')
+      .expect(200)
+      .expect('Content-Type', /application\/json/)
+  })
+  // Prueba para verificar el listado de notificaciones por usuario
+  test('GET /listarNotificacionesPorUsuario', async () => {
+    const response = await api
+      .get('/listarNotificacionesPorUsuario/1635')
+      .expect(200)
+      .expect('Content-Type', /application\/json/)
+  })
+})
 
+// //Declaracion del test
+// test('GET /listarCursosAgregadosPorProfesor', async () => {
+//   //Hacemos la llamada a la ruta de la api
+//   await api
+//     .get('/listarCursosAgregadosPorProfesor/1645')
+//     .expect(200)
+//     .expect('Content-Type', /application\/json/)
+// })
+// //Declaracion del test
+// test('GET /listarCursosConSolicicitudAcceso', async () => {
+//   //Hacemos la llamada a la ruta de la api
+//   await api.
+//     get('/listarCursosConSolicicitudAcceso/8205')
+//     .expect(200)
+//     .expect('Content-Type', /application\/json/)
+// })
+// // Prueba para verificar la lista de cursos con solicitud de acceso para el alumno
+// test('GET /listarCursosConSolicicitudAccesoParaAlumnos', async () => {
+//   await api
+//     .get('/listarCursosConSolicicitudAccesoParaAlumnos/23285')
+//     .expect(200)
+//     .expect('Content-Type', /application\/json/)
+// })
+
+//Declaracion de un describe de tests
+describe('Categories test', () => {
+  //Declaracion del test
+  test('GET all categories', async () => {
+    //Hacemos la llamada a la ruta de la api
+    await api
+      .get('/categories')
+      .expect(200)
+      .expect('Content-Type', /application\/json/)
+  })
+  //Declaracion del test
+  test('GET one categories', async () => {
+    //Hacemos la llamada a la ruta de la api
+    await api
+      .get('/categories/15')
+      .expect(200)
+      .expect('Content-Type', /application\/json/)
+  })
+  //Declaracion del test
+  test('GET one categories fail', async () => {
+    //Hacemos la llamada a la ruta de la api
+    await api
+      .get('/categories/12')
+      .expect(200)
+      .expect('Content-Type', /application\/json/)
+  })
+})
 afterAll(async () => {
 	await new Promise(resolve => setTimeout(() => resolve(), 500));
 });

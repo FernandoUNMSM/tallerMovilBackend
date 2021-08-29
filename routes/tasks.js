@@ -1,5 +1,5 @@
 //Framework de nodejs
-const express = r//Definicion de la rutaequire('express')
+const express = require('express')
 //Defi//Definicion de la rutanicion del router//Definicion de la ruta
 const router = express.Router()
 //Definicion del pool sql
