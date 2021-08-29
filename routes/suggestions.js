@@ -33,7 +33,6 @@ router.post('/suggestions', async (req, res, next) => {
       sugerencia_estado,
       descripcion
     }
-    console.log(newSugesstion)
     // Se accede a la BD y se inserta o guarda newSuggestion en la BD
     await pool.query('INSERT INTO heroku_b3e0382f6ba83ba.sugerencias SET ? ', [newSugesstion])
     // Se selecciona la sugerencia previamente guardada a través del parámetro sugerencia_nombre_curso
@@ -45,7 +44,6 @@ router.post('/suggestions', async (req, res, next) => {
     })
   } catch (e) {
     // Se maneja el error en caso de haberlo
-    console.log(e)
     next(e)
   }
 })
@@ -90,8 +88,6 @@ router.put('/votarSugerencias', async (req, res, next) => {
 
     //Busca por sugerencia_id en el votos_usuario
     const resultado = votos_usuario.find( sugerencia => sugerencia.sugerencia_id == sugerencia_id );
-    //console.log(resultado);
-    //console.log(typeof (resultado));
 
     //Si no se encuentra en la tabla
     if(typeof(resultado) == "undefined"){

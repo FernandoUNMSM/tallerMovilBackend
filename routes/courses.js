@@ -36,14 +36,13 @@ router.get('/courses/:id', async (req, res, next) => {
     // Aqui va el query para obtener un curso especifico por su id
     const course = await pool.query('SELECT * FROM cursos WHERE curso_id = ?', [id])
 
-    const alumnos = await pool.query('SELECT COUNT(*) FROM curso_usuario WHERE curso_id = ? situacion_id = 1', [id])
+    const alumnos = await pool.query('SELECT COUNT(*) FROM curso_usuario WHERE curso_id = ? and situacion_id = 1', [id])
     // Respuesta a la peticion
     res.status(200).json({
       data: course[0],
       alumnos: Object.values(alumnos[0])[0]
     })
   } catch (err) {
-    console.log(err)
     next(err)
   }
 })
@@ -53,7 +52,7 @@ router.post('/courses', async (req, res, next) => {
 
   try {
     // Obtenemos los datos del cuerpo de la peticion
-    const { curso_id, usuario_id, categoria_id, codigo, imagen, curso_nombre, descripcion, conoci_previo, privacidad_id, curso_fecha_creacion } = req.body
+    const { curso_id, usuario_id, categoria_id, imagen, curso_nombre, descripcion, conoci_previo, privacidad_id, curso_fecha_creacion } = req.body
 
     var code = generator.generateCodes(pattern, 1, {});
 
@@ -218,12 +217,12 @@ router.post('/unirPorCodigo', async (req, res, next) => {
  */
 // Metodo get para listar los cursos agregados por un profesor
 // Se especifica el id del usuario profesor quien agrego alumnos a su curso
-router.get('/listarCursosAgregadosPorProfesor', async (req, res, next) => {
+router.get('/listarCursosAgregadosPorProfesor/:usuario_id', async (req, res, next) => {
   // Usamos un try-catch para capturar posibles errores al momento de mandar las consultas
   try {
     // Especificamos que usaremos un objeto para poder enviar una consulta.
     // Especificamos que la consulta se hara con un body.
-    const { usuario_id } = req.body
+    const { usuario_id } = req.params
     // Hacemos la consulta a base de datos mediante el pool pasando como parametros el objeto creado lineas arriba
     await pool.query('CALL heroku_b3e0382f6ba83ba.listarCursosAgregadosPorProfesor (?) ', [usuario_id])
     // Guardamos el resultado de otra consulta para mostrarlo como mensaje de salida
@@ -287,12 +286,12 @@ router.get('/listarCursosConSolicicitudAccesoParaAlumnos/:usuario_id', async (re
  */
 // Metodo get para listar las notificaciones de un usuario
 // Se especifica el id del usuario del cual queremos listar sus notificaciones
-router.get('/listarNotificacionesPorUsuario', async (req, res, next) => {
+router.get('/listarNotificacionesPorUsuario/:usuario_id', async (req, res, next) => {
   // Usamos un try-catch para capturar posibles errores al momento de mandar las consultas
   try {
     // Especificamos que usaremos un objeto para poder enviar una consulta.
     // Especificamos que la consulta se hara con un body.
-    const { usuario_id } = req.body
+    const { usuario_id } = req.params
     // Hacemos la consulta a base de datos mediante el pool pasando como parametros el objeto creado lineas arriba
     await pool.query('CALL heroku_b3e0382f6ba83ba.listarNotificacionesPorUsuario (?) ', [usuario_id])
     // Guardamos el resultado de otra consulta para mostrarlo como mensaje de salida
@@ -359,7 +358,6 @@ router.get('/course-user/:idcurso', async (req, res, next) => {
   
   //Obtenemos el id del curso de los parametros de la ruta de la peticion
   const { idcurso } = req.params;
-  console.log(idcurso)
   try{
     
     //Aqui va el query para obtener la lista de usuarios de un curso
@@ -370,7 +368,6 @@ router.get('/course-user/:idcurso', async (req, res, next) => {
       data: listUser
     })
   } catch (err) {
-    console.log(err)
     next(err)
   }
 })
@@ -406,9 +403,8 @@ router.get('/coursespublic', async (req, res, next) => {
   // Ruta para obtener la lista de cursos publicos
   try {
     // Query para obtener la lista de cursos publicos
-    let cursos = await pool.query('SELECT * FROM heroku_b3e0382f6ba83ba.cursos WHERE privacidad_id IN (1, 5)')
-    let cantCursos = await pool.query('SELECT count(curso_id) FROM heroku_b3e0382f6ba83ba.cursos WHERE privacidad_id IN (1, 5)')
-    console.log(cantCursos)
+    let cursos = await pool.query('SELECT * FROM heroku_b3e0382f6ba83ba.cursos')
+    let cantCursos = await pool.query('SELECT count(curso_id) FROM heroku_b3e0382f6ba83ba.cursos')
     // Respuesta a la peticion
     res.status(200).json({
       cursos,
@@ -424,7 +420,6 @@ router.get('/coursespublicmax', async (req, res, next) => {
   try {
     // Query para obtener la lista de cursos publicos
     let cursos = await pool.query('SELECT c.* FROM cursos as c JOIN curso_usuario as cu ON c.curso_id = cu.curso_id WHERE c.privacidad_id IN (1,5) GROUP BY c.curso_id ORDER BY COUNT(*) DESC LIMIT 4;')
-    console.log(cursos)
     // Respuesta a la peticion
     res.status(200).json({
       cursos,
@@ -499,7 +494,6 @@ router.post('/course-material/:idcurso', async (req, res, next) => {
       descripcion,
       fecha_creacion,
       curso_id
-
     }
     // Aqui va el query para guardar un nuevo material de un curso
     await pool.query('INSERT INTO heroku_b3e0382f6ba83ba.material SET ? ', newMaterial)
@@ -523,7 +517,7 @@ router.get('/list-task/:idcurso', async (req, res, next) => {
     let list = await pool.query('SELECT * FROM heroku_b3e0382f6ba83ba.tareas WHERE curso_id = ?', [idcurso])
 
     // Respuesta a la peticion
-    res.status(201).json(list)
+    res.status(200).json(list)
   } catch (e) {
     next(e)
   }
@@ -569,7 +563,6 @@ router.get('/AcceptarSolicitudPrivado/:idcurso', async (req, res, next) => {
   //Se solicita el id_curso a traves de enlace.
   const { idcurso } = req.params
 
-  // console.log(idcurso)
   //Si coloca como que la situacion_id siempre va ser 3
   const situacion_id = '3'
 
@@ -628,8 +621,9 @@ router.post('/join-public-course/:idcurso', async (req, res, next) => {
     
     if (curso[0].privacidad_id == privacidad_publico){
       const curso_usuario = await pool.query('SELECT * FROM heroku_b3e0382f6ba83ba.curso_usuario WHERE usuario_id = ?', [iduser])
-      for ( let i=0 ; i<curso_usuario.length ;i++){
-        if(curso_usuario[i].curso_id == idcurso && curso_usuario[i].usuario_id == iduser){
+
+      for(let i in curso_usuario) {
+        if(curso_usuario[Number(i)].curso_id == idcurso && curso_usuario[Number(i)].usuario_id == iduser){
           existe = "existe"
           break;
         }
@@ -654,6 +648,28 @@ router.get('/list-task-submissions/:idtarea', async (req, res, next) => {
     res.status(200).json(listaTareas)
   } catch (err) {
     console.log(err)
+    next(err)
+  }
+})
+
+router.get('/listMaterials/:idcurso', async (req, res, next) => {
+  const { idcurso } = req.params
+  try {
+    const listaMaterial = await pool.query('SELECT * from material WHERE curso_id = ?',[idcurso])
+    res.status(200).json(listaMaterial)
+  } catch (err) {
+    next(err)
+  }
+})
+
+router.post('/entregarTarea', async (req, res, next) => {
+  const { tarea_asignada_id, usuario_id, url } = req.body
+  try {
+    await pool.query('UPDATE tarea_asignada set ? WHERE usuario_id = ? AND tarea_asignada_id = ?',[{url}, usuario_id, tarea_asignada_id])
+    res.status(200).json({
+      msg: 'tarea entragasa'
+    })
+  } catch (err) {
     next(err)
   }
 })
