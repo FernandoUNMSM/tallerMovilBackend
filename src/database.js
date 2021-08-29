@@ -21,7 +21,7 @@ pool.getConnection((err, connection) => {
     if (connection) connection.release();
 
   
-    return;
+    return true;
   });
 
 

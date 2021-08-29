@@ -12,6 +12,8 @@ sonarqubeScanner(
       'sonar.javascript.lcov.reportPaths': 'coverage/lcov.info',
       'sonar.testExecutionReportPaths': 'coverage/test-reporter.xml',
       'sonar.login': 'admin',
-      'sonar.password': 'root'
+      'sonar.password': process.env.PASSWORDSONAR
     }
-  }, () => { })
+  }, () => {
+    console.log('sonar is running')
+  })

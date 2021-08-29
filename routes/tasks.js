@@ -106,7 +106,7 @@ router.get('/listarTareasCurso/:idcurso', async (req, res, next) => {
   try{
     //Aqui va el query para crear una nueva tarea
     const tareas = await pool.query('SELECT * FROM tareas WHERE curso_id = ? ', [idcurso]);
-    console.log(tareas)
+    // console.log(tareas)
     //Respuesta a la peticion
     res.status(200).json({
       tareas,
