@@ -108,6 +108,24 @@ describe('Material test', () => {
 
     await pool.query('DELETE FROM tareas WHERE tarea_id = ?', [idMaterialCreated])
   })
+  test('GET /archivos', async () => {
+    const response = await api
+      .get('/mostrarArchivo/4')
+      .expect(200)
+      .expect('Content-Type', /application\/json/)
+  })
+  test('crear entregarTarea', async () => {
+    const newTask = {
+      tarea_id: 5,
+      usuario_id: 1635
+    }
+    const response = await api
+      .post('/entregarTarea')
+      .send(newTask)
+      .expect(200)
+      .expect('Content-Type', /application\/json/)
+    
+  })
 })
 
 //Declaracion de un describe de tests

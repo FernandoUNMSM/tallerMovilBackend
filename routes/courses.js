@@ -375,31 +375,6 @@ router.post('/aceptarInvitacionDeProfesor', async (req, res, next) => {
   }
 })
 
-/**
- * @param {Number} iduser
- */
-// Metodo get obtener las notificaciones de un usuario
-//Declaramos la ruta
-// Se especifica el id del usuario del cual se quiere listar sus notificaciones
-router.get('/notificacionPorUsuario/:iduser', async (req, res, next) => {
-  const { iduser } = req.params
-  try {
-    // Aqui va el query para obtener la lista de cursos de un usuario
-
-    let listNotificacion = await pool.query(`select mensaje_notificacion from heroku_b3e0382f6ba83ba.tarea_asignada where usuario_id = ?;`, [iduser])
-
-    // Respuesta a la peticion
-    res.status(200).json({
-      message: 'Notificacion para el usuario: ' + iduser,
-      data: listNotificacion
-    })
-    //Manejo de errror
-    //EMpezamos con el catch
-  } catch (err) {
-    //Envio a middleware
-    next(err);
-  }
-})
 //Declaramos la ruta
 router.get('/course-user/:idcurso', async (req, res, next) => {
   // Ruta para obtener la lista de usuarios de un curso
