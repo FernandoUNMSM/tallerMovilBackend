@@ -14,4 +14,6 @@ sonarqubeScanner(
       'sonar.login': 'admin',
       'sonar.password': process.env.PASSWORDSONAR
     }
-  }, () => { })
+  }, () => { 
+    console.log('sonar is running')
+  })

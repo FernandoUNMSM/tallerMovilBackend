@@ -52,7 +52,7 @@ router.post('/courses', async (req, res, next) => {
 
   try {
     // Obtenemos los datos del cuerpo de la peticion
-    const { curso_id, usuario_id, categoria_id, codigo, imagen, curso_nombre, descripcion, conoci_previo, privacidad_id, curso_fecha_creacion } = req.body
+    const { curso_id, usuario_id, categoria_id, imagen, curso_nombre, descripcion, conoci_previo, privacidad_id, curso_fecha_creacion } = req.body
 
     var code = generator.generateCodes(pattern, 1, {});
 
@@ -627,8 +627,9 @@ router.post('/join-public-course/:idcurso', async (req, res, next) => {
     
     if (curso[0].privacidad_id == privacidad_publico){
       const curso_usuario = await pool.query('SELECT * FROM heroku_b3e0382f6ba83ba.curso_usuario WHERE usuario_id = ?', [iduser])
-      for ( let i=0 ; i<curso_usuario.length ;i++){
-        if(curso_usuario[i].curso_id == idcurso && curso_usuario[i].usuario_id == iduser){
+
+      for(let i in curso_usuario) {
+        if(curso_usuario[Number(i)].curso_id == idcurso && curso_usuario[Number(i)].usuario_id == iduser){
           existe = "existe"
           break;
         }
@@ -653,6 +654,16 @@ router.get('/list-task-submissions/:idtarea', async (req, res, next) => {
     res.status(200).json(listaTareas)
   } catch (err) {
     console.log(err)
+    next(err)
+  }
+})
+
+router.get('/listMaterials/:idcurso', async (req, res, next) => {
+  const { idcurso } = req.params
+  try {
+    const listaMaterial = await pool.query('SELECT * from material WHERE curso_id = ?',[idcurso])
+    res.status(200).json(listaMaterial)
+  } catch (err) {
     next(err)
   }
 })

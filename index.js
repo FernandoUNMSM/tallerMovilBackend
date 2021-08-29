@@ -1,9 +1,10 @@
 require('dotenv').config()
 
 const express = require('express')
-// const app = express()
 
-// app1.disable("x-powered-by");
+let corsOptions = {
+  origin: '*' // Compliant
+};
 
 let helmet = require("helmet");
 let app = express(); // Compliant
@@ -11,8 +12,7 @@ app.use(helmet.hidePoweredBy());
 
 const cors = require('cors')
 
-app.options('*', cors());
-// app.use(cors(corsOptions))
+app.use(cors(corsOptions))
 app.use(express.urlencoded({extended: true, limit: "8mb"}));
 app.use(express.json())
 
@@ -44,12 +44,6 @@ app.get('/', (req, res) => {
 app.use(notFound)
 // Control de errores
 app.use(errors)
-// app.use((req, res, next) => {
-//   res.header('Access-Control-Allow-Origin', '*');
-//   res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE');
-//   res.header('Access-Control-Allow-Headers', 'Content-Type');
-//   next();
-// });
 
 const PORT = process.env.PORT || 3001
 if (process.env.NODE_ENV !== 'test') {

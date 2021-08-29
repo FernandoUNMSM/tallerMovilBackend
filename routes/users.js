@@ -44,8 +44,8 @@ router.get('/users/:id', async (req, res, next) => {
     let cursos = await pool.query('SELECT * FROM heroku_b3e0382f6ba83ba.cursos WHERE privacidad_id = 1 AND usuario_id = ?', [id]);
     let idcursos = cursos.map(curso => curso.curso_id)
 
-    let cantidadEstudiantes = await Promise.all(idcursos.map(async (id) => {
-      return await pool.query('SELECT COUNT(*) FROM cursos as c JOIN curso_usuario as cu ON c.curso_id = cu.curso_id WHERE c.privacidad_id IN (1,5) AND cu.curso_id = ? GROUP BY cu.curso_id;', [id])
+    let cantidadEstudiantes = await Promise.all(idcursos.map(async (idcur) => {
+      return pool.query('SELECT COUNT(*) FROM cursos as c JOIN curso_usuario as cu ON c.curso_id = cu.curso_id WHERE c.privacidad_id IN (1,5) AND cu.curso_id = ? GROUP BY cu.curso_id;', [idcur])
     }))
 
     let cantidadTotal = cantidadEstudiantes.map(can => (can.length > 0) ? Object.values(can[0])[0] : 0)
