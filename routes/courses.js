@@ -218,18 +218,18 @@ router.post('/unirPorCodigo', async (req, res, next) => {
  */
 // Metodo get para listar los cursos agregados por un profesor
 // Se especifica el id del usuario profesor quien agrego alumnos a su curso
-router.get('/listarCursosAgregadosPorProfesor', async (req, res, next) => {
+router.get('/listarCursosAgregadosPorProfesor/:usuario_id', async (req, res, next) => {
   // Usamos un try-catch para capturar posibles errores al momento de mandar las consultas
   try {
     // Especificamos que usaremos un objeto para poder enviar una consulta.
     // Especificamos que la consulta se hara con un body.
-    const { usuario_id } = req.body
+    const { usuario_id } = req.params
     // Hacemos la consulta a base de datos mediante el pool pasando como parametros el objeto creado lineas arriba
     await pool.query('CALL heroku_b3e0382f6ba83ba.listarCursosAgregadosPorProfesor (?) ', [usuario_id])
     // Guardamos el resultado de otra consulta para mostrarlo como mensaje de salida
-    const listaCursos = await pool.query('CALL heroku_b3e0382f6ba83ba.listarCursosAgregadosPorProfesor (?)  ', usuario_id)
+    const listaCursosAgregadosPorProfesor = await pool.query('CALL heroku_b3e0382f6ba83ba.listarCursosAgregadosPorProfesor (?)  ', usuario_id)
     // Se muestra la respuesta exitosa a la consulta
-    res.status(200).json(listaCursos)
+    res.status(200).json(listaCursosAgregadosPorProfesor)
   } catch (e) {
     // Se muestra el error que genero la consulta
     next(e)
@@ -250,9 +250,9 @@ router.get('/listarCursosConSolicicitudAcceso/:usuario_id', async (req, res, nex
     // Hacemos la consulta a base de datos mediante el pool pasando como parametros el objeto creado lineas arriba
     await pool.query('CALL heroku_b3e0382f6ba83ba.listarCursosConSolicicitudAcceso (?) ', [usuario_id])
     // Guardamos el resultado de otra consulta para mostrarlo como mensaje de salida
-    const listaCursos = await pool.query('CALL heroku_b3e0382f6ba83ba.listarCursosConSolicicitudAcceso (?)  ', usuario_id)
+    const listaCursosConSolicicitudAcceso = await pool.query('CALL heroku_b3e0382f6ba83ba.listarCursosConSolicicitudAcceso (?)  ', usuario_id)
     // Se muestra la respuesta exitosa a la consulta
-    res.status(200).json(listaCursos)
+    res.status(200).json(listaCursosConSolicicitudAcceso)
   } catch (e) {
     // Se muestra el error que genero la consulta
     next(e)
@@ -273,9 +273,9 @@ router.get('/listarCursosConSolicicitudAccesoParaAlumnos/:usuario_id', async (re
     // Hacemos la consulta a base de datos mediante el pool pasando como parametros el objeto creado lineas arriba
     await pool.query('CALL heroku_b3e0382f6ba83ba.listarCursosConSolicicitudAccesoParaAlumnos (?) ', [usuario_id])
     // Guardamos el resultado de otra consulta para mostrarlo como mensaje de salida
-    const listaCursos = await pool.query('CALL heroku_b3e0382f6ba83ba.listarCursosConSolicicitudAccesoParaAlumnos (?)  ', usuario_id)
+    const listaCursosConSolicicitudAccesoParaAlumnos = await pool.query('CALL heroku_b3e0382f6ba83ba.listarCursosConSolicicitudAccesoParaAlumnos (?)  ', usuario_id)
     // Se muestra la respuesta exitosa a la consulta
-    res.status(200).json(listaCursos)
+    res.status(200).json(listaCursosConSolicicitudAccesoParaAlumnos)
   } catch (e) {
     // Se muestra el error que genero la consulta
     next(e)
@@ -287,18 +287,18 @@ router.get('/listarCursosConSolicicitudAccesoParaAlumnos/:usuario_id', async (re
  */
 // Metodo get para listar las notificaciones de un usuario
 // Se especifica el id del usuario del cual queremos listar sus notificaciones
-router.get('/listarNotificacionesPorUsuario', async (req, res, next) => {
+router.get('/listarNotificacionesPorUsuario/:usuario_id', async (req, res, next) => {
   // Usamos un try-catch para capturar posibles errores al momento de mandar las consultas
   try {
     // Especificamos que usaremos un objeto para poder enviar una consulta.
-    // Especificamos que la consulta se hara con un body.
-    const { usuario_id } = req.body
+    // Especificamos que la consulta se hara con un parametro.
+    const { usuario_id } = req.params
     // Hacemos la consulta a base de datos mediante el pool pasando como parametros el objeto creado lineas arriba
     await pool.query('CALL heroku_b3e0382f6ba83ba.listarNotificacionesPorUsuario (?) ', [usuario_id])
     // Guardamos el resultado de otra consulta para mostrarlo como mensaje de salida
-    const listaCursos = await pool.query('CALL heroku_b3e0382f6ba83ba.listarNotificacionesPorUsuario (?)  ', usuario_id)
+    const listaNotificacionesPorUsuario = await pool.query('CALL heroku_b3e0382f6ba83ba.listarNotificacionesPorUsuario (?)  ', usuario_id)
     // Se muestra la respuesta exitosa a la consulta
-    res.status(200).json(listaCursos)
+    res.status(200).json(listaNotificacionesPorUsuario)
   } catch (e) {
     // Se muestra el error que genero la consulta
     next(e)
