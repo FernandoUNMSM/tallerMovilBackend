@@ -37,6 +37,14 @@ describe('tests de Cursos', () => {
       .expect('Content-Type', /application\/json/)
   })
   //Declaracion del test
+  test('Get user courses puiblic', async () => {
+    //Hacemos la llamada a la ruta de la api
+    await api
+      .get('/coursespublic/35')
+      .expect(200)
+      .expect('Content-Type', /application\/json/)
+  })
+  //Declaracion del test
   test('Get courses by user', async () => {
     //Hacemos la llamada a la ruta de la api
     await api
@@ -49,6 +57,13 @@ describe('tests de Cursos', () => {
     //Hacemos la llamada a la ruta de la api
     await api
       .get('/course-user/135')
+      .expect(200)
+      .expect('Content-Type', /application\/json/)
+  })
+  test('Get courses by user', async () => {
+    //Hacemos la llamada a la ruta de la api
+    await api
+      .get('/cursos/35')
       .expect(200)
       .expect('Content-Type', /application\/json/)
   })
@@ -107,6 +122,50 @@ describe('tests de Cursos', () => {
     // Borramos el dato de prueba insertado
     await pool.query('DELETE FROM curso_usuario WHERE curso_id = ? and usuario_id = ?', [idCourseCreated, nuevo.usuario_id])
   })
+
+  test('test deletecoursesUsers', async () => {
+    const newCourse = {
+      curso_id: 35,
+      correo: 'xdpvd@hotmail.es'
+    }
+    //Hacemos la llamada a la ruta de la api
+    await api
+      .post('/coursesUsers')
+      .send(newCourse)
+      .expect(201)
+      .expect('Content-Type', /application\/json/)
+
+    const idCourseCreated = {
+      curso_id: 35,
+      usuario_id: 205
+    }
+    await api
+      .post('/deletecoursesUsers')
+      .send(idCourseCreated)
+      .expect(201)
+      .expect('Content-Type', /application\/json/)
+  })
+  test('test editar curso', async () => {
+    const newCourse = {
+      curso_nombre: 'Prueba'
+    }
+    //Hacemos la llamada a la ruta de la api
+    await api
+      .post('/coursesEdit/35')
+      .send(newCourse)
+      .expect(201)
+      .expect('Content-Type', /application\/json/)
+
+    const newCourse2 = {
+      curso_nombre: 'Machine Learning'
+    }
+    await api
+      .post('/coursesEdit/35')
+      .send(newCourse2)
+      .expect(201)
+      .expect('Content-Type', /application\/json/)
+  })
+
 })
 
 //Declaracion de un describe de tests

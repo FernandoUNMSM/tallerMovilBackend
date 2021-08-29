@@ -84,7 +84,6 @@ router.post('/useredit/:id', upload.fields([]), async (req, res, next) => {
     const { id } = req.params
     //Parámetros extraidos del cuerpo  enviado por el frontend
     const { usuario_nombre, usuario_apellidos, url, correo, descripcion } = req.body;
-
     //Constante newUser user donde se guardan los parámetros del cuerpo
     const newUser = {
       usuario_nombre,
@@ -93,7 +92,6 @@ router.post('/useredit/:id', upload.fields([]), async (req, res, next) => {
       url,
       descripcion
     }
-
 
     //Se accede a la BD y se realiza un update a traves de la variable newUser y el parametro id
     await pool.query('UPDATE heroku_b3e0382f6ba83ba.usuarios set ? WHERE usuario_id = ?', [newUser, id]);

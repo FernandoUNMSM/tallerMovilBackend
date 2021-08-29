@@ -39,7 +39,7 @@ test('Registro', async () => {
     .send(user)
     .expect(201)
     .expect('Content-Type', /application\/json/)
-  
+
   const passwordCreated = response.body.usuario_id
 
   await pool.query('DELETE FROM usuarios WHERE usuario_id = ?', [passwordCreated])
@@ -78,31 +78,55 @@ describe('Material test', () => {
       .expect(200)
       .expect('Content-Type', /application\/json/)
   })
-})
+  test('CREATE material', async () => {
+    const nweMaterial = {
+      nombre: 'Material Prueba'
+    }
+    const response = await api
+      .post('/course-material/35')
+      .send(nweMaterial)
+      .expect(201)
+      .expect('Content-Type', /application\/json/)
 
-// //Declaracion del test
-// test('GET /listarCursosAgregadosPorProfesor', async () => {
-//   //Hacemos la llamada a la ruta de la api
-//   await api
-//     .get('/listarCursosAgregadosPorProfesor/1645')
-//     .expect(200)
-//     .expect('Content-Type', /application\/json/)
-// })
-// //Declaracion del test
-// test('GET /listarCursosConSolicicitudAcceso', async () => {
-//   //Hacemos la llamada a la ruta de la api
-//   await api.
-//     get('/listarCursosConSolicicitudAcceso/8205')
-//     .expect(200)
-//     .expect('Content-Type', /application\/json/)
-// })
-// // Prueba para verificar la lista de cursos con solicitud de acceso para el alumno
-// test('GET /listarCursosConSolicicitudAccesoParaAlumnos', async () => {
-//   await api
-//     .get('/listarCursosConSolicicitudAccesoParaAlumnos/23285')
-//     .expect(200)
-//     .expect('Content-Type', /application\/json/)
-// })
+    const idMaterialCreated = response.body.material_id
+
+    await pool.query('DELETE FROM material WHERE material_id = ?', [idMaterialCreated])
+  })
+
+  test('crear tarea', async () => {
+    const newTask = {
+      curso_id: 35,
+      nombre: 'prueba'
+    }
+    const response = await api
+      .post('/creartarea')
+      .send(newTask)
+      .expect(200)
+      .expect('Content-Type', /application\/json/)
+    
+    const idMaterialCreated = response.body.tarea_id
+
+    await pool.query('DELETE FROM tareas WHERE tarea_id = ?', [idMaterialCreated])
+  })
+  test('GET /archivos', async () => {
+    const response = await api
+      .get('/mostrarArchivo/4')
+      .expect(200)
+      .expect('Content-Type', /application\/json/)
+  })
+  test('crear entregarTarea', async () => {
+    const newTask = {
+      tarea_id: 5,
+      usuario_id: 1635
+    }
+    const response = await api
+      .post('/entregarTarea')
+      .send(newTask)
+      .expect(200)
+      .expect('Content-Type', /application\/json/)
+    
+  })
+})
 
 //Declaracion de un describe de tests
 describe('Categories test', () => {
@@ -132,5 +156,5 @@ describe('Categories test', () => {
   })
 })
 afterAll(async () => {
-	await new Promise(resolve => setTimeout(() => resolve(), 500));
+  await new Promise(resolve => setTimeout(() => resolve(), 500));
 });
