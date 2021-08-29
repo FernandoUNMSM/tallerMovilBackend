@@ -70,21 +70,27 @@ router.get('/suggestions/:idsuggestions', async (req, res, next) => {
 
 router.post('/votarSugerencias', async (req, res, next) => {
   // Metodo para votar sugerencias
+
+  //Variables que sus datos son ingresados por el body
+  const { usuario_id, sugerencia_id } = req.body
+
+  //Se crea un obtejo con las variables de usuario_id, sugerencias_id
+  let VotarPorSugerencia = {
+    usuario_id,
+    sugerencia_id
+  }
+
+  //Si es correcto 
   try {
-    const { usuario_id, sugerencia_id } = req.body
 
-    let VotarPorSugerencia = {
-      usuario_id,
-      sugerencia_id
-    }
-
+    //Se insetar en la tabla de votos, el objeto de votar
     await pool.query('INSERT INTO heroku_b3e0382f6ba83ba.votos SET ? ', VotarPorSugerencia)
 
-    // Respuesta a la peticion
+    // Respuesta a la peticion, se manda un mensaje 
     res.status(200).json({
       msg: 'Voto Registrado'
     })
-  }  catch (e) {
+  }  catch (e) { //Si hay algun error
     next(e)
   }
 })
@@ -94,12 +100,14 @@ router.get('/listarSugerenciasVotos', async(req,res,next)=>{
   try{
     // Se accede a la BD para listar la sugerencias con su cantidad de votos
     let list = await pool.query('SELECT sugerencia_id, COUNT(sugerencia_id) FROM votos GROUP BY sugerencia_id ')
+    
+    // Respuesta a la peticion, se manda un mensaje 
     res.status(200).json({
       // Se devuelve la lista de sugerencias con su cantidad de votos al Frontend
       list
     })
 
-  }catch(e){
+  }catch(e){ //Si hay algun error
     next(e)
   }
 })
@@ -109,12 +117,14 @@ router.get('/listarSugerenciasMasVotos', async(req,res,next)=>{
   try{
     // Se accede a la BD para listar la sugerencias con su cantidad de votos
     let list = await pool.query('SELECT sugerencia_id, COUNT(sugerencia_id) FROM votos GROUP BY sugerencia_id ORDER BY COUNT(sugerencia_id) DESC LIMIT 3')
+    
+    // Respuesta a la peticion, se manda un mensaje 
     res.status(200).json({
-      // Se devuelve la lista de sugerencias con su cantidad de "3" votos al Frontend
+    // Se devuelve la lista de sugerencias con su cantidad de "3" votos al Frontend
       list
     })
 
-  }catch(e){
+  }catch(e){ //Si hay algun error
     next(e)
   }
 })
