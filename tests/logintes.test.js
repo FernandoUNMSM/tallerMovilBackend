@@ -1,8 +1,14 @@
+//importamos la libreria supertesr
 const supertest = require('supertest')
+//importamos la app
 const { app } = require('../index')
+//App + supertest
 const api = supertest(app)
+//Definicion del pool sql
 const pool = require('../src/database');
+//Nos trae el metodo para hacer querys a la BD
 
+//Declaramos el test
 test('Login', async () => {
   const user = {
     correo: 'sebasxiom@gmail.com',
@@ -18,6 +24,7 @@ test('Login', async () => {
   expect(response.body.user).toBeDefined()
 })
 
+//Declaramos el test
 test('Registro', async () => {
   const user = {
     usuario_nombre: 'Usuario Prueba',
@@ -38,8 +45,92 @@ test('Registro', async () => {
   await pool.query('DELETE FROM usuarios WHERE usuario_id = ?', [passwordCreated])
 
 })
+//Declaramos el test
+test('Create sugerences', async () => {
+  const newSuggestion = {
+    categoria_id: 15,
+    sugerencia_nombre_curso: 'Prueba'
+  }
+  const response = await api
+    .post('/suggestions')
+    .send(newSuggestion)
+    .expect(201)
+    .expect('Content-Type', /application\/json/)
 
+  const idSuggestionCreated = response.body.sugerencia_id
 
+  await pool.query('DELETE FROM sugerencias WHERE sugerencia_id = ?', [idSuggestionCreated])
+})
+//Declaracion de un describe de tests
+describe('Material test', () => {
+  //Declaracion del test
+  test('List Material by course', async () => {
+    //Hacemos la llamada a la ruta de la api
+    await api
+      .get('/listMaterials/35')
+      .expect(200)
+      .expect('Content-Type', /application\/json/)
+  })
+  // Prueba para verificar el listado de notificaciones por usuario
+  test('GET /listarNotificacionesPorUsuario', async () => {
+    const response = await api
+      .get('/listarNotificacionesPorUsuario/1635')
+      .expect(200)
+      .expect('Content-Type', /application\/json/)
+  })
+})
+
+// //Declaracion del test
+// test('GET /listarCursosAgregadosPorProfesor', async () => {
+//   //Hacemos la llamada a la ruta de la api
+//   await api
+//     .get('/listarCursosAgregadosPorProfesor/1645')
+//     .expect(200)
+//     .expect('Content-Type', /application\/json/)
+// })
+// //Declaracion del test
+// test('GET /listarCursosConSolicicitudAcceso', async () => {
+//   //Hacemos la llamada a la ruta de la api
+//   await api.
+//     get('/listarCursosConSolicicitudAcceso/8205')
+//     .expect(200)
+//     .expect('Content-Type', /application\/json/)
+// })
+// // Prueba para verificar la lista de cursos con solicitud de acceso para el alumno
+// test('GET /listarCursosConSolicicitudAccesoParaAlumnos', async () => {
+//   await api
+//     .get('/listarCursosConSolicicitudAccesoParaAlumnos/23285')
+//     .expect(200)
+//     .expect('Content-Type', /application\/json/)
+// })
+
+//Declaracion de un describe de tests
+describe('Categories test', () => {
+  //Declaracion del test
+  test('GET all categories', async () => {
+    //Hacemos la llamada a la ruta de la api
+    await api
+      .get('/categories')
+      .expect(200)
+      .expect('Content-Type', /application\/json/)
+  })
+  //Declaracion del test
+  test('GET one categories', async () => {
+    //Hacemos la llamada a la ruta de la api
+    await api
+      .get('/categories/15')
+      .expect(200)
+      .expect('Content-Type', /application\/json/)
+  })
+  //Declaracion del test
+  test('GET one categories fail', async () => {
+    //Hacemos la llamada a la ruta de la api
+    await api
+      .get('/categories/12')
+      .expect(200)
+      .expect('Content-Type', /application\/json/)
+  })
+})
 afterAll(async () => {
 	await new Promise(resolve => setTimeout(() => resolve(), 500));
 });

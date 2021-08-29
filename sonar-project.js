@@ -14,6 +14,6 @@ sonarqubeScanner(
       'sonar.login': 'admin',
       'sonar.password': 'HolaMundo'
     }
-  }, () => { 
+  }, () => {
     console.log('sonar is running')
   })

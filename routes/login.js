@@ -1,5 +1,6 @@
-//middlewares usados
+//Framework de nodejs
 const express = require('express')
+//Definicion del router
 const router = express.Router()
 
 //conexion a la BD
@@ -10,6 +11,8 @@ const bcrypt = require('bcrypt')
 
 //Metudo Get del login
 router.get('/login', async (req, res) => {
+
+  //Respuesta a la peticion
   res.status(200).json({
     gawr: 'gura'
   })
@@ -17,9 +20,9 @@ router.get('/login', async (req, res) => {
 
 //Metudo post para logear al usuario
 router.post('/login', async (req, res) => {
-  
+
   //Parámetros del login con el correo y el password.
-  const {correo, password} = req.body
+  const { correo, password } = req.body
 
   //Se realiza la petición para seleccionar todos campos del usuario a la BD
   //Se guarda los datos en la constante user
@@ -37,11 +40,12 @@ router.post('/login', async (req, res) => {
 
   //Si el usuario o password son incorrectos se notificará el error
   if (!(user && passwordCorrect)) {
+    //Respuesta a la peticion
     return res.status(401).json({
       error: 'invalid user or password'
     })
   }
-  
+
   //En caso de que los datos sean correctos se devolverán todos los datos del usuario
   res.status(200).json({
     //Se envia los datos del usuario validado al Frontend
