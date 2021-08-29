@@ -533,7 +533,7 @@ router.post('/solicitarCursoPrivado', async (req, res, next) => {
   // Aqui el query para solicitar acceso a un curso privado
   //Metodo para que el alumno pueda solicitad un notificacion al profesor que quiere unirse a su curso privado
 
-  //En caso que sea todo correcto
+  //En caso que sea este en lo correcto
   try {
 
     //Se solicita el id_curso y id_usuario a traves de body.
@@ -558,8 +558,7 @@ router.post('/solicitarCursoPrivado', async (req, res, next) => {
     //Se manda en forma de json al fronted los datos encontrados en la tabla 
     res.status(201).json(savedSocitudPrivate) 
   
-  } //En caso que haya un error
-    catch (e) {
+  } catch (e) { //En caso que haya un error
     next(e)
   }
 })
@@ -574,7 +573,7 @@ router.get('/AcceptarSolicitudPrivado/:idcurso', async (req, res, next) => {
   //Si coloca como que la situacion_id siempre va ser 3
   const situacion_id = '3'
 
-  //En caso que sea todo correcto
+  //En caso que sea correcto
   try {
     //Se declara una variable
     let alumnosPendientes
@@ -582,8 +581,7 @@ router.get('/AcceptarSolicitudPrivado/:idcurso', async (req, res, next) => {
     alumnosPendientes = await pool.query('SELECT * FROM heroku_b3e0382f6ba83ba.curso_usuario WHERE curso_id = ? AND situacion_id = ?', [idcurso, situacion_id])
     //Manda al fronted en forma de json la varible
     res.status(200).json(alumnosPendientes)
-  } //En caso que haya un error
-  catch (err) {
+  } catch (err) {//En caso que haya un error
     next(err)
   }
 })
@@ -605,8 +603,7 @@ router.put('/AcceptarSolicitudPrivado/:idcurso', async (req, res, next) => {
     const aceptarsolictudPrivate = await pool.query('SELECT * FROM heroku_b3e0382f6ba83ba.curso_usuario WHERE curso_id = ? AND usuario_id = ?', [idcurso, usuario_id])
     //Se manda la variable sobre como se encuentra actualizada
     res.status(200).json(aceptarsolictudPrivate)
-  } 
-  catch (err) { //En caso que haya un error
+  } catch (err) { //En caso que haya un error
     next(err)
   }
 })
@@ -631,7 +628,7 @@ router.post('/join-public-course/:idcurso', async (req, res, next) => {
     
     if (curso[0].privacidad_id == privacidad_publico){
       const curso_usuario = await pool.query('SELECT * FROM heroku_b3e0382f6ba83ba.curso_usuario WHERE usuario_id = ?', [iduser])
-      for (i=0 ; i<curso_usuario.length ;i++){
+      for ( let i=0 ; i<curso_usuario.length ;i++){
         if(curso_usuario[i].curso_id == idcurso && curso_usuario[i].usuario_id == iduser){
           existe = "existe"
           break;
