@@ -1,6 +1,7 @@
 const supertest = require('supertest')
 const { app } = require('../index')
 const api = supertest(app)
+const pool = require('../src/database');
 
 describe('tests de Cursos', () => {
   test('Get course by ID', async () => {
@@ -16,23 +17,49 @@ describe('tests de Cursos', () => {
       .expect(200)
       .expect('Content-Type', /application\/json/)
   })
+  test('Get max courses', async () => {
+    await api
+      .get('/coursespublicmax')
+      .expect(200)
+      .expect('Content-Type', /application\/json/)
+  })
+  test('Get courses by user', async () => {
+    await api
+      .get('/coursesofuser/35')
+      .expect(200)
+      .expect('Content-Type', /application\/json/)
+  })
+  test('Get courses by user', async () => {
+    await api
+      .get('/course-user/135')
+      .expect(200)
+      .expect('Content-Type', /application\/json/)
+  })
+  test('CREATE one course', async () => {
+    const newCourse = {
+      usuario_id: 35
+    }
+    const response = await api
+      .post('/courses')
+      .send(newCourse)
+      .expect(201)
+      .expect('Content-Type', /application\/json/)
+
+    const idCourseCreated = response.body.curso_id
+
+    await pool.query('DELETE FROM cursos WHERE curso_id = ?', [idCourseCreated])
+  })
   test('GET /listarCursosAgregadosPorProfesor', async () => {
     const response = await api
       .get('/listarCursosAgregadosPorProfesor/1645')
       .expect(200)
       .expect('Content-Type', /application\/json/)
-    // expect(response.error).toBe(false)
-    // expect(response.status).toBe(200)
-    // expect(response.body.body).not.toBeNull()
   })
   test('GET /listarCursosConSolicicitudAcceso', async () => {
     const response = await api.
       get('/listarCursosConSolicicitudAcceso/8205')
       .expect(200)
       .expect('Content-Type', /application\/json/)
-    // expect(response.error).toBe(false)
-    // expect(response.status).toBe(200)
-    // expect(response.body.body).not.toBeNull()
   })
 })
 
@@ -109,12 +136,14 @@ describe('Tasks tests', () => {
       .expect(200)
       .expect('Content-Type', /application\/json/)
   })
+  test('List taks curso', async () => {
+    await api
+      .get('/list-task/4935')
+      .expect(200)
+      .expect('Content-Type', /application\/json/)
+  })
+
 });
-
-
-afterAll(async () => {
-  await new Promise(resolve => setTimeout(() => resolve(), 500));
-})
 
 describe('Test de Curso -Usuario', () => {
   test('POST /coursesUsers', async () => {
@@ -125,11 +154,8 @@ describe('Test de Curso -Usuario', () => {
     const response = await api.
       post('/coursesUsers')
       .send(nuevo)
-      .expect(200)
+      .expect(201)
       .expect('Content-Type', /application\/json/)
-    // expect(response.error).toBe(false)
-    // expect(response.status).toBe(201)
-    // expect(response.body.body).not.toBeNull()
   })
 })
 
@@ -144,18 +170,45 @@ describe('Test de Notificaciones', () => {
       .send(nuevaNotificacion)
       .expect(200)
       .expect('Content-Type', /application\/json/)
-    // expect(response.error).toBe(false)
-    // expect(response.status).toBe(200)
-    // expect(response.body.body).not.toBeNull()
   })
   test('GET /listarNotificacionesPorUsuario', async () => {
     const response = await api.
       get('/listarNotificacionesPorUsuario/1635')
       .expect(200)
       .expect('Content-Type', /application\/json/)
-    // expect(response.error).toBe(false)
-    // expect(response.status).toBe(200)
-    // expect(response.body.body).not.toBeNull()
   })
 })
 
+describe('Material test', ()=> {
+  test('List Material by course', async () => {
+    await api
+      .get('/listMaterials/35')
+      .expect(200)
+      .expect('Content-Type', /application\/json/)
+  })
+})
+
+describe('Categories test', ()=> {
+  test('GET all categories', async () => {
+    await api
+      .get('/categories')
+      .expect(200)
+      .expect('Content-Type', /application\/json/)
+  })
+  test('GET one categories', async () => {
+    await api
+      .get('/categories/15')
+      .expect(200)
+      .expect('Content-Type', /application\/json/)
+  })
+  test('GET one categories fail', async () => {
+    await api
+      .get('/categories/12')
+      .expect(200)
+      .expect('Content-Type', /application\/json/)
+  })
+})
+
+afterAll(async () => {
+  await new Promise(resolve => setTimeout(() => resolve(), 500));
+})

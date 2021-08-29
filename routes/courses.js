@@ -358,7 +358,6 @@ router.get('/course-user/:idcurso', async (req, res, next) => {
   
   //Obtenemos el id del curso de los parametros de la ruta de la peticion
   const { idcurso } = req.params;
-  console.log(idcurso)
   try{
     
     //Aqui va el query para obtener la lista de usuarios de un curso
@@ -369,7 +368,6 @@ router.get('/course-user/:idcurso', async (req, res, next) => {
       data: listUser
     })
   } catch (err) {
-    console.log(err)
     next(err)
   }
 })
@@ -422,7 +420,6 @@ router.get('/coursespublicmax', async (req, res, next) => {
   try {
     // Query para obtener la lista de cursos publicos
     let cursos = await pool.query('SELECT c.* FROM cursos as c JOIN curso_usuario as cu ON c.curso_id = cu.curso_id WHERE c.privacidad_id IN (1,5) GROUP BY c.curso_id ORDER BY COUNT(*) DESC LIMIT 4;')
-    console.log(cursos)
     // Respuesta a la peticion
     res.status(200).json({
       cursos,
@@ -497,7 +494,6 @@ router.post('/course-material/:idcurso', async (req, res, next) => {
       descripcion,
       fecha_creacion,
       curso_id
-
     }
     // Aqui va el query para guardar un nuevo material de un curso
     await pool.query('INSERT INTO heroku_b3e0382f6ba83ba.material SET ? ', newMaterial)
@@ -521,7 +517,7 @@ router.get('/list-task/:idcurso', async (req, res, next) => {
     let list = await pool.query('SELECT * FROM heroku_b3e0382f6ba83ba.tareas WHERE curso_id = ?', [idcurso])
 
     // Respuesta a la peticion
-    res.status(201).json(list)
+    res.status(200).json(list)
   } catch (e) {
     next(e)
   }
@@ -567,7 +563,6 @@ router.get('/AcceptarSolicitudPrivado/:idcurso', async (req, res, next) => {
   //Se solicita el id_curso a traves de enlace.
   const { idcurso } = req.params
 
-  // console.log(idcurso)
   //Si coloca como que la situacion_id siempre va ser 3
   const situacion_id = '3'
 
@@ -669,7 +664,6 @@ router.get('/listMaterials/:idcurso', async (req, res, next) => {
 
 router.post('/entregarTarea', async (req, res, next) => {
   const { tarea_asignada_id, usuario_id, url } = req.body
-  console.log(req.body)
   try {
     await pool.query('UPDATE tarea_asignada set ? WHERE usuario_id = ? AND tarea_asignada_id = ?',[{url}, usuario_id, tarea_asignada_id])
     res.status(200).json({
