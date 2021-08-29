@@ -68,38 +68,95 @@ router.get('/suggestions/:idsuggestions', async (req, res, next) => {
 })
 
 
-router.post('/votarSugerencias', async (req, res, next) => {
+router.put('/votarSugerencias', async (req, res, next) => {
   // Metodo para votar sugerencias
-  try {
-    const { usuario_id, sugerencia_id } = req.body
 
-    let VotarPorSugerencia = {
-      usuario_id,
-      sugerencia_id
+  //Variables que sus datos son ingresados por el body
+  const { usuario_id, sugerencia_id } = req.body
+
+  //Se crea una nueva variable para guardar los datos de usuario y sugerencia
+  let votos_nuevo = {
+    usuario_id,
+    sugerencia_id
+  }
+  //Si es correcto 
+  try {
+
+    // Se accede a la BD para listar todos los votos de un usario
+    let votos_usuario = await pool.query('SELECT * FROM heroku_b3e0382f6ba83ba.votos WHERE usuario_id = ?', [usuario_id])
+    
+    //Lo que han ingresado
+    //console.log(votos_nuevo)
+
+    //Busca por sugerencia_id en el votos_usuario
+    const resultado = votos_usuario.find( sugerencia => sugerencia.sugerencia_id == sugerencia_id );
+    //console.log(resultado);
+    //console.log(typeof (resultado));
+
+    //Si no se encuentra en la tabla
+    if(typeof(resultado) == "undefined"){
+      //Se inserta
+      await pool.query('INSERT INTO heroku_b3e0382f6ba83ba.votos SET ? ', votos_nuevo)
+
+      // Respuesta a la peticion, se manda un mensaje 
+      res.status(200).json({
+        msg: 'Voto Registrado'
+      })
+
+    }
+    //Si se encuentra en la tabla
+    else{
+      //Se Elimina
+      await pool.query(' DELETE FROM heroku_b3e0382f6ba83ba.votos WHERE usuario_id = ? AND sugerencia_id = ? ', [ usuario_id, sugerencia_id])
+      
+      res.status(200).json({
+        msg: 'Voto Eliminado'
+      })
+
     }
 
-    await pool.query('INSERT INTO heroku_b3e0382f6ba83ba.votos SET ? ', VotarPorSugerencia)
+  }  catch (e) { //Si hay algun error
+    next(e)
+  }
+})
 
-    // Respuesta a la peticion
+
+router.get('/listarVotosUsuario/:idUsuario', async(req,res,next)=>{
+  //metodo para listar los votos por usuario.
+  
+  //Se ingresa el dato de codigo de usuario por el body
+  const { idUsuario } = req.params
+
+  //cuando es correcto
+  try{
+    let list = await pool.query('SELECT * FROM heroku_b3e0382f6ba83ba.votos WHERE usuario_id = ?', [idUsuario])
+    
+    // Respuesta a la peticion, se manda un mensaje 
     res.status(200).json({
-      msg: 'Voto Registrado'
+      // Se devuelve la lista de votos de un usuario al Frontend
+      list
     })
-  }  catch (e) {
+
+  }catch(e){ //Si hay algun error
     next(e)
   }
 })
 
 router.get('/listarSugerenciasVotos', async(req,res,next)=>{
   // Metodo para listar el numero de votos de TODAS las sugerencias
+  
+  //cuando es correcto
   try{
     // Se accede a la BD para listar la sugerencias con su cantidad de votos
-    let list = await pool.query('SELECT sugerencia_id, COUNT(sugerencia_id) FROM votos GROUP BY sugerencia_id ')
+    let list = await pool.query('SELECT sugerencia_id, COUNT(sugerencia_id) FROM heroku_b3e0382f6ba83ba.votos GROUP BY sugerencia_id ')
+    
+    // Respuesta a la peticion, se manda un mensaje 
     res.status(200).json({
       // Se devuelve la lista de sugerencias con su cantidad de votos al Frontend
       list
     })
 
-  }catch(e){
+  }catch(e){ //Si hay algun error
     next(e)
   }
 })
@@ -108,13 +165,15 @@ router.get('/listarSugerenciasMasVotos', async(req,res,next)=>{
   // Metodo para listar el numero votos de 3 sugerencias mas votadas
   try{
     // Se accede a la BD para listar la sugerencias con su cantidad de votos
-    let list = await pool.query('SELECT sugerencia_id, COUNT(sugerencia_id) FROM votos GROUP BY sugerencia_id ORDER BY COUNT(sugerencia_id) DESC LIMIT 3')
+    let list = await pool.query('SELECT sugerencia_id, COUNT(sugerencia_id) FROM heroku_b3e0382f6ba83ba.votos GROUP BY sugerencia_id ORDER BY COUNT(sugerencia_id) DESC LIMIT 3')
+    
+    // Respuesta a la peticion, se manda un mensaje 
     res.status(200).json({
-      // Se devuelve la lista de sugerencias con su cantidad de "3" votos al Frontend
+    // Se devuelve la lista de sugerencias con su cantidad de "3" votos al Frontend
       list
     })
 
-  }catch(e){
+  }catch(e){ //Si hay algun error
     next(e)
   }
 })
