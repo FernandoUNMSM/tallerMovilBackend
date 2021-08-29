@@ -379,7 +379,8 @@ router.post('/aceptarInvitacionDeProfesor', async (req, res, next) => {
  * @param {Number} iduser
  */
 // Metodo get obtener las notificaciones de un usuario
-//Declaramos la ruta// Se especifica el id del usuario del cual se quiere listar sus notificaciones
+//Declaramos la ruta
+// Se especifica el id del usuario del cual se quiere listar sus notificaciones
 router.get('/notificacionPorUsuario/:iduser', async (req, res, next) => {
   const { iduser } = req.params
   try {
