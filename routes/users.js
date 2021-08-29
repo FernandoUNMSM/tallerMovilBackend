@@ -1,34 +1,42 @@
 //Middlewares
+//Framework de nodejs
 const express = require('express')
+//Definicion del router
 const router = express.Router()
-
-//Conexion a la BD
+//Definicion del pool sql
 const pool = require('../src/database');
+//Nos trae el metodo para hacer querys a la BD
 
 //encriptacion del password
+//Importamos el bycrupt
 const bcrypt = require('bcrypt')
-
+//Importamos el multer
 let multer = require('multer');
+//instanciamos el mutler
 let upload = multer({
   limits: {
-     fileSize: 8000000 // Compliant: 8MB
+    fileSize: 8000000 // Compliant: 8MB
   }
 });
 
 
 //Metodo get para listar a todos los usuarios existentes
 router.get('/users', async (req, res, next) => {
+  //Empesamos con el try
   try {
     //Se accede a la BD y se seleciona  a todos los usuarios
     //Todos los datos se guardan en la variable list
     let list = await pool.query('SELECT * FROM heroku_b3e0382f6ba83ba.usuarios');
+    //Respuesta a la peticion
     res.status(200).json({
       //Se devuelve la lista de usuarios al Frontend
       list
     })
 
+    //Manejo de errror
+    //EMpezamos con el catch
   } catch (err) {
-    //Se maneja los errores en caso de haberlo
+    //Envio a middleware
     next(err);
   }
 })
@@ -37,6 +45,7 @@ router.get('/users', async (req, res, next) => {
 router.get('/users/:id', async (req, res, next) => {
   //Parámetro id del usuario para listarlo
   const { id } = req.params
+  //Empesamos con el try
   try {
     //Se accede a la BD y se seleciona  al usuarios a través de su id única
     //Los datos del usuario se guarda en la variable user
@@ -51,6 +60,7 @@ router.get('/users/:id', async (req, res, next) => {
     let cantidadTotal = cantidadEstudiantes.map(can => (can.length > 0) ? Object.values(can[0])[0] : 0)
     let suma = cantidadTotal.reduce((a, b) => a + b)
 
+    //Respuesta a la peticion
     res.status(200).json({
       //Se devuelve el usuario al Frontend
       user,
@@ -58,14 +68,17 @@ router.get('/users/:id', async (req, res, next) => {
       cantidadCursosPublicos: cursos.length
     })
 
+    //Manejo de errror
+    //EMpezamos con el catch
   } catch (err) {
-    //Se maneja los errores en caso de haberlo
+    //Envio a middleware
     next(err);
   }
 })
 
 //Metodo get para editar al usuario
-router.post('/useredit/:id', upload.fields([]),async (req, res, next) => {
+router.post('/useredit/:id', upload.fields([]), async (req, res, next) => {
+  //Empesamos con el try
   try {
     //Parámetro id extraido de la ruta
     const { id } = req.params
@@ -89,12 +102,15 @@ router.post('/useredit/:id', upload.fields([]),async (req, res, next) => {
     //Se guardan los nuevos datos del usuario en la variable user1
     const user1 = await pool.query('SELECT * FROM heroku_b3e0382f6ba83ba.usuarios WHERE usuario_id = ?', [id]);
 
+    //Respuesta a la peticion
     res.status(200).json({
       //Se devuelve el usuario updateado al Frontend
       user1
     })
+    //Manejo de errror
+    //EMpezamos con el catch
   } catch (err) {
-    //Se maneja los errores en caso de haberlo
+    //Envio a middleware
     next(err);
   }
 })
@@ -107,7 +123,8 @@ router.post('/register', async (req, res, next) => {
 
   //Si el password es nulo la data es inválida
   if (!password) {
-    return res.status(400).json({
+    //Respuesta a la peticionreturn 
+    res.status(400).json({
       //Se notifica al frontend que la data es inválida
       error: 'data invalid'
     })
@@ -131,6 +148,7 @@ router.post('/register', async (req, res, next) => {
     url
   }
 
+  //Empesamos con el try
   try {
     //Se accede a la BD y se inserta o guarda al muevo usuario
     await pool.query('INSERT INTO heroku_b3e0382f6ba83ba.usuarios  set ? ', newUser);
@@ -139,9 +157,11 @@ router.post('/register', async (req, res, next) => {
     //Se guardan los datos usuario en la variable usuario
     const usuario = await pool.query('SELECT * FROM heroku_b3e0382f6ba83ba.usuarios WHERE usuario_nombre = ?', [newUser.usuario_nombre]);
     //Se devuelve el usuario creado al Frontend
+    //Respuesta a la peticion
     res.status(201).json(usuario[0])
   } catch (e) {
     //Se maneja los errores en caso de haberlo
+    //Respuesta a la peticion
     res.status(400).json(e)
   }
 })
