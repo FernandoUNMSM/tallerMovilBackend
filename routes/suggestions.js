@@ -68,28 +68,53 @@ router.get('/suggestions/:idsuggestions', async (req, res, next) => {
 })
 
 
-router.post('/votarSugerencias', async (req, res, next) => {
+router.put('/votarSugerencias', async (req, res, next) => {
   // Metodo para votar sugerencias
 
   //Variables que sus datos son ingresados por el body
   const { usuario_id, sugerencia_id } = req.body
 
-  //Se crea un obtejo con las variables de usuario_id, sugerencias_id
-  let VotarPorSugerencia = {
+  //Se crea una nueva variable para guardar los datos de usuario y sugerencia
+  let votos_nuevo = {
     usuario_id,
     sugerencia_id
   }
-
   //Si es correcto 
   try {
 
-    //Se insetar en la tabla de votos, el objeto de votar
-    await pool.query('INSERT INTO heroku_b3e0382f6ba83ba.votos SET ? ', VotarPorSugerencia)
+    // Se accede a la BD para listar todos los votos de un usario
+    let votos_usuario = await pool.query('SELECT * FROM heroku_b3e0382f6ba83ba.votos WHERE usuario_id = ?', [usuario_id])
+    
+    //Lo que han ingresado
+    //console.log(votos_nuevo)
 
-    // Respuesta a la peticion, se manda un mensaje 
-    res.status(200).json({
-      msg: 'Voto Registrado'
-    })
+    //Busca por sugerencia_id en el votos_usuario
+    const resultado = votos_usuario.find( sugerencia => sugerencia.sugerencia_id == sugerencia_id );
+    //console.log(resultado);
+    //console.log(typeof (resultado));
+
+    //Si no se encuentra en la tabla
+    if(typeof(resultado) == "undefined"){
+      //Se inserta
+      await pool.query('INSERT INTO heroku_b3e0382f6ba83ba.votos SET ? ', votos_nuevo)
+
+      // Respuesta a la peticion, se manda un mensaje 
+      res.status(200).json({
+        msg: 'Voto Registrado'
+      })
+
+    }
+    //Si se encuentra en la tabla
+    else{
+      //Se Elimina
+      await pool.query(' DELETE FROM heroku_b3e0382f6ba83ba.votos WHERE usuario_id = ? AND sugerencia_id = ? ', [ usuario_id, sugerencia_id])
+      
+      res.status(200).json({
+        msg: 'Voto Eliminado'
+      })
+
+    }
+
   }  catch (e) { //Si hay algun error
     next(e)
   }
