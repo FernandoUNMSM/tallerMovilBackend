@@ -9,7 +9,11 @@ const pool = require('../src/database');
 const bcrypt = require('bcrypt')
 
 let multer = require('multer');
-let upload = multer();
+let upload = multer({
+  limits: {
+     fileSize: 8000000 // Compliant: 8MB
+  }
+});
 
 
 //Metodo get para listar a todos los usuarios existentes

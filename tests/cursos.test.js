@@ -6,11 +6,12 @@ const api = supertest(app)
 describe('tests de Cursos', () => {
   test('Get course by ID', async () => {
     const response = await api
-      .get('/courses/5')
+      .get('/courses/35')
       .expect(200)
       .expect('Content-Type', /application\/json/)
-    expect(response.body.data.curso_id).toBe(5)
+    expect(response.body.data.curso_id).toBe(35)
   })
+
   test('GET /listarCursosAgregadosPorProfesor', async() => {
     const response = await request(app).get('/listarCursosAgregadosPorProfesor/1645')
         expect(response.error).toBe(false)

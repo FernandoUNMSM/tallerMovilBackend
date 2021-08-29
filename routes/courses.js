@@ -36,14 +36,13 @@ router.get('/courses/:id', async (req, res, next) => {
     // Aqui va el query para obtener un curso especifico por su id
     const course = await pool.query('SELECT * FROM cursos WHERE curso_id = ?', [id])
 
-    const alumnos = await pool.query('SELECT COUNT(*) FROM curso_usuario WHERE curso_id = ? situacion_id = 1', [id])
+    const alumnos = await pool.query('SELECT COUNT(*) FROM curso_usuario WHERE curso_id = ? and situacion_id = 1', [id])
     // Respuesta a la peticion
     res.status(200).json({
       data: course[0],
       alumnos: Object.values(alumnos[0])[0]
     })
   } catch (err) {
-    console.log(err)
     next(err)
   }
 })

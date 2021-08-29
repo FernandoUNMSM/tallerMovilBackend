@@ -4,7 +4,7 @@
   "description": "\"An unofficial api from cosmere\"",
   "main": "index.js",
   "scripts": {
-    "sonar": "node sonar-project.js",
+    "sonar": "cross-env PASSWORDSONAR=root81018 node sonar-project.js",
     "dev": "cross-env NODE_ENV=development nodemon index.js",
     "start": "cross-env NODE_ENV=production node index.js",
     "test": "cross-env NODE_ENV=test jest --coverage --no-cache"
@@ -23,6 +23,7 @@
     "dotenv": "^8.2.0",
     "express": "^4.17.1",
     "express-mysql-session": "^2.1.6",
+    "helmet": "^4.6.0",
     "jest-sonar-reporter": "^2.0.0",
     "jsonwebtoken": "^8.5.1",
     "mongoose": "5.12.3",
