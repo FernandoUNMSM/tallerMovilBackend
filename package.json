@@ -7,7 +7,7 @@
     "sonar": "cross-env PASSWORDSONAR=root81018 node sonar-project.js",
     "dev": "cross-env NODE_ENV=development nodemon index.js",
     "start": "cross-env NODE_ENV=production node index.js",
-    "test": "cross-env NODE_ENV=test jest --coverage --no-cache"
+    "test": "cross-env NODE_ENV=test PORT=3002 jest --coverage --no-cache"
   },
   "keywords": [
     "cosmere"

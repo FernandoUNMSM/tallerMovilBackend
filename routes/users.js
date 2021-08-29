@@ -17,7 +17,7 @@ let upload = multer({
 
 
 //Metodo get para listar a todos los usuarios existentes
-router.get('/users', async (req, res) => {
+router.get('/users', async (req, res, next) => {
   try {
     //Se accede a la BD y se seleciona  a todos los usuarios
     //Todos los datos se guardan en la variable list
