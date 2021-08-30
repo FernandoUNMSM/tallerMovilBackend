@@ -274,19 +274,14 @@ describe('test extras', () => {
       .expect('Content-Type', /application\/json/)
 
   })
-  test('editarTarea', async () => {
-    await api
-      .get('/users/34')
-      .expect(500)
 
-  })
   test('subirArchivo', async () => {
     const archivo = {
       archivo_id: 12,
-      origen_id: 5,
+      origen_id: 25,
       url: "https://firebasestorage.googleapis.com/v0/b/bd-archivos.appspot.com/o/BD%20(1).pdf?alt=media&token=2998512d-b423-47d3-b9b7-5409d68620a0",
       nombre_archivo: "Prueba de Archivo test",
-      tipo: 25
+      tipo: 5
     }
 
     await api
@@ -295,12 +290,13 @@ describe('test extras', () => {
       .expect(200)
       .expect('Content-Type', /application\/json/)
 
-    await pool.query('DELETE FROM archivos WHERE archivo_id = ?', [archivo_id])
+    await pool.query('DELETE FROM archivos WHERE archivo_id = 12')
 
   })
 
 })
 
 afterAll(async () => {
+  await pool.query("DELETE FROM usuarios WHERE usuario_nombre = 'UsuarioPrueba2'")
   await new Promise(resolve => setTimeout(() => resolve(), 500));
 });

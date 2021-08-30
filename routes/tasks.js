@@ -71,6 +71,7 @@ router.post('/subirArchivo', async (req, res, next) => {
   //Obrenemos los dartos del cuertpo de la petcion
   const { archivo_id, origen_id, url, nombre_archivo, tipo } = req.body;
   //Se crea un json para el nuevo archivo
+  console.log(req.body)
   const newArchivo = {
     archivo_id,
     origen_id,

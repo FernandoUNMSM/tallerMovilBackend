@@ -320,6 +320,13 @@ describe('USERS tests', () => {
       .expect('Content-Type', /application\/json/)
 
   })
+  test('Get one user fail', async () => {
+    //Hacemos la llamada a la ruta de la api
+    await api
+      .get('/users/123')
+      .expect(500)
+
+  })
 
   //Declaracion del test
   test('Edit one user', async () => {
