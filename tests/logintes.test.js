@@ -113,6 +113,28 @@ test('Create sugerences', async () => {
 
   await pool.query('DELETE FROM sugerencias WHERE sugerencia_id = ?', [idSuggestionCreated])
 })
+test('Create sugerences empty', async () => {
+  const newSuggestion = {
+    
+  }
+  await api
+    .post('/suggestions')
+    .send(newSuggestion)
+    .expect(400)
+    .expect('Content-Type', /application\/json/)
+
+})
+test('vote sugerences empty', async () => {
+  const newSuggestion = {
+    
+  }
+  await api
+    .put('/votarSugerencias')
+    .send(newSuggestion)
+    .expect(400)
+    .expect('Content-Type', /application\/json/)
+
+})
 
 //Declaracion de un describe de tests
 describe('Material test', () => {
@@ -237,6 +259,12 @@ describe('test extras', () => {
       .send(suge)
       .expect(200)
       .expect('Content-Type', /application\/json/)
+
+  })
+  test('editarTarea', async () => {
+    await api
+      .get('/users/34')
+      .expect(500)
 
   })
 })

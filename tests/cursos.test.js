@@ -337,6 +337,7 @@ describe('USERS tests', () => {
       .expect('Content-Type', /application\/json/)
 
   })
+
 });
 
 

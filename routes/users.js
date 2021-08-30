@@ -23,22 +23,18 @@ let upload = multer({
 //Metodo get para listar a todos los usuarios existentes
 router.get('/users', async (req, res, next) => {
   //Empesamos con el try
-  try {
-    //Se accede a la BD y se seleciona  a todos los usuarios
-    //Todos los datos se guardan en la variable list
-    let list = await pool.query('SELECT * FROM heroku_b3e0382f6ba83ba.usuarios');
-    //Respuesta a la peticion
-    res.status(200).json({
-      //Se devuelve la lista de usuarios al Frontend
-      list
-    })
+  //Se accede a la BD y se seleciona  a todos los usuarios
+  //Todos los datos se guardan en la variable list
+  let list = await pool.query('SELECT * FROM heroku_b3e0382f6ba83ba.usuarios');
+  //Respuesta a la peticion
+  res.status(200).json({
+    //Se devuelve la lista de usuarios al Frontend
+    list
+  })
 
-    //Manejo de errror
-    //EMpezamos con el catch
-  } catch (err) {
-    //Envio a middleware
-    next(err);
-  }
+  //Manejo de errror
+  //EMpezamos con el catch
+
 })
 
 //Metodo get para listar a un solo usuarios
@@ -79,40 +75,35 @@ router.get('/users/:id', async (req, res, next) => {
 //Metodo get para editar al usuario
 router.post('/useredit/:id', upload.fields([]), async (req, res, next) => {
   //Empesamos con el try
-  try {
-    //Parámetro id extraido de la ruta
-    const { id } = req.params
-    //Parámetros extraidos del cuerpo  enviado por el frontend
-    const { usuario_nombre, usuario_apellidos, url, correo, descripcion } = req.body;
-    //Constante newUser user donde se guardan los parámetros del cuerpo
-    console.log(req.body)
+  //Parámetro id extraido de la ruta
+  const { id } = req.params
+  //Parámetros extraidos del cuerpo  enviado por el frontend
+  const { usuario_nombre, usuario_apellidos, url, correo, descripcion } = req.body;
+  //Constante newUser user donde se guardan los parámetros del cuerpo
+  console.log(req.body)
 
-    const newUser = {
-      usuario_nombre,
-      usuario_apellidos,
-      correo,
-      url,
-      descripcion
-    }
-
-    //Se accede a la BD y se realiza un update a traves de la variable newUser y el parametro id
-    await pool.query('UPDATE heroku_b3e0382f6ba83ba.usuarios set ? WHERE usuario_id = ?', [newUser, id]);
-
-    //Se accede a la BD y se seleciona al usuario previamente updateado a través del parametro id
-    //Se guardan los nuevos datos del usuario en la variable user1
-    const user1 = await pool.query('SELECT * FROM heroku_b3e0382f6ba83ba.usuarios WHERE usuario_id = ?', [id]);
-
-    //Respuesta a la peticion
-    res.status(200).json({
-      //Se devuelve el usuario updateado al Frontend
-      user1
-    })
-    //Manejo de errror
-    //EMpezamos con el catch
-  } catch (err) {
-    //Envio a middleware
-    next(err);
+  const newUser = {
+    usuario_nombre,
+    usuario_apellidos,
+    correo,
+    url,
+    descripcion
   }
+
+  //Se accede a la BD y se realiza un update a traves de la variable newUser y el parametro id
+  await pool.query('UPDATE heroku_b3e0382f6ba83ba.usuarios set ? WHERE usuario_id = ?', [newUser, id]);
+
+  //Se accede a la BD y se seleciona al usuario previamente updateado a través del parametro id
+  //Se guardan los nuevos datos del usuario en la variable user1
+  const user1 = await pool.query('SELECT * FROM heroku_b3e0382f6ba83ba.usuarios WHERE usuario_id = ?', [id]);
+
+  //Respuesta a la peticion
+  res.status(200).json({
+    //Se devuelve el usuario updateado al Frontend
+    user1
+  })
+  //Manejo de errror
+  //EMpezamos con el catch
 })
 
 

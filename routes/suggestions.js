@@ -8,20 +8,15 @@ const pool = require('../src/database');
 
 // Metodo GET para listar las sugerencias
 router.get('/suggestions', async (req, res, next) => {
-  try {
-    // Se accede a la BD para listar todos los campos de las sugerencias
-    let list = await pool.query('SELECT * FROM heroku_b3e0382f6ba83ba.sugerencias')    
-    //Respuesta a la peticion
-    res.status(200).json({
-      // Se devuelve la lista de sugerencias al Forntend
-      list
-    })
-    //Manejo de errror
-    //EMpezamos con el catch
-  } catch (err) {
-    //Envio a middleware
-    next(err);
-  }
+  // Se accede a la BD para listar todos los campos de las sugerencias
+  let list = await pool.query('SELECT * FROM heroku_b3e0382f6ba83ba.sugerencias')
+  //Respuesta a la peticion
+  res.status(200).json({
+    // Se devuelve la lista de sugerencias al Forntend
+    list
+  })
+  //Manejo de errror
+  //EMpezamos con el catch
 })
 
 // Metodo POST para guardar las sugerencias
@@ -57,23 +52,19 @@ router.post('/suggestions', async (req, res, next) => {
 })
 //Definicion de la ruta
 router.get('/suggestions/:idsuggestions', async (req, res, next) => {
-  try {
-    // Obtenemos el id de la sugerencia de los parametros de la ruta de la peticion
-    const { idsuggestions } = req.params
+  // Obtenemos el id de la sugerencia de los parametros de la ruta de la peticion
+  const { idsuggestions } = req.params
 
-    // Se accede a la BD para listar una sola sugerencia
-    let list = await pool.query('SELECT * FROM heroku_b3e0382f6ba83ba.sugerencias WHERE sugerencia_id = ?', [idsuggestions])
-    //Respuesta a la peticion
-    res.status(200).json({
-      // Se devuelve la lista de sugerencias al Forntend
-      list
-    })
-    //Manejo de errror
-    //EMpezamos con el catch
-  } catch (err) {
-    //Envio a middleware
-    next(err);
-  }
+  // Se accede a la BD para listar una sola sugerencia
+  let list = await pool.query('SELECT * FROM heroku_b3e0382f6ba83ba.sugerencias WHERE sugerencia_id = ?', [idsuggestions])
+  //Respuesta a la peticion
+  res.status(200).json({
+    // Se devuelve la lista de sugerencias al Forntend
+    list
+  })
+  //Manejo de errror
+  //EMpezamos con el catch
+
 })
 
 
@@ -140,63 +131,50 @@ router.get('/listarVotosUsuario/:idUsuario', async (req, res, next) => {
   const { idUsuario } = req.params
 
   //cuando es correcto
-  try {
-    let list = await pool.query('SELECT * FROM heroku_b3e0382f6ba83ba.votos WHERE usuario_id = ?', [idUsuario])
+  let list = await pool.query('SELECT * FROM heroku_b3e0382f6ba83ba.votos WHERE usuario_id = ?', [idUsuario])
 
-    // Respuesta a la peticion, se manda un mensaje 
-    res.status(200).json({
-      // Se devuelve la lista de votos de un usuario al Frontend
-      list
-    })
+  // Respuesta a la peticion, se manda un mensaje 
+  res.status(200).json({
+    // Se devuelve la lista de votos de un usuario al Frontend
+    list
+  })
 
-    //Manejo de errror
-    //EMpezamos con el catch
-  } catch (err) {
-    //Envio a middleware
-    next(err);
-  }
+  //Manejo de errror
+  //EMpezamos con el catch
+
 })
 
 router.get('/listarSugerenciasVotos', async (req, res, next) => {
   // Metodo para listar el numero de votos de TODAS las sugerencias
 
   //cuando es correcto
-  try {
-    // Se accede a la BD para listar la sugerencias con su cantidad de votos
-    let list = await pool.query('SELECT sugerencia_id, COUNT(sugerencia_id) FROM heroku_b3e0382f6ba83ba.votos GROUP BY sugerencia_id ')
+  // Se accede a la BD para listar la sugerencias con su cantidad de votos
+  let list = await pool.query('SELECT sugerencia_id, COUNT(sugerencia_id) FROM heroku_b3e0382f6ba83ba.votos GROUP BY sugerencia_id ')
 
-    // Respuesta a la peticion, se manda un mensaje 
-    res.status(200).json({
-      // Se devuelve la lista de sugerencias con su cantidad de votos al Frontend
-      list
-    })
+  // Respuesta a la peticion, se manda un mensaje 
+  res.status(200).json({
+    // Se devuelve la lista de sugerencias con su cantidad de votos al Frontend
+    list
+  })
 
-    //Manejo de errror
-    //EMpezamos con el catch
-  } catch (err) {
-    //Envio a middleware
-    next(err);
-  }
+  //Manejo de errror
+  //EMpezamos con el catch
 })
 
 router.get('/listarSugerenciasMasVotos', async (req, res, next) => {
   // Metodo para listar el numero votos de 3 sugerencias mas votadas
-  try {
-    // Se accede a la BD para listar la sugerencias con su cantidad de votos
-    let list = await pool.query('SELECT sugerencia_id, COUNT(sugerencia_id) FROM heroku_b3e0382f6ba83ba.votos GROUP BY sugerencia_id ORDER BY COUNT(sugerencia_id) DESC LIMIT 3')
+  // Se accede a la BD para listar la sugerencias con su cantidad de votos
+  let list = await pool.query('SELECT sugerencia_id, COUNT(sugerencia_id) FROM heroku_b3e0382f6ba83ba.votos GROUP BY sugerencia_id ORDER BY COUNT(sugerencia_id) DESC LIMIT 3')
 
-    // Respuesta a la peticion, se manda un mensaje 
-    res.status(200).json({
-      // Se devuelve la lista de sugerencias con su cantidad de "3" votos al Frontend
-      list
-    })
+  // Respuesta a la peticion, se manda un mensaje 
+  res.status(200).json({
+    // Se devuelve la lista de sugerencias con su cantidad de "3" votos al Frontend
+    list
+  })
 
-    //Manejo de errror
-    //EMpezamos con el catch
-  } catch (err) {
-    //Envio a middleware
-    next(err);
-  }
+  //Manejo de errror
+  //EMpezamos con el catch
+
 })
 
 

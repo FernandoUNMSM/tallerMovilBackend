@@ -22,22 +22,18 @@ router.get('/cursos/:iduser', async (req, res, next) => {
   const { iduser } = req.params
   //Empesamos con el try
 
-  try {
-    //Declaramos la variable list
-    let list
+  //Declaramos la variable list
+  let list
 
-    // Aqui va el query de buscar los cursos de un usuario
-    list = await pool.query('SELECT * FROM heroku_b3e0382f6ba83ba.cursos WHERE usuario_id = ?', [iduser])
-    // Respuesta a la peticion
-    res.status(200).json({
-      list
-    })
-    //Manejo de errror
-    //EMpezamos con el catch
-  } catch (err) {
-    //Envio a middleware
-    next(err);
-  }
+  // Aqui va el query de buscar los cursos de un usuario
+  list = await pool.query('SELECT * FROM heroku_b3e0382f6ba83ba.cursos WHERE usuario_id = ?', [iduser])
+  // Respuesta a la peticion
+  res.status(200).json({
+    list
+  })
+  //Manejo de errror
+  //EMpezamos con el catch
+
 })
 //Declaramos la ruta
 //Declaramos la ruta
@@ -47,7 +43,6 @@ router.get('/courses/:id', async (req, res, next) => {
   // Obtenemos el id del usuario de los parametros de la ruta de la peticion
   const { id } = req.params
 
-  try {
     // Aqui va el query para obtener un curso especifico por su id
     const course = await pool.query('SELECT * FROM cursos WHERE curso_id = ?', [id])
     // Aqui va el query para obtener un alumno especifico por su id
@@ -59,48 +54,41 @@ router.get('/courses/:id', async (req, res, next) => {
     })
     //Manejo de errror
     //EMpezamos con el catch
-  } catch (err) {
-    //Envio a middleware
-    next(err);
-  }
+
 })
 //Declaramos la ruta
 router.post('/courses', async (req, res, next) => {
   // Esta es la ruta para crear un curso
 
-  try {
-    // Obtenemos los datos del cuerpo de la peticion
-    const { curso_id, usuario_id, categoria_id, imagen, curso_nombre, descripcion, conoci_previo, privacidad_id, curso_fecha_creacion } = req.body
-    //Creamos el codigo para generar
-    var code = generator.generateCodes(pattern, 1, {});
-    //Creamo un json para el nuevo curso
-    let newCourse = {
-      curso_id,
-      usuario_id,
-      categoria_id,
-      codigo: code,
-      imagen,
-      curso_nombre,
-      descripcion,
-      conoci_previo,
-      privacidad_id,
-      curso_fecha_creacion
-    }
-
-    // Aqui va el query para guardar un curso
-    await pool.query('INSERT INTO heroku_b3e0382f6ba83ba.cursos SET ? ', newCourse)
-    //const savedCourse = await pool.query('SELECT * FROM heroku_b3e0382f6ba83ba.cursos WHERE curso_nombre = ?', [curso_nombre])
-
-    // Respuesta a la peticion
-    res.status(201).json({
-      msg: 'Curso creado'
-    })// Aca se debe de enviar el nuevo curso creado
-    //Manejo de errror
-    //EMpezamos con el catch
-  } catch (err) {
-    //Envio a middleware
-    next(err);
+  // Obtenemos los datos del cuerpo de la peticion
+  const { curso_id, usuario_id, categoria_id, imagen, curso_nombre, descripcion, conoci_previo, privacidad_id, curso_fecha_creacion } = req.body
+  //Creamos el codigo para generar
+  var code = generator.generateCodes(pattern, 1, {});
+  //Creamo un json para el nuevo curso
+  let newCourse = {
+    curso_id,
+    usuario_id,
+    categoria_id,
+    codigo: code,
+    imagen,
+    curso_nombre,
+    descripcion,
+    conoci_previo,
+    privacidad_id,
+    curso_fecha_creacion
   }
+
+  // Aqui va el query para guardar un curso
+  await pool.query('INSERT INTO heroku_b3e0382f6ba83ba.cursos SET ? ', newCourse)
+  //const savedCourse = await pool.query('SELECT * FROM heroku_b3e0382f6ba83ba.cursos WHERE curso_nombre = ?', [curso_nombre])
+
+  // Respuesta a la peticion
+  res.status(201).json({
+    msg: 'Curso creado'
+  })// Aca se debe de enviar el nuevo curso creado
+  //Manejo de errror
+  //EMpezamos con el catch
+
 })
 
 /**
@@ -253,22 +241,18 @@ router.post('/unirPorCodigo', async (req, res, next) => {
 //Declaramos la ruta// Se especifica el id del usuario profesor quien agrego alumnos a su curso
 router.get('/listarCursosAgregadosPorProfesor/:usuario_id', async (req, res, next) => {
   // Usamos un try-catch para capturar posibles errores al momento de mandar las consultas
-  try {
-    // Especificamos que usaremos un objeto para poder enviar una consulta.
-    // Especificamos que la consulta se hara con un body.
-    const { usuario_id } = req.params
-    // Hacemos la consulta a base de datos mediante el pool pasando como parametros el objeto creado lineas arriba
-    await pool.query('CALL heroku_b3e0382f6ba83ba.listarCursosAgregadosPorProfesor (?) ', [usuario_id])
-    // Guardamos el resultado de otra consulta para mostrarlo como mensaje de salida
-    const listaCursosAgregadosPorProfesor = await pool.query('CALL heroku_b3e0382f6ba83ba.listarCursosAgregadosPorProfesor (?)  ', usuario_id)
-    // Se muestra la respuesta exitosa a la consulta
-    res.status(200).json(listaCursosAgregadosPorProfesor)
-    //Manejo de errror
-    //EMpezamos con el catch
-  } catch (err) {
-    //Envio a middleware
-    next(err);
-  }
+  // Especificamos que usaremos un objeto para poder enviar una consulta.
+  // Especificamos que la consulta se hara con un body.
+  const { usuario_id } = req.params
+  // Hacemos la consulta a base de datos mediante el pool pasando como parametros el objeto creado lineas arriba
+  await pool.query('CALL heroku_b3e0382f6ba83ba.listarCursosAgregadosPorProfesor (?) ', [usuario_id])
+  // Guardamos el resultado de otra consulta para mostrarlo como mensaje de salida
+  const listaCursosAgregadosPorProfesor = await pool.query('CALL heroku_b3e0382f6ba83ba.listarCursosAgregadosPorProfesor (?)  ', usuario_id)
+  // Se muestra la respuesta exitosa a la consulta
+  res.status(200).json(listaCursosAgregadosPorProfesor)
+  //Manejo de errror
+  //EMpezamos con el catch
+
 })
 
 /**
@@ -278,22 +262,18 @@ router.get('/listarCursosAgregadosPorProfesor/:usuario_id', async (req, res, nex
 //Declaramos la ruta// Se especifica el id del usuario profesor quien creo los cursos con solcicitud de acceso
 router.get('/listarCursosConSolicicitudAcceso/:usuario_id', async (req, res, next) => {
   // Usamos un try-catch para capturar posibles errores al momento de mandar las consultas
-  try {
-    // Especificamos que usaremos un objeto para poder enviar una consulta.
-    // Especificamos que la consulta se hara con un oarametro.
-    const { usuario_id } = req.params
-    // Hacemos la consulta a base de datos mediante el pool pasando como parametros el objeto creado lineas arriba
-    await pool.query('CALL heroku_b3e0382f6ba83ba.listarCursosConSolicicitudAcceso (?) ', [usuario_id])
-    // Guardamos el resultado de otra consulta para mostrarlo como mensaje de salida
-    const listaCursosConSolicicitudAcceso = await pool.query('CALL heroku_b3e0382f6ba83ba.listarCursosConSolicicitudAcceso (?)  ', usuario_id)
-    // Se muestra la respuesta exitosa a la consulta
-    res.status(200).json(listaCursosConSolicicitudAcceso)
-    //Manejo de errror
-    //EMpezamos con el catch
-  } catch (err) {
-    //Envio a middleware
-    next(err);
-  }
+  // Especificamos que usaremos un objeto para poder enviar una consulta.
+  // Especificamos que la consulta se hara con un oarametro.
+  const { usuario_id } = req.params
+  // Hacemos la consulta a base de datos mediante el pool pasando como parametros el objeto creado lineas arriba
+  await pool.query('CALL heroku_b3e0382f6ba83ba.listarCursosConSolicicitudAcceso (?) ', [usuario_id])
+  // Guardamos el resultado de otra consulta para mostrarlo como mensaje de salida
+  const listaCursosConSolicicitudAcceso = await pool.query('CALL heroku_b3e0382f6ba83ba.listarCursosConSolicicitudAcceso (?)  ', usuario_id)
+  // Se muestra la respuesta exitosa a la consulta
+  res.status(200).json(listaCursosConSolicicitudAcceso)
+  //Manejo de errror
+  //EMpezamos con el catch
+
 })
 
 /**
@@ -303,22 +283,18 @@ router.get('/listarCursosConSolicicitudAcceso/:usuario_id', async (req, res, nex
 //Declaramos la ruta// Se especifica el id del usuario alumno quien tiene cursos con solicitud de acceso
 router.get('/listarCursosConSolicicitudAccesoParaAlumnos/:usuario_id', async (req, res, next) => {
   // Usamos un try-catch para capturar posibles errores al momento de mandar las consultas
-  try {
-    // Especificamos que usaremos un objeto para poder enviar una consulta.
-    // Especificamos que la consulta se hara con un oarametro.
-    const { usuario_id } = req.params
-    // Hacemos la consulta a base de datos mediante el pool pasando como parametros el objeto creado lineas arriba
-    await pool.query('CALL heroku_b3e0382f6ba83ba.listarCursosConSolicicitudAccesoParaAlumnos (?) ', [usuario_id])
-    // Guardamos el resultado de otra consulta para mostrarlo como mensaje de salida
-    const listaCursosConSolicicitudAccesoParaAlumnos = await pool.query('CALL heroku_b3e0382f6ba83ba.listarCursosConSolicicitudAccesoParaAlumnos (?)  ', usuario_id)
-    // Se muestra la respuesta exitosa a la consulta
-    res.status(200).json(listaCursosConSolicicitudAccesoParaAlumnos)
-    //Manejo de errror
-    //EMpezamos con el catch
-  } catch (err) {
-    //Envio a middleware
-    next(err);
-  }
+  // Especificamos que usaremos un objeto para poder enviar una consulta.
+  // Especificamos que la consulta se hara con un oarametro.
+  const { usuario_id } = req.params
+  // Hacemos la consulta a base de datos mediante el pool pasando como parametros el objeto creado lineas arriba
+  await pool.query('CALL heroku_b3e0382f6ba83ba.listarCursosConSolicicitudAccesoParaAlumnos (?) ', [usuario_id])
+  // Guardamos el resultado de otra consulta para mostrarlo como mensaje de salida
+  const listaCursosConSolicicitudAccesoParaAlumnos = await pool.query('CALL heroku_b3e0382f6ba83ba.listarCursosConSolicicitudAccesoParaAlumnos (?)  ', usuario_id)
+  // Se muestra la respuesta exitosa a la consulta
+  res.status(200).json(listaCursosConSolicicitudAccesoParaAlumnos)
+  //Manejo de errror
+  //EMpezamos con el catch
+
 })
 
 /**
@@ -328,22 +304,18 @@ router.get('/listarCursosConSolicicitudAccesoParaAlumnos/:usuario_id', async (re
 //Declaramos la ruta// Se especifica el id del usuario del cual queremos listar sus notificaciones
 router.get('/listarNotificacionesPorUsuario/:usuario_id', async (req, res, next) => {
   // Usamos un try-catch para capturar posibles errores al momento de mandar las consultas
-  try {
-    // Especificamos que usaremos un objeto para poder enviar una consulta.
-    // Especificamos que la consulta se hara con un parametro.
-    const { usuario_id } = req.params
-    // Hacemos la consulta a base de datos mediante el pool pasando como parametros el objeto creado lineas arriba
-    await pool.query('CALL heroku_b3e0382f6ba83ba.listarNotificacionesPorUsuario (?) ', [usuario_id])
-    // Guardamos el resultado de otra consulta para mostrarlo como mensaje de salida
-    const listaNotificacionesPorUsuario = await pool.query('CALL heroku_b3e0382f6ba83ba.listarNotificacionesPorUsuario (?)  ', usuario_id)
-    // Se muestra la respuesta exitosa a la consulta
-    res.status(200).json(listaNotificacionesPorUsuario)
-    //Manejo de errror
-    //EMpezamos con el catch
-  } catch (err) {
-    //Envio a middleware
-    next(err);
-  }
+  // Especificamos que usaremos un objeto para poder enviar una consulta.
+  // Especificamos que la consulta se hara con un parametro.
+  const { usuario_id } = req.params
+  // Hacemos la consulta a base de datos mediante el pool pasando como parametros el objeto creado lineas arriba
+  await pool.query('CALL heroku_b3e0382f6ba83ba.listarNotificacionesPorUsuario (?) ', [usuario_id])
+  // Guardamos el resultado de otra consulta para mostrarlo como mensaje de salida
+  const listaNotificacionesPorUsuario = await pool.query('CALL heroku_b3e0382f6ba83ba.listarNotificacionesPorUsuario (?)  ', usuario_id)
+  // Se muestra la respuesta exitosa a la consulta
+  res.status(200).json(listaNotificacionesPorUsuario)
+  //Manejo de errror
+  //EMpezamos con el catch
+
 })
 
 /**
@@ -357,22 +329,18 @@ router.get('/listarNotificacionesPorUsuario/:usuario_id', async (req, res, next)
 //Declaramos la ruta// Se especifica el id de la situacion con la que se acepta el curso
 router.post('/aceptarInvitacionDeProfesor', async (req, res, next) => {
   // Usamos un try-catch para capturar posibles errores al momento de mandar las consultas
-  try {
-    // Especificamos que usaremos un objeto para poder enviar una consulta.
-    // Especificamos que la consulta se hara con un body.
-    const { usuario_id, curso_id, situacion_id } = req.body
-    // Hacemos la consulta a base de datos mediante el pool pasando como parametros el objeto creado lineas arriba
-    await pool.query('CALL heroku_b3e0382f6ba83ba.aceptar_invitacion_profesor (?, ?, ?) ', [usuario_id, curso_id, situacion_id])
-    // Guardamos el resultado de otra consulta para mostrarlo como mensaje de salida
-    const cursoAceptado = await pool.query('SELECT * FROM heroku_b3e0382f6ba83ba.curso_usuario where curso_id = ? and usuario_id = ?', [usuario_id, curso_id])
-    // Se muestra la respuesta exitosa a la consulta
-    res.status(201).json(cursoAceptado)
-    //Manejo de errror
-    //EMpezamos con el catch
-  } catch (err) {
-    //Envio a middleware
-    next(err);
-  }
+  // Especificamos que usaremos un objeto para poder enviar una consulta.
+  // Especificamos que la consulta se hara con un body.
+  const { usuario_id, curso_id, situacion_id } = req.body
+  // Hacemos la consulta a base de datos mediante el pool pasando como parametros el objeto creado lineas arriba
+  await pool.query('CALL heroku_b3e0382f6ba83ba.aceptar_invitacion_profesor (?, ?, ?) ', [usuario_id, curso_id, situacion_id])
+  // Guardamos el resultado de otra consulta para mostrarlo como mensaje de salida
+  const cursoAceptado = await pool.query('SELECT * FROM heroku_b3e0382f6ba83ba.curso_usuario where curso_id = ? and usuario_id = ?', [usuario_id, curso_id])
+  // Se muestra la respuesta exitosa a la consulta
+  res.status(201).json(cursoAceptado)
+  //Manejo de errror
+  //EMpezamos con el catch
+
 })
 
 //Declaramos la ruta
@@ -382,21 +350,17 @@ router.get('/course-user/:idcurso', async (req, res, next) => {
   //Obtenemos el id del curso de los parametros de la ruta de la peticion
   const { idcurso } = req.params;
   //Empesamos con el try
-  try {
 
-    //Aqui va el query para obtener la lista de usuarios de un curso
-    let listUser = await pool.query('CALL listarUsuariosPorCurso(?);', [idcurso]);
-    //Respuesta a la peticion
-    res.status(200).json({
-      message: 'Lista del curso: ' + idcurso,
-      data: listUser
-    })
-    //Manejo de errror
-    //EMpezamos con el catch
-  } catch (err) {
-    //Envio a middleware
-    next(err);
-  }
+  //Aqui va el query para obtener la lista de usuarios de un curso
+  let listUser = await pool.query('CALL listarUsuariosPorCurso(?);', [idcurso]);
+  //Respuesta a la peticion
+  res.status(200).json({
+    message: 'Lista del curso: ' + idcurso,
+    data: listUser
+  })
+  //Manejo de errror
+  //EMpezamos con el catch
+
 })
 //Declaramos la ruta
 router.get('/coursesofuser/:iduser', async (req, res, next) => {
@@ -406,10 +370,9 @@ router.get('/coursesofuser/:iduser', async (req, res, next) => {
   const { iduser } = req.params
 
   //Empesamos con el try
-  try {
-    // Aqui va el query para obtener la lista de cursos de un usuario
+  // Aqui va el query para obtener la lista de cursos de un usuario
 
-    let listUser = await pool.query(`
+  let listUser = await pool.query(`
     SELECT c.*
     FROM heroku_b3e0382f6ba83ba.curso_usuario AS cu 
     INNER JOIN heroku_b3e0382f6ba83ba.cursos AS c 
@@ -417,56 +380,45 @@ router.get('/coursesofuser/:iduser', async (req, res, next) => {
     WHERE cu.usuario_id = ?
     `, [iduser])
 
-    // Respuesta a la peticion
-    res.status(200).json({
-      message: 'Lista de cursos del usuario: ' + iduser,
-      data: listUser
-    })
-    //Manejo de errror
-    //EMpezamos con el catch
-  } catch (err) {
-    //Envio a middleware
-    next(err);
-  }
+  // Respuesta a la peticion
+  res.status(200).json({
+    message: 'Lista de cursos del usuario: ' + iduser,
+    data: listUser
+  })
+  //Manejo de errror
+  //EMpezamos con el catch
+
 })
 //Declaramos la ruta
 router.get('/coursespublic', async (req, res, next) => {
   // Ruta para obtener la lista de cursos publicos
   //Empesamos con el try
-  try {
-    // Query para obtener la lista de cursos publicos
-    let cursos = await pool.query('SELECT * FROM heroku_b3e0382f6ba83ba.cursos')
-    //Obtenemos la cantidad de cursos
-    let cantCursos = await pool.query('SELECT count(curso_id) FROM heroku_b3e0382f6ba83ba.cursos')
-    // Respuesta a la peticion
-    res.status(200).json({
-      cursos,
-      cantidad: cantCursos
-    })
-    //Manejo de errror
-    //EMpezamos con el catch
-  } catch (err) {
-    //Envio a middleware
-    next(err);
-  }
+  // Query para obtener la lista de cursos publicos
+  let cursos = await pool.query('SELECT * FROM heroku_b3e0382f6ba83ba.cursos')
+  //Obtenemos la cantidad de cursos
+  let cantCursos = await pool.query('SELECT count(curso_id) FROM heroku_b3e0382f6ba83ba.cursos')
+  // Respuesta a la peticion
+  res.status(200).json({
+    cursos,
+    cantidad: cantCursos
+  })
+  //Manejo de errror
+  //EMpezamos con el catch
+
 })
 //Declaramos la ruta
 router.get('/coursespublicmax', async (req, res, next) => {
   // Ruta para obtener la lista de cursos publicos
   //Empesamos con el try
-  try {
-    // Query para obtener la lista de cursos publicos
-    let cursos = await pool.query('SELECT c.* FROM cursos as c JOIN curso_usuario as cu ON c.curso_id = cu.curso_id WHERE c.privacidad_id IN (1,5) GROUP BY c.curso_id ORDER BY COUNT(*) DESC LIMIT 4;')
-    // Respuesta a la peticion
-    res.status(200).json({
-      cursos,
-    })
-    //Manejo de errror
-    //EMpezamos con el catch
-  } catch (err) {
-    //Envio a middleware
-    next(err);
-  }
+  // Query para obtener la lista de cursos publicos
+  let cursos = await pool.query('SELECT c.* FROM cursos as c JOIN curso_usuario as cu ON c.curso_id = cu.curso_id WHERE c.privacidad_id IN (1,5) GROUP BY c.curso_id ORDER BY COUNT(*) DESC LIMIT 4;')
+  // Respuesta a la peticion
+  res.status(200).json({
+    cursos,
+  })
+  //Manejo de errror
+  //EMpezamos con el catch
+
 })
 //Declaramos la ruta
 router.get('/coursespublic/:iduser', async (req, res, next) => {
@@ -475,19 +427,14 @@ router.get('/coursespublic/:iduser', async (req, res, next) => {
   // Obtenemos el id del usuario de los parametros de la ruta de la peticion
   const { iduser } = req.params
   //Empesamos con el try
-  try {
-    // Query para obtener la lista de cursos publicos de un usuario
-    let cursos = await pool.query('SELECT * FROM heroku_b3e0382f6ba83ba.cursos WHERE privacidad_id = 1 AND usuario_id = ?', [iduser])
-    // Respuesta a la peticion
-    res.status(200).json({
-      cursos
-    })
-    //Manejo de errror
-    //EMpezamos con el catch
-  } catch (err) {
-    //Envio a middleware
-    next(err);
-  }
+  // Query para obtener la lista de cursos publicos de un usuario
+  let cursos = await pool.query('SELECT * FROM heroku_b3e0382f6ba83ba.cursos WHERE privacidad_id = 1 AND usuario_id = ?', [iduser])
+  // Respuesta a la peticion
+  res.status(200).json({
+    cursos
+  })
+  //Manejo de errror
+  //EMpezamos con el catch
 })
 //Declaramos la ruta
 router.post('/coursesEdit/:idcurso', async (req, res, next) => {
@@ -536,9 +483,9 @@ router.post('/course-material/:idcurso', async (req, res, next) => {
     // Obtenemos los datos del cuerpo de la peticion
 
     const { nombre, descripcion, fecha_creacion } = req.body
-//Creamos una variable para el idcurso
+    //Creamos una variable para el idcurso
     let curso_id = idcurso
-//Creamos un json para el nuevo material
+    //Creamos un json para el nuevo material
     const newMaterial = {
       nombre,
       descripcion,
@@ -564,21 +511,17 @@ router.get('/list-task/:idcurso', async (req, res, next) => {
   // Ruta para listar las tareas de un curso
 
   //Empesamos con el try
-  try {
-    // Obtenemos el id del curso de los parametros de la ruta de la peticion
-    const { idcurso } = req.params
+  // Obtenemos el id del curso de los parametros de la ruta de la peticion
+  const { idcurso } = req.params
 
-    // Aqui va el query para listar las tareas de un curso
-    let list = await pool.query('SELECT * FROM heroku_b3e0382f6ba83ba.tareas WHERE curso_id = ?', [idcurso])
+  // Aqui va el query para listar las tareas de un curso
+  let list = await pool.query('SELECT * FROM heroku_b3e0382f6ba83ba.tareas WHERE curso_id = ?', [idcurso])
 
-    // Respuesta a la peticion
-    res.status(200).json(list)
-    //Manejo de errror
-    //EMpezamos con el catch
-  } catch (err) {
-    //Envio a middleware
-    next(err);
-  }
+  // Respuesta a la peticion
+  res.status(200).json(list)
+  //Manejo de errror
+  //EMpezamos con el catch
+
 })
 //Declaramos la ruta
 router.post('/solicitarCursoPrivado', async (req, res, next) => {
@@ -630,19 +573,15 @@ router.get('/AcceptarSolicitudPrivado/:idcurso', async (req, res, next) => {
 
   //En caso que sea correcto
   //Empesamos con el try
-  try {
-    //Se declara una variable
-    let alumnosPendientes
-    //Se guarda en la varibale una lista de alumnos que tengan la situacion_id de 3
-    alumnosPendientes = await pool.query('SELECT * FROM heroku_b3e0382f6ba83ba.curso_usuario WHERE curso_id = ? AND situacion_id = ?', [idcurso, situacion_id])
-    //Manda al fronted en forma de json la varible
-    res.status(200).json(alumnosPendientes)
-    //Manejo de errror
-    //EMpezamos con el catch
-  } catch (err) {
-    //Envio a middleware
-    next(err);
-  }
+  //Se declara una variable
+  let alumnosPendientes
+  //Se guarda en la varibale una lista de alumnos que tengan la situacion_id de 3
+  alumnosPendientes = await pool.query('SELECT * FROM heroku_b3e0382f6ba83ba.curso_usuario WHERE curso_id = ? AND situacion_id = ?', [idcurso, situacion_id])
+  //Manda al fronted en forma de json la varible
+  res.status(200).json(alumnosPendientes)
+  //Manejo de errror
+  //EMpezamos con el catch
+
 })
 //Declaramos la ruta
 router.put('/AcceptarSolicitudPrivado/:idcurso', async (req, res, next) => {
@@ -733,35 +672,27 @@ router.get('/list-task-submissions/:idtarea', async (req, res, next) => {
   // Obtenemos los datos de los parametros
   const { idtarea } = req.params
   //Empesamos con el try
-  try {
-    // Aqui va el query 
-    const listaTareas = await pool.query('SELECT ta.tarea_id, ta.usuario_id, ta.url, ta.fecha_entrega, u.usuario_nombre, u.usuario_apellidos FROM heroku_b3e0382f6ba83ba.tarea_asignada ta  INNER JOIN heroku_b3e0382f6ba83ba.usuarios u ON ta.usuario_id = u.usuario_id   WHERE ta.tarea_id = ?', [idtarea])
-    //Respuesta a la peticion
-    res.status(200).json(listaTareas)
-    //Manejo de errror
-    //EMpezamos con el catch
-  } catch (err) {
-    //Envio a middleware
-    next(err);
-  }
+  // Aqui va el query 
+  const listaTareas = await pool.query('SELECT ta.tarea_id, ta.usuario_id, ta.url, ta.fecha_entrega, u.usuario_nombre, u.usuario_apellidos FROM heroku_b3e0382f6ba83ba.tarea_asignada ta  INNER JOIN heroku_b3e0382f6ba83ba.usuarios u ON ta.usuario_id = u.usuario_id   WHERE ta.tarea_id = ?', [idtarea])
+  //Respuesta a la peticion
+  res.status(200).json(listaTareas)
+  //Manejo de errror
+  //EMpezamos con el catch
+
 })
 //Declaramos la ruta
 router.get('/listMaterials/:idcurso', async (req, res, next) => {
   // Obtenemos los datos de los parametros
   const { idcurso } = req.params
   //Empesamos con el try
-  try {
-    // Aqui va el query 
-    const listaMaterial = await pool.query('SELECT * from material WHERE curso_id = ?', [idcurso])
+  // Aqui va el query 
+  const listaMaterial = await pool.query('SELECT * from material WHERE curso_id = ?', [idcurso])
 
-    //Respuesta a la peticion
-    res.status(200).json(listaMaterial)
-    //Manejo de errror
-    //EMpezamos con el catch
-  } catch (err) {
-    //Envio a middleware
-    next(err);
-  }
+  //Respuesta a la peticion
+  res.status(200).json(listaMaterial)
+  //Manejo de errror
+  //EMpezamos con el catch
+
 })
 //Declaramos la ruta
 router.post('/entregarTarea', async (req, res, next) => {
