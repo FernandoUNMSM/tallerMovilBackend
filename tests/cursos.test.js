@@ -166,7 +166,37 @@ describe('tests de Cursos', () => {
       .expect('Content-Type', /application\/json/)
   })
 
+  // Prueba para verificar que se solicitando un curso privado RO
+  test('POST /solicitarCursoPrivado', async() =>{
+    let newSolicitud = {
+      curso_id: '7105',
+      usuario_id: '8345'
+    }
+    // Hacemos la llamada a la ruta de la api
+    await api
+      .post('/solicitarCursoPrivado')
+      .send(newSolicitud)
+      .expect(200)
+      .expect('Content-Type', /application\/json/)
+    await pool.query('DELETE FROM curso_usuario WHERE curso_id = ? and usuario_id = ?', [newSolicitud.curso_id, newSolicitud.usuario_id])
+
+  })
+
+  // Prueba para verificar la lista de cursos con solicitud de acceso para el alumno RO
+  test('GET /AcceptarSolicitudPrivado', async () => {
+    // Hacemos la llamada a la ruta de la api
+    await api
+      .get('/AcceptarSolicitudPrivado/5')
+      .expect(200)
+      .expect('Content-Type', /application\/json/)
+  })
+
 })
+
+
+
+
+
 
 //Declaracion de un describe de tests
 describe('Suggestions test', () => {
@@ -213,6 +243,12 @@ describe('Suggestions test', () => {
 
 })
 
+
+
+
+
+
+
 //Declaracion de un describe de tests
 // Suit de pruebas para Curso - Usuario
 // Prueba para verificar la inscripcion de un alumno a un curso
@@ -255,6 +291,9 @@ describe('USERS tests', () => {
   })
 });
 
+
+
+
 //Declaracion de un describe de tests
 describe('Tasks tests', () => {
   //Declaracion del test
@@ -275,6 +314,9 @@ describe('Tasks tests', () => {
   })
 
 });
+
+
+
 
 // Declaracion de un describe de tests
 describe('Test de Curso -Usuario', () => {
@@ -321,6 +363,9 @@ describe('Test de Curso -Usuario', () => {
       .expect('Content-Type', /application\/json/)
   })
 })
+
+
+
 
 //Declaracion de un describe de tests
 //Declaracion del test
