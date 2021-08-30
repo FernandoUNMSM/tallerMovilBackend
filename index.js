@@ -7,7 +7,7 @@ const express = require('express')
 //Se crean las opciones de cors
 let corsOptions = {
   //Se declara el origin 
-  origin: 'https://aprendo-en-linea.herokuapp.com/' // Compliant
+  origin: '*' // Compliant
 };
 //Para detectar por donde se usa la api
 //Se importa el helmet
