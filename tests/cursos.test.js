@@ -166,6 +166,58 @@ describe('tests de Cursos', () => {
       .expect('Content-Type', /application\/json/)
   })
 
+  test('Get /list-task-submissions', async () => {
+    //Hacemos la llamada a la ruta de la api
+    await api
+      .get('/list-task-submissions/85')
+      .expect(200)
+      .expect('Content-Type', /application\/json/)
+  })
+
+  test('POST /aceptar curso publico', async () => {
+    const User = {
+      iduser: '55'
+    }
+    //Hacemos la llamada a la ruta de la api
+    await api
+      .post('/join-public-course/5')
+      .send(User)
+      .expect(201)
+      .expect('Content-Type', /application\/json/)
+
+    const User2 = {
+      iduser: '85'
+    }
+    await api
+      .post('/join-public-course/5')
+      .send(User2)
+      .expect(201)
+      .expect('Content-Type', /application\/json/)
+  })
+  test('POST /solicitarcursoprrivado', async () => {
+    const User = {
+      curso_id: '105',
+      usuario_id: '55'
+    }
+    //Hacemos la llamada a la ruta de la api
+    await api
+      .post('/solicitarCursoPrivado')
+      .send(User)
+      .expect(201)
+      .expect('Content-Type', /application\/json/)
+
+    const User2 = {
+      curso_id: '275',
+      usuario_id: '65'
+    }
+    await api
+      .post('/solicitarCursoPrivado')
+      .send(User2)
+      .expect(201)
+      .expect('Content-Type', /application\/json/)
+  })
+
+
 })
 
 //Declaracion de un describe de tests
@@ -213,6 +265,12 @@ describe('Suggestions test', () => {
 
 })
 
+
+
+
+
+
+
 //Declaracion de un describe de tests
 // Suit de pruebas para Curso - Usuario
 // Prueba para verificar la inscripcion de un alumno a un curso
@@ -255,6 +313,9 @@ describe('USERS tests', () => {
   })
 });
 
+
+
+
 //Declaracion de un describe de tests
 describe('Tasks tests', () => {
   //Declaracion del test
@@ -275,6 +336,9 @@ describe('Tasks tests', () => {
   })
 
 });
+
+
+
 
 // Declaracion de un describe de tests
 describe('Test de Curso -Usuario', () => {
@@ -321,6 +385,9 @@ describe('Test de Curso -Usuario', () => {
       .expect('Content-Type', /application\/json/)
   })
 })
+
+
+
 
 //Declaracion de un describe de tests
 //Declaracion del test
