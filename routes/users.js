@@ -85,6 +85,8 @@ router.post('/useredit/:id', upload.fields([]), async (req, res, next) => {
     //Parámetros extraidos del cuerpo  enviado por el frontend
     const { usuario_nombre, usuario_apellidos, url, correo, descripcion } = req.body;
     //Constante newUser user donde se guardan los parámetros del cuerpo
+    console.log(req.body)
+
     const newUser = {
       usuario_nombre,
       usuario_apellidos,
