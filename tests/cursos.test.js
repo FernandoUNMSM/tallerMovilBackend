@@ -37,6 +37,14 @@ describe('tests de Cursos', () => {
       .expect('Content-Type', /application\/json/)
   })
   //Declaracion del test
+  test('Get user courses puiblic', async () => {
+    //Hacemos la llamada a la ruta de la api
+    await api
+      .get('/coursespublic/35')
+      .expect(200)
+      .expect('Content-Type', /application\/json/)
+  })
+  //Declaracion del test
   test('Get courses by user', async () => {
     //Hacemos la llamada a la ruta de la api
     await api
@@ -49,6 +57,13 @@ describe('tests de Cursos', () => {
     //Hacemos la llamada a la ruta de la api
     await api
       .get('/course-user/135')
+      .expect(200)
+      .expect('Content-Type', /application\/json/)
+  })
+  test('Get courses by user', async () => {
+    //Hacemos la llamada a la ruta de la api
+    await api
+      .get('/cursos/35')
       .expect(200)
       .expect('Content-Type', /application\/json/)
   })
@@ -107,6 +122,133 @@ describe('tests de Cursos', () => {
     // Borramos el dato de prueba insertado
     await pool.query('DELETE FROM curso_usuario WHERE curso_id = ? and usuario_id = ?', [idCourseCreated, nuevo.usuario_id])
   })
+
+  test('test deletecoursesUsers', async () => {
+    const newCourse = {
+      curso_id: 35,
+      correo: 'xdpvd@hotmail.es'
+    }
+    //Hacemos la llamada a la ruta de la api
+    await api
+      .post('/coursesUsers')
+      .send(newCourse)
+      .expect(201)
+      .expect('Content-Type', /application\/json/)
+
+    const idCourseCreated = {
+      curso_id: 35,
+      usuario_id: 205
+    }
+    await api
+      .post('/deletecoursesUsers')
+      .send(idCourseCreated)
+      .expect(201)
+      .expect('Content-Type', /application\/json/)
+  })
+  test('test editar curso', async () => {
+    const newCourse = {
+      curso_nombre: 'Prueba'
+    }
+    //Hacemos la llamada a la ruta de la api
+    await api
+      .post('/coursesEdit/35')
+      .send(newCourse)
+      .expect(201)
+      .expect('Content-Type', /application\/json/)
+
+    const newCourse2 = {
+      curso_nombre: 'Machine Learning'
+    }
+    await api
+      .post('/coursesEdit/35')
+      .send(newCourse2)
+      .expect(201)
+      .expect('Content-Type', /application\/json/)
+  })
+
+  test('Get /list-task-submissions', async () => {
+    //Hacemos la llamada a la ruta de la api
+    await api
+      .get('/list-task-submissions/85')
+      .expect(200)
+      .expect('Content-Type', /application\/json/)
+  })
+
+  test('POST /aceptar curso publico', async () => {
+    const User = {
+      iduser: '55'
+    }
+    //Hacemos la llamada a la ruta de la api
+    await api
+      .post('/join-public-course/5')
+      .send(User)
+      .expect(201)
+      .expect('Content-Type', /application\/json/)
+
+    const User2 = {
+      iduser: '85'
+    }
+    await api
+      .post('/join-public-course/5')
+      .send(User2)
+      .expect(201)
+      .expect('Content-Type', /application\/json/)
+  })
+  // Prueba para verificar la lista de cursos con solicitud de acceso para el alumno RO
+  test('GET /AcceptarSolicitudPrivado', async () => {
+    // Hacemos la llamada a la ruta de la api
+    await api
+      .get('/AcceptarSolicitudPrivado/5')
+      .expect(200)
+      .expect('Content-Type', /application\/json/)
+  })
+
+  // Prueba para verificar que se solicitando un curso privado RO
+  test('POST /solicitarCursoPrivado', async() =>{
+  let newSolicitud = {
+    curso_id: '7105',
+    usuario_id: '8345'
+  }
+  // Hacemos la llamada a la ruta de la api
+  await api
+    .post('/solicitarCursoPrivado')
+    .send(newSolicitud)
+    .expect(200)
+    .expect('Content-Type', /application\/json/)
+  await pool.query('DELETE FROM curso_usuario WHERE curso_id = ? and usuario_id = ?', [newSolicitud.curso_id, newSolicitud.usuario_id])
+
+  })
+
+  // Prueba para verificar editar, dar acceso o rechazar el acceso de un curso para el profesor RO
+  test('PUT /AcceptarSolicitudPrivado', async () => {
+    // Hacemos la llamada a la ruta de la api
+    let newSolicitud = {
+      usuario_id: '8345',
+      situacion_id: '1'
+    }
+    // Hacemos la llamada a la ruta de la api
+    await api
+      .put('/solicitarCursoPrivado/7105')
+      .send(newSolicitud)
+      .expect(200)
+      .expect('Content-Type', /application\/json/)
+
+    let newSolicitud = {
+      usuario_id: '8345',
+      situacion_id: '2'
+    }
+    // Hacemos la llamada a la ruta de la api
+    const response = await api
+      .put('/solicitarCursoPrivado/7105')
+      .send(newSolicitud)
+      .expect(200)
+      .expect('Content-Type', /application\/json/)
+    const idCursoUsuario = response.body.curso_id
+    // Borramos el dato de prueba insertado
+    await pool.query('DELETE FROM curso_usuario WHERE curso_id = ? and usuario_id = ?', [idCursoUsuario, newSolicitud.usuario_id])
+
+  })
+
 })
 
 //Declaracion de un describe de tests
@@ -154,6 +296,12 @@ describe('Suggestions test', () => {
 
 })
 
+
+
+
+
+
+
 //Declaracion de un describe de tests
 // Suit de pruebas para Curso - Usuario
 // Prueba para verificar la inscripcion de un alumno a un curso
@@ -196,6 +344,9 @@ describe('USERS tests', () => {
   })
 });
 
+
+
+
 //Declaracion de un describe de tests
 describe('Tasks tests', () => {
   //Declaracion del test
@@ -216,6 +367,9 @@ describe('Tasks tests', () => {
   })
 
 });
+
+
+
 
 // Declaracion de un describe de tests
 describe('Test de Curso -Usuario', () => {
@@ -262,6 +416,9 @@ describe('Test de Curso -Usuario', () => {
       .expect('Content-Type', /application\/json/)
   })
 })
+
+
+
 
 //Declaracion de un describe de tests
 //Declaracion del test
