@@ -440,7 +440,6 @@ describe('Test de Notificaciones', () => {
       get('/listarNotificacionesPorUsuario/1635')
       .expect(200)
       .expect('Content-Type', /application\/json/)
-
   })
 })
 

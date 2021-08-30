@@ -115,7 +115,7 @@ test('Create sugerences', async () => {
 })
 test('Create sugerences empty', async () => {
   const newSuggestion = {
-    
+
   }
   await api
     .post('/suggestions')
@@ -126,7 +126,7 @@ test('Create sugerences empty', async () => {
 })
 test('vote sugerences empty', async () => {
   const newSuggestion = {
-    
+
   }
   await api
     .put('/votarSugerencias')
@@ -183,12 +183,25 @@ describe('Material test', () => {
 
     await pool.query('DELETE FROM tareas WHERE tarea_id = ?', [idMaterialCreated])
   })
-  test('GET /archivos', async () => {
+
+  test('crear tarea fail', async () => {
+    const newTask = {
+
+    }
     const response = await api
+      .post('/creartarea')
+      .send(newTask)
+      .expect(400)
+      .expect('Content-Type', /application\/json/)
+
+  })
+  test('GET /archivos', async () => {
+    await api
       .get('/mostrarArchivo/4')
       .expect(200)
       .expect('Content-Type', /application\/json/)
   })
+
   test('crear entregarTarea', async () => {
     const newTask = {
       tarea_id: 5,
@@ -267,6 +280,25 @@ describe('test extras', () => {
       .expect(500)
 
   })
+  test('subirArchivo', async () => {
+    const archivo = {
+      archivo_id: 12,
+      origen_id: 5,
+      url: "https://firebasestorage.googleapis.com/v0/b/bd-archivos.appspot.com/o/BD%20(1).pdf?alt=media&token=2998512d-b423-47d3-b9b7-5409d68620a0",
+      nombre_archivo: "Prueba de Archivo test",
+      tipo: 25
+    }
+
+    await api
+      .post('/subirArchivo')
+      .send(archivo)
+      .expect(200)
+      .expect('Content-Type', /application\/json/)
+
+    await pool.query('DELETE FROM archivos WHERE archivo_id = ?', [archivo_id])
+
+  })
+
 })
 
 afterAll(async () => {

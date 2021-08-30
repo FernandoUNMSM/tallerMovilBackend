@@ -101,22 +101,18 @@ router.post('/subirArchivo', async (req, res, next) => {
 router.get('/mostrarArchivo/:id_archivo', async (req, res, next) => {
 
   //Empesamos con el try
-  try {
-    // Obtenemos el id de los archivos de los parametros de la ruta de la peticion
-    const { id_archivo } = req.params
+  // Obtenemos el id de los archivos de los parametros de la ruta de la peticion
+  const { id_archivo } = req.params
 
-    // Se accede a la BD para listar un solo Archivo 
-    let list = await pool.query('SELECT * FROM heroku_b3e0382f6ba83ba.archivos WHERE archivo_id = ?', [id_archivo])
-    //Respuesta a la peticion
-    res.status(200).json({
-      list
-    })
-    //Manejo de errror
-    //EMpezamos con el catch
-  } catch (err) {
-    //Envio a middleware
-    next(err);
-  }
+  // Se accede a la BD para listar un solo Archivo 
+  let list = await pool.query('SELECT * FROM heroku_b3e0382f6ba83ba.archivos WHERE archivo_id = ?', [id_archivo])
+  //Respuesta a la peticion
+  res.status(200).json({
+    list
+  })
+  //Manejo de errror
+  //EMpezamos con el catch
+
 
 })
 
@@ -126,22 +122,17 @@ router.get('/listarTareasCurso/:idcurso', async (req, res, next) => {
   const { idcurso } = req.params;
 
   //Empesamos con el try
-  try {
-    //Aqui va el query para crear una nueva tarea
-    const tareas = await pool.query('SELECT * FROM tareas WHERE curso_id = ? ', [idcurso]);
-    // console.log(tareas)
-    //Respuesta a la peticion
-    res.status(200).json({
-      tareas,
-      msg: `Tareas del curso: ${idcurso} listadas`
-    })
+  //Aqui va el query para crear una nueva tarea
+  const tareas = await pool.query('SELECT * FROM tareas WHERE curso_id = ? ', [idcurso]);
+  // console.log(tareas)
+  //Respuesta a la peticion
+  res.status(200).json({
+    tareas,
+    msg: `Tareas del curso: ${idcurso} listadas`
+  })
 
-    //Manejo de errror
-    //EMpezamos con el catch
-  } catch (err) {
-    //Envio a middleware
-    next(err);
-  }
+  //Manejo de errror
+  //EMpezamos con el catch
 
 })
 
