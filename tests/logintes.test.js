@@ -239,6 +239,25 @@ describe('test extras', () => {
       .expect('Content-Type', /application\/json/)
 
   })
+  test('subirArchivo',async () => {
+    const archivo = {
+      archivo_id: 12,
+      origen_id: 5,
+      url: "https://firebasestorage.googleapis.com/v0/b/bd-archivos.appspot.com/o/BD%20(1).pdf?alt=media&token=2998512d-b423-47d3-b9b7-5409d68620a0",
+      nombre_archivo: "Prueba de Archivo test",
+      tipo: 25 
+    }
+
+    const response = await api
+      .post('/subirArchivo')
+      .send(archivo)
+      .expect(200)
+      .expect('Content-Type', /application\/json/)
+
+    await pool.query('DELETE FROM archivos WHERE archivo_id = ?', [archivo_id])
+
+  })
+
 })
 
 afterAll(async () => {
