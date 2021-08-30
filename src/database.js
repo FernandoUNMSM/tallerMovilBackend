@@ -8,24 +8,7 @@ const { database } = require('./keys');
 const pool = mysql.createPool(database);
 //Se crea la connecion
 pool.getConnection((err, connection) => {
-  //Condicional 
-    if (err) {
-      //Seguncda condicional
-      if (err.code === 'PROTOCOL_CONNECTION_LOST') {
-        //Console del erroer
-        console.error('Database connection was closed.');
-      }
-      //tercera condicional
-      if (err.code === 'ER_CON_COUNT_ERROR') {
-        //Console del erroer
-        console.error('Database has to many connections');
-      }
-      //curata condicional
-      if (err.code === 'ECONNREFUSED') {
-        //Console del erroer
-        console.error('Database connection was refused');
-      }
-    }
+
     //Codicional de la coneccion
     if (connection) connection.release();
 //Return dela conexion  

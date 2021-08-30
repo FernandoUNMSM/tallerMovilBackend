@@ -1,10 +1,6 @@
 //Manejo de Errores
 const ERROR_HANDLERS = {
   //Error validate
-  ValidatorError: res => res.status(400).send({
-    //Mensahe de error
-    error: '`username` to be unique'
-  }),
   //Error Json
   //Error tipical
   Error: res => res.status(400).json({

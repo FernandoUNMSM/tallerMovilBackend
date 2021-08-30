@@ -22,6 +22,12 @@ test('baselogin', async () => {
     .expect(200)
     .expect('Content-Type', /application\/json/)
 })
+test('not found', async () => {
+  await api
+    .get('/loginnotfounf')
+    .expect(404)
+    .expect('Content-Type', /application\/json/)
+})
 
 //Declaramos el test
 test('Login', async () => {
@@ -70,28 +76,25 @@ test('Registro', async () => {
     .expect('Content-Type', /application\/json/)
 
   const passwordCreated = response.body.usuario_id
-
-  pool.query('DELETE FROM usuarios WHERE usuario_id = ?', [passwordCreated])
+  await pool.query('DELETE FROM usuarios WHERE usuario_id = ?', [passwordCreated])
 })
 
 test('Registro fallido', async () => {
   const user = {
-    usuario_nombre: 'Usuario Prueba',
+    usuario_nombre: 'UsuarioPrueba2',
     usuario_apellidos: 'Prueba Apellido',
     password: "",
     correo: 'prueba@test.com',
     url: ''
   }
 
-  const response = await api
+  await api
     .post('/register')
     .send(user)
     .expect(400)
     .expect('Content-Type', /application\/json/)
 
-  const passwordCreated = response.body.usuario_id
-
-  pool.query('DELETE FROM usuarios WHERE usuario_id = ?', [passwordCreated])
+  await pool.query("DELETE FROM usuarios WHERE usuario_nombre = 'UsuarioPrueba2'")
 })
 
 //Declaramos el test
@@ -205,6 +208,39 @@ describe('Categories test', () => {
       .expect('Content-Type', /application\/json/)
   })
 })
+
+describe('test extras', () => {
+  test('VotarSugerencia', async () => {
+    const suge = {
+      usuario_id: 35,
+      sugerencia_id: 25
+    }
+    await api
+      .put('/votarSugerencias')
+      .send(suge)
+      .expect(200)
+      .expect('Content-Type', /application\/json/)
+    await api
+      .put('/votarSugerencias')
+      .send(suge)
+      .expect(200)
+      .expect('Content-Type', /application\/json/)
+
+    await pool.query('DELETE FROM votos WHERE usuario_id = ? and sugerencia_id', [35, 25])
+  })
+  test('editarTarea', async () => {
+    const suge = {
+      nombre: 'Tarea edit'
+    }
+    await api
+      .put('/editarTarea/5')
+      .send(suge)
+      .expect(200)
+      .expect('Content-Type', /application\/json/)
+
+  })
+})
+
 afterAll(async () => {
   await new Promise(resolve => setTimeout(() => resolve(), 500));
 });

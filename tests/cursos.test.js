@@ -118,7 +118,7 @@ describe('tests de Cursos', () => {
       .send(nuevo)
       .expect(201)
       .expect('Content-Type', /application\/json/)
-      const idCourseCreated = response.body.curso_id
+    const idCourseCreated = response.body.curso_id
     // Borramos el dato de prueba insertado
     await pool.query('DELETE FROM curso_usuario WHERE curso_id = ? and usuario_id = ?', [idCourseCreated, nuevo.usuario_id])
   })
@@ -198,25 +198,24 @@ describe('tests de Cursos', () => {
   test('GET /AcceptarSolicitudPrivado', async () => {
     // Hacemos la llamada a la ruta de la api
     await api
-      .get('/AcceptarSolicitudPrivado/5')
+      .get('/AcceptarSolicitudPrivado/35')
       .expect(200)
       .expect('Content-Type', /application\/json/)
   })
 
   // Prueba para verificar que se solicitando un curso privado RO
-  test('POST /solicitarCursoPrivado', async() =>{
-  let newSolicitud = {
-    curso_id: '7105',
-    usuario_id: '8345'
-  }
-  // Hacemos la llamada a la ruta de la api
-  await api
-    .post('/solicitarCursoPrivado')
-    .send(newSolicitud)
-    .expect(200)
-    .expect('Content-Type', /application\/json/)
-  await pool.query('DELETE FROM curso_usuario WHERE curso_id = ? and usuario_id = ?', [newSolicitud.curso_id, newSolicitud.usuario_id])
-
+  test('POST /solicitarCursoPrivado', async () => {
+    let newSolicitud = {
+      curso_id: '7105',
+      usuario_id: '8345'
+    }
+    // Hacemos la llamada a la ruta de la api
+    await api
+      .post('/solicitarCursoPrivado')
+      .send(newSolicitud)
+      .expect(201)
+      .expect('Content-Type', /application\/json/)
+    await pool.query('DELETE FROM curso_usuario WHERE curso_id = ? and usuario_id = ?', [newSolicitud.curso_id, newSolicitud.usuario_id])
   })
 
   // Prueba para verificar editar, dar acceso o rechazar el acceso de un curso para el profesor RO
@@ -228,7 +227,7 @@ describe('tests de Cursos', () => {
     }
     // Hacemos la llamada a la ruta de la api
     await api
-      .put('/solicitarCursoPrivado/7105')
+      .put('/AcceptarSolicitudPrivado/7105')
       .send(newSolicitud_1)
       .expect(200)
       .expect('Content-Type', /application\/json/)
@@ -239,13 +238,13 @@ describe('tests de Cursos', () => {
     }
     // Hacemos la llamada a la ruta de la api
     const response = await api
-      .put('/solicitarCursoPrivado/7105')
+      .put('/AcceptarSolicitudPrivado/7105')
       .send(newSolicitud_2)
       .expect(200)
       .expect('Content-Type', /application\/json/)
     const idCursoUsuario = response.body.curso_id
     // Borramos el dato de prueba insertado
-    await pool.query('DELETE FROM curso_usuario WHERE curso_id = ? and usuario_id = ?', [idCursoUsuario, newSolicitud.usuario_id])
+    await pool.query('DELETE FROM curso_usuario WHERE curso_id = ? and usuario_id = ?', [idCursoUsuario, newSolicitud_1.usuario_id])
 
   })
 
@@ -381,7 +380,7 @@ describe('Test de Curso -Usuario', () => {
       .send(nuevo)
       .expect(201)
       .expect('Content-Type', /application\/json/)
-      const idUsuario = response.body.usuario_id
+    const idUsuario = response.body.usuario_id
     // Borramos el dato de prueba insertado
     await pool.query('DELETE FROM curso_usuario WHERE usuario_id = ? and curso_id = ?', [idUsuario, nuevo.curso_id])
   })
@@ -392,7 +391,7 @@ describe('Test de Curso -Usuario', () => {
       curso_id: 4935,
       situacion_id: 5
     }
-    const response = await api
+    await api
       .post('/aceptarInvitacionDeProfesor ')
       .send(nuevo)
       .expect(201)
@@ -405,7 +404,7 @@ describe('Test de Curso -Usuario', () => {
       curso_id: 6025,
       situacion_id: 1
     }
-    const response = await api
+    await api
       .post('/aceptarSolicitudAcceso')
       .send(nuevo)
       .expect(200)
@@ -427,7 +426,7 @@ describe('Test de Notificaciones', () => {
       notificacion: 'Tarea 3'
     }
     //Hacemos la llamada a la ruta de la api
-    const response = await api.
+    await api.
       post('/notificacion')
       .send(nuevaNotificacion)
       .expect(200)
@@ -436,7 +435,7 @@ describe('Test de Notificaciones', () => {
   //Declaracion del test
   test('GET /listarNotificacionesPorUsuario', async () => {
     //Hacemos la llamada a la ruta de la api
-    const response = await api.
+    await api.
       get('/listarNotificacionesPorUsuario/1635')
       .expect(200)
       .expect('Content-Type', /application\/json/)
