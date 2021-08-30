@@ -222,25 +222,25 @@ describe('tests de Cursos', () => {
   // Prueba para verificar editar, dar acceso o rechazar el acceso de un curso para el profesor RO
   test('PUT /AcceptarSolicitudPrivado', async () => {
     // Hacemos la llamada a la ruta de la api
-    let newSolicitud = {
+    let newSolicitud_1 = {
       usuario_id: '8345',
       situacion_id: '1'
     }
     // Hacemos la llamada a la ruta de la api
     await api
       .put('/solicitarCursoPrivado/7105')
-      .send(newSolicitud)
+      .send(newSolicitud_1)
       .expect(200)
       .expect('Content-Type', /application\/json/)
 
-    let newSolicitud = {
+    let newSolicitud_2 = {
       usuario_id: '8345',
       situacion_id: '2'
     }
     // Hacemos la llamada a la ruta de la api
     const response = await api
       .put('/solicitarCursoPrivado/7105')
-      .send(newSolicitud)
+      .send(newSolicitud_2)
       .expect(200)
       .expect('Content-Type', /application\/json/)
     const idCursoUsuario = response.body.curso_id
