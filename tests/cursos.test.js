@@ -166,7 +166,7 @@ describe('tests de Cursos', () => {
       .expect('Content-Type', /application\/json/)
   })
 
-  test('Get listar tareas entregadas', async () => {
+  test('Get /list-task-submissions', async () => {
     //Hacemos la llamada a la ruta de la api
     await api
       .get('/list-task-submissions/85')
@@ -174,15 +174,7 @@ describe('tests de Cursos', () => {
       .expect('Content-Type', /application\/json/)
   })
 
-  test('Get listar tareas entregadas', async () => {
-    //Hacemos la llamada a la ruta de la api
-    await api
-      .get('/list-task-submissions/85')
-      .expect(200)
-      .expect('Content-Type', /application\/json/)
-  })
-
-  test('POST aceptar curso publico', async () => {
+  test('POST /aceptar curso publico', async () => {
     const User = {
       iduser: '55'
     }
@@ -202,7 +194,7 @@ describe('tests de Cursos', () => {
       .expect(201)
       .expect('Content-Type', /application\/json/)
   })
-  test('POST solicitarcursoprrivado', async () => {
+  test('POST /solicitarcursoprrivado', async () => {
     const User = {
       curso_id: '105',
       usuario_id: '55'
@@ -273,6 +265,12 @@ describe('Suggestions test', () => {
 
 })
 
+
+
+
+
+
+
 //Declaracion de un describe de tests
 // Suit de pruebas para Curso - Usuario
 // Prueba para verificar la inscripcion de un alumno a un curso
@@ -315,6 +313,9 @@ describe('USERS tests', () => {
   })
 });
 
+
+
+
 //Declaracion de un describe de tests
 describe('Tasks tests', () => {
   //Declaracion del test
@@ -335,6 +336,9 @@ describe('Tasks tests', () => {
   })
 
 });
+
+
+
 
 // Declaracion de un describe de tests
 describe('Test de Curso -Usuario', () => {
@@ -381,6 +385,9 @@ describe('Test de Curso -Usuario', () => {
       .expect('Content-Type', /application\/json/)
   })
 })
+
+
+
 
 //Declaracion de un describe de tests
 //Declaracion del test
