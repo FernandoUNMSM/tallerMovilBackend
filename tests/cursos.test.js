@@ -166,6 +166,66 @@ describe('tests de Cursos', () => {
       .expect('Content-Type', /application\/json/)
   })
 
+  test('Get listar tareas entregadas', async () => {
+    //Hacemos la llamada a la ruta de la api
+    await api
+      .get('/list-task-submissions/85')
+      .expect(200)
+      .expect('Content-Type', /application\/json/)
+  })
+
+  test('Get listar tareas entregadas', async () => {
+    //Hacemos la llamada a la ruta de la api
+    await api
+      .get('/list-task-submissions/85')
+      .expect(200)
+      .expect('Content-Type', /application\/json/)
+  })
+
+  test('POST aceptar curso publico', async () => {
+    const User = {
+      iduser: '55'
+    }
+    //Hacemos la llamada a la ruta de la api
+    await api
+      .post('/join-public-course/5')
+      .send(User)
+      .expect(201)
+      .expect('Content-Type', /application\/json/)
+
+    const User2 = {
+      iduser: '85'
+    }
+    await api
+      .post('/join-public-course/5')
+      .send(User2)
+      .expect(201)
+      .expect('Content-Type', /application\/json/)
+  })
+  test('POST solicitarcursoprrivado', async () => {
+    const User = {
+      curso_id: '105',
+      usuario_id: '55'
+    }
+    //Hacemos la llamada a la ruta de la api
+    await api
+      .post('/solicitarCursoPrivado')
+      .send(User)
+      .expect(201)
+      .expect('Content-Type', /application\/json/)
+
+    const User2 = {
+      curso_id: '275',
+      usuario_id: '65'
+    }
+    await api
+      .post('/solicitarCursoPrivado')
+      .send(User2)
+      .expect(201)
+      .expect('Content-Type', /application\/json/)
+  })
+
+
 })
 
 //Declaracion de un describe de tests
