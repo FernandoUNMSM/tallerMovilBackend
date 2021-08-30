@@ -162,7 +162,7 @@ router.post('/register', async (req, res, next) => {
   } catch (e) {
     //Se maneja los errores en caso de haberlo
     //Respuesta a la peticion
-    res.status(400).json(e)
+    next(e)
   }
 })
 

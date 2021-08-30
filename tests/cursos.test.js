@@ -182,7 +182,7 @@ describe('tests de Cursos', () => {
     await api
       .post('/join-public-course/5')
       .send(User)
-      .expect(201)
+      .expect(200)
       .expect('Content-Type', /application\/json/)
 
     const User2 = {
@@ -191,7 +191,7 @@ describe('tests de Cursos', () => {
     await api
       .post('/join-public-course/5')
       .send(User2)
-      .expect(201)
+      .expect(200)
       .expect('Content-Type', /application\/json/)
   })
   test('POST /solicitarcursoprrivado', async () => {
@@ -267,10 +267,6 @@ describe('Suggestions test', () => {
 
 
 
-
-
-
-
 //Declaracion de un describe de tests
 // Suit de pruebas para Curso - Usuario
 // Prueba para verificar la inscripcion de un alumno a un curso
@@ -278,7 +274,7 @@ describe('USERS tests', () => {
   //Declaracion del test
   test('Get all users', async () => {
     //Hacemos la llamada a la ruta de la api
-    const response = await api
+    await api
       .get('/users')
       .expect(200)
       .expect('Content-Type', /application\/json/)
@@ -288,7 +284,7 @@ describe('USERS tests', () => {
   //Declaracion del test
   test('Get one user', async () => {
     //Hacemos la llamada a la ruta de la api
-    const response = await api
+    await api
       .get('/users/35')
       .expect(200)
       .expect('Content-Type', /application\/json/)
@@ -304,7 +300,7 @@ describe('USERS tests', () => {
       correo: 'prueba@prueba.com'
     }
     //Hacemos la llamada a la ruta de la api
-    const response = await api
+    await api
       .post('/useredit/215')
       .send(editUser)
       .expect(200)

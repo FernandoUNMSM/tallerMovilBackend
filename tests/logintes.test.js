@@ -8,6 +8,21 @@ const api = supertest(app)
 const pool = require('../src/database');
 //Nos trae el metodo para hacer querys a la BD
 
+//TEst de la ruta base
+test('base', async () => {
+  await api
+    .get('/')
+    .expect(200)
+    .expect('Content-Type', /application\/json/)
+})
+//TEst de la ruta base
+test('baselogin', async () => {
+  await api
+    .get('/login')
+    .expect(200)
+    .expect('Content-Type', /application\/json/)
+})
+
 //Declaramos el test
 test('Login', async () => {
   const user = {
@@ -22,6 +37,20 @@ test('Login', async () => {
     .expect('Content-Type', /application\/json/)
 
   expect(response.body.user).toBeDefined()
+})
+//Declaramos el test
+test('Login erroneo', async () => {
+  const user = {
+    correo: 'sebasxiommail.com',
+    password: 'pepicho1234'
+  }
+
+  await api
+    .post('/login')
+    .send(user)
+    .expect(401)
+    .expect('Content-Type', /application\/json/)
+
 })
 
 //Declaramos el test
@@ -42,9 +71,29 @@ test('Registro', async () => {
 
   const passwordCreated = response.body.usuario_id
 
-  await pool.query('DELETE FROM usuarios WHERE usuario_id = ?', [passwordCreated])
-
+  pool.query('DELETE FROM usuarios WHERE usuario_id = ?', [passwordCreated])
 })
+
+test('Registro fallido', async () => {
+  const user = {
+    usuario_nombre: 'Usuario Prueba',
+    usuario_apellidos: 'Prueba Apellido',
+    password: "",
+    correo: 'prueba@test.com',
+    url: ''
+  }
+
+  const response = await api
+    .post('/register')
+    .send(user)
+    .expect(400)
+    .expect('Content-Type', /application\/json/)
+
+  const passwordCreated = response.body.usuario_id
+
+  pool.query('DELETE FROM usuarios WHERE usuario_id = ?', [passwordCreated])
+})
+
 //Declaramos el test
 test('Create sugerences', async () => {
   const newSuggestion = {
@@ -61,6 +110,7 @@ test('Create sugerences', async () => {
 
   await pool.query('DELETE FROM sugerencias WHERE sugerencia_id = ?', [idSuggestionCreated])
 })
+
 //Declaracion de un describe de tests
 describe('Material test', () => {
   //Declaracion del test
@@ -103,7 +153,7 @@ describe('Material test', () => {
       .send(newTask)
       .expect(200)
       .expect('Content-Type', /application\/json/)
-    
+
     const idMaterialCreated = response.body.tarea_id
 
     await pool.query('DELETE FROM tareas WHERE tarea_id = ?', [idMaterialCreated])
@@ -119,12 +169,12 @@ describe('Material test', () => {
       tarea_id: 5,
       usuario_id: 1635
     }
-    const response = await api
+    await api
       .post('/entregarTarea')
       .send(newTask)
       .expect(200)
       .expect('Content-Type', /application\/json/)
-    
+
   })
 })
 

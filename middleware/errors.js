@@ -1,20 +1,11 @@
 //Manejo de Errores
 const ERROR_HANDLERS = {
-  //Error Cast
-  CastError: res => res.status(400).send({
-    //Mensahe de error
-    error: 'id used is malformed'
-  }),
   //Error validate
   ValidatorError: res => res.status(400).send({
     //Mensahe de error
     error: '`username` to be unique'
   }),
   //Error Json
-  JsonWebTokenError: res => res.status(401).json({
-    //Mensahe de error
-    error: 'token is invalid'
-  }),
   //Error tipical
   Error: res => res.status(400).json({
     //Mensahe de error

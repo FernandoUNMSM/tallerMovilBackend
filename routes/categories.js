@@ -9,43 +9,27 @@ const pool = require('../src/database');
 //Definicion de la ruta
 router.get('/categories', async (req, res, next) => {
   // Ruta para listar las categorias
-  //Empesamos con el try
-  try {
-    // Aqui va el query para listar las categorias
-    const categories = await pool.query('SELECT * FROM heroku_b3e0382f6ba83ba.categoria');
+  // Aqui va el query para listar las categorias
+  const categories = await pool.query('SELECT * FROM heroku_b3e0382f6ba83ba.categoria');
 
-    //Respuesta a la peticion
-    res.status(200).json({
-      categories
-    })
-    //Manejo de errror
-    //EMpezamos con el catch
-  } catch (err) {
-    //Envio a middleware
-    next(err);
-  }
+  //Respuesta a la peticion
+  res.status(200).json({
+    categories
+  })
 })
 
 router.get('/categories/:cat_id', async (req, res, next) => {
   // Ruta para listar las categorias
 
   const { cat_id } = req.params
-  //Empesamos con el try
-  try {
-    // Aqui va el query para listar las categorias
-    const categories = await pool.query('SELECT * FROM heroku_b3e0382f6ba83ba.categoria WHERE categoria_id = ?', [cat_id]);
+  // Aqui va el query para listar las categorias
+  const categories = await pool.query('SELECT * FROM heroku_b3e0382f6ba83ba.categoria WHERE categoria_id = ?', [cat_id]);
 
-    //Respuesta a la peticion
-    res.status(200).json({
-      categories
-    })
+  //Respuesta a la peticion
+  res.status(200).json({
+    categories
+  })
 
-    //Manejo de errror
-    //EMpezamos con el catch
-  } catch (err) {
-    //Envio a middleware
-    next(err);
-  }
 })
 //exportacion del router
 module.exports = router
