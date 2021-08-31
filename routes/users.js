@@ -114,8 +114,8 @@ router.post('/register', async (req, res, next) => {
 
   //Si el password es nulo la data es inválida
   if (!password) {
-    //Respuesta a la peticionreturn 
-    res.status(400).json({
+    //Respuesta a la peticion return 
+    return res.status(400).json({
       //Se notifica al frontend que la data es inválida
       error: 'data invalid'
     })
