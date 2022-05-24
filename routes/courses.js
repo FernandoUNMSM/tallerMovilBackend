@@ -91,6 +91,8 @@ router.post('/courses', async (req, res, next) => {
 
 })
 
+// Se podria modificar los parametros enviados al procedimiento almacenado para 
+// optimizar el numero de operaciones en dicho SP.
 /**
  * @param {Number} curso_id
  * @param {String} correo
