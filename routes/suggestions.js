@@ -6,6 +6,11 @@ const router = express.Router()
 const pool = require('../src/database');
 //Nos trae el metodo para hacer querys a la BD
 
+
+//Se debe de modificar el metodo GET para listar las sugerencias, 
+//se debe de agregar un Script para que este mande de forma ordenada 
+//la lista de sugerncias
+
 // Metodo GET para listar las sugerencias
 router.get('/suggestions', async (req, res, next) => {
   // Se accede a la BD para listar todos los campos de las sugerencias
