@@ -12,6 +12,9 @@ let corsOptions = {
 //Para detectar por donde se usa la api
 //Se importa el helmet
 let helmet = require("helmet");
+
+
+
 //Para la proteccion de la apio
 //Se crea la app de express
 let app = express(); // Compliant
