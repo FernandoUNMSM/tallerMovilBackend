@@ -135,7 +135,7 @@ router.post('/register', async (req, res, next) => {
 
     //Se accede a la BD y se seleciona al usuario de previamente creado a través del usuario_nombre
     //Se guardan los datos usuario en la variable usuario
-    const usuario = await pool.query('SELECT * FROM usuarios WHERE usuario_nombre = ?', [newUser.usuario_nombre]);
+    const usuario = await pool.query('SELECT * FROM usuarios WHERE name = ?', [newUser.name]);
     //Se devuelve el usuario creado al Frontend
     //Respuesta a la peticion
     res.status(201).json(usuario[0])
