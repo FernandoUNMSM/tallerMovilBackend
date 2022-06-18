@@ -4,12 +4,12 @@ module.exports = {
     //Se declara el json databse
     database: {
         //Datos del host
-        host: 'us-cdbr-east-04.cleardb.com',
+        host: 'us-cdbr-east-05.cleardb.net',
         //Datos del user
-        user: 'b0b2ae9c7354b4',
+        user: 'b2a15a7a405153',
         //Datos de la contraseña
-        password: process.env.PASSWORDSQL,
+        password: '1b937a6f',
         //Database
-        database: 'heroku_b3e0382f6ba83ba'
+        database: 'heroku_347f24c0f96634b'
     }
 }

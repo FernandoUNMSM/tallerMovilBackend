@@ -25,7 +25,7 @@ router.get('/users', async (req, res, next) => {
   //Empesamos con el try
   //Se accede a la BD y se seleciona  a todos los usuarios
   //Todos los datos se guardan en la variable list
-  let list = await pool.query('SELECT * FROM heroku_b3e0382f6ba83ba.usuarios');
+  let list = await pool.query('SELECT * FROM usuarios');
   //Respuesta a la peticion
   res.status(200).json({
     //Se devuelve la lista de usuarios al Frontend
@@ -45,23 +45,11 @@ router.get('/users/:id', async (req, res, next) => {
   try {
     //Se accede a la BD y se seleciona  al usuarios a través de su id única
     //Los datos del usuario se guarda en la variable user
-    let user = await pool.query('SELECT * FROM heroku_b3e0382f6ba83ba.usuarios WHERE usuario_id = ?', [id]);
-    let cursos = await pool.query('SELECT * FROM heroku_b3e0382f6ba83ba.cursos WHERE privacidad_id = 1 AND usuario_id = ?', [id]);
-    let idcursos = cursos.map(curso => curso.curso_id)
-
-    let cantidadEstudiantes = await Promise.all(idcursos.map(async (idcur) => {
-      return pool.query('SELECT COUNT(*) FROM cursos as c JOIN curso_usuario as cu ON c.curso_id = cu.curso_id WHERE c.privacidad_id IN (1,5) AND cu.curso_id = ? GROUP BY cu.curso_id;', [idcur])
-    }))
-
-    let cantidadTotal = cantidadEstudiantes.map(can => (can.length > 0) ? Object.values(can[0])[0] : 0)
-    let suma = cantidadTotal.reduce((a, b) => a + b)
-
+    let user = await pool.query('SELECT * FROM usuarios WHERE usuario_id = ?', [id]);
     //Respuesta a la peticion
     res.status(200).json({
       //Se devuelve el usuario al Frontend
       user,
-      cantidadEstudiantes: suma,
-      cantidadCursosPublicos: cursos.length
     })
 
     //Manejo de errror
@@ -91,11 +79,11 @@ router.post('/useredit/:id', upload.fields([]), async (req, res, next) => {
   }
 
   //Se accede a la BD y se realiza un update a traves de la variable newUser y el parametro id
-  await pool.query('UPDATE heroku_b3e0382f6ba83ba.usuarios set ? WHERE usuario_id = ?', [newUser, id]);
+  await pool.query('UPDATE usuarios set ? WHERE usuario_id = ?', [newUser, id]);
 
   //Se accede a la BD y se seleciona al usuario previamente updateado a través del parametro id
   //Se guardan los nuevos datos del usuario en la variable user1
-  const user1 = await pool.query('SELECT * FROM heroku_b3e0382f6ba83ba.usuarios WHERE usuario_id = ?', [id]);
+  const user1 = await pool.query('SELECT * FROM usuarios WHERE usuario_id = ?', [id]);
 
   //Respuesta a la peticion
   res.status(200).json({
@@ -110,11 +98,11 @@ router.post('/useredit/:id', upload.fields([]), async (req, res, next) => {
 //Metodo POST para crear un nuevo usuario
 router.post('/register', async (req, res, next) => {
   //Parámetros necesarios para crear al nuevo usuario
-  const { usuario_nombre, usuario_apellidos, password, correo, url } = req.body
+  const { name, codstud, password, email, facultad, escuela } = req.body
 
   //Si el password es nulo la data es inválida
   if (!password) {
-    //Respuesta a la peticion return 
+    //Respuesta a la peticion return
     return res.status(400).json({
       //Se notifica al frontend que la data es inválida
       error: 'data invalid'
@@ -132,21 +120,22 @@ router.post('/register', async (req, res, next) => {
 
   //se crear la variable newUser con los campos necesarios para guardarla en la BD
   let newUser = {
-    usuario_nombre,
-    usuario_apellidos,
-    usuario_contrasenia,
-    correo,
-    url
+    name,
+    codstud,
+    email,
+    facultad,
+    escuela,
+    password: usuario_contrasenia
   }
 
   //Empesamos con el try
   try {
     //Se accede a la BD y se inserta o guarda al muevo usuario
-    await pool.query('INSERT INTO heroku_b3e0382f6ba83ba.usuarios  set ? ', newUser);
+    await pool.query('INSERT INTO usuarios  set ? ', newUser);
 
     //Se accede a la BD y se seleciona al usuario de previamente creado a través del usuario_nombre
     //Se guardan los datos usuario en la variable usuario
-    const usuario = await pool.query('SELECT * FROM heroku_b3e0382f6ba83ba.usuarios WHERE usuario_nombre = ?', [newUser.usuario_nombre]);
+    const usuario = await pool.query('SELECT * FROM usuarios WHERE usuario_nombre = ?', [newUser.usuario_nombre]);
     //Se devuelve el usuario creado al Frontend
     //Respuesta a la peticion
     res.status(201).json(usuario[0])

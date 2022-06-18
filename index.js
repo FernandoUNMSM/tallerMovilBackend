@@ -6,7 +6,7 @@ const express = require('express')
 //Para poder usar el framework de express
 //Se crean las opciones de cors
 let corsOptions = {
-  //Se declara el origin 
+  //Se declara el origin
   origin: '*' // Compliant
 };
 //Para detectar por donde se usa la api
