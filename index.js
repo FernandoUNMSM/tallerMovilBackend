@@ -37,14 +37,9 @@ app.use(express.json())
 const users = require('./routes/users')
 //Importamos la ruta login
 const login = require('./routes/login')
-//Importamos la ruta course
-const course = require('./routes/courses')
+
 //Importamos la ruta suggestion
 const suggestions = require('./routes/suggestions')
-//Importamos la ruta categories
-const categories = require('./routes/categories')
-//Importamos la ruta taks
-const tasks = require('./routes/tasks')
 
 //Importamos la ruta not found
 const notFound = require('./middleware/notFound')
