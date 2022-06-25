@@ -51,13 +51,9 @@ app.use(login)
 //Se usa la ruta users
 app.use(users)
 //Se usa la ruta course
-app.use(course)
 //Se usa la ruta suggestion
-app.use(suggestions)
 //Se usa la ruta categories
-app.use(categories)
 //Se usa la ruta taks
-app.use(tasks)
 //Se declara la ruta base
 app.get('/', (req, res) => {
   //Resopuesta a la peticion
