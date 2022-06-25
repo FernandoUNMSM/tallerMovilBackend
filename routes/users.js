@@ -59,23 +59,32 @@ router.get('/users/:id', async (req, res, next) => {
 })
 
 // Metodo get para editar al usuario
-router.post('/useredit/:id', upload.fields([]), async (req, res, next) => {
+router.post('/edituser/:id', async (req, res, next) => {
   // Empesamos con el try
   // Parámetro id extraido de la ruta
   const { id } = req.params
-  // Parámetros extraidos del cuerpo  enviado por el frontend
-  const { usuario_nombre, usuario_apellidos, url, correo, descripcion } = req.body
+  const { name, codstud, facultad, escuela } = req.body
   // Constante newUser user donde se guardan los parámetros del cuerpo
-  console.log(req.body)
 
   const newUser = {
-    usuario_nombre,
-    usuario_apellidos,
-    correo,
-    url,
-    descripcion
   }
 
+  if (name !== undefined) {
+    newUser['name'] = name
+  }
+
+  if (codstud !== undefined) {
+    newUser['codstud'] = codstud
+  }
+
+  if (facultad !== undefined) {
+    newUser['facultad'] = facultad
+  }
+
+  if (escuela !== undefined) {
+    newUser['escuela'] = escuela
+  }
+  console.log(newUser)
   // Se accede a la BD y se realiza un update a traves de la variable newUser y el parametro id
   await pool.query('UPDATE usuarios set ? WHERE usuario_id = ?', [newUser, id])
 
@@ -88,8 +97,6 @@ router.post('/useredit/:id', upload.fields([]), async (req, res, next) => {
     // Se devuelve el usuario updateado al Frontend
     user1
   })
-  // Manejo de errror
-  // EMpezamos con el catch
 })
 
 // Metodo POST para crear un nuevo usuario
