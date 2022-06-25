@@ -62,7 +62,7 @@ app.use(notFound)
 // Control de errores
 app.use(errors)
 // Se declara el puerto
-const PORT = process.env.PORT || 3000
+const PORT = process.env.PORT || 3002
 // Condicional para el testing
 if (process.env.NODE_ENV !== 'test') {
   // Se crea el escuchador

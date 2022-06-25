@@ -57,6 +57,28 @@ router.get('/users/:id', async (req, res, next) => {
     next(err)
   }
 })
+router.delete('/users/:id', async (req, res, next) => {
+  // Parámetro id del usuario para listarlo
+  const { id } = req.params
+  // Empesamos con el try
+  console.log(id)
+  try {
+    // Se accede a la BD y se seleciona  al usuarios a través de su id única
+    // Los datos del usuario se guarda en la variable user
+    let user = await pool.query('DELETE FROM usuarios WHERE usuario_id = ?', [id])
+    // Respuesta a la peticion
+    res.status(200).json({
+      // Se devuelve el usuario al Frontend
+      user
+    })
+
+    // Manejo de errror
+    // EMpezamos con el catch
+  } catch (err) {
+    // Envio a middleware
+    next(err)
+  }
+})
 
 // Metodo get para editar al usuario
 router.post('/edituser/:id', async (req, res, next) => {
