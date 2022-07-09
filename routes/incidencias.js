@@ -6,7 +6,7 @@ const router = express.Router()
 // conexion a la BD
 const pool = require('../src/database')
 
-router.post('/incidencia', async (req, res, next) => {
+router.post('/incidencias', async (req, res, next) => {
   // Parámetro id del usuario para listarlo
   const { titulo, lugar, categoria, descripcion, foto, id_usuario: id_usuarios } = req.body
   // Empesamos con el try
@@ -39,7 +39,7 @@ router.post('/incidencia', async (req, res, next) => {
     next(err)
   }
 })
-router.get('/incidencia/:id', async (req, res, next) => {
+router.get('/incidencias/:id', async (req, res, next) => {
   // Parámetro id del usuario para listarlo
   const { id } = req.params
   // Empesamos con el try
