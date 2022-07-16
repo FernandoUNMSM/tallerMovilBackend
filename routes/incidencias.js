@@ -7,10 +7,7 @@ const router = express.Router()
 const pool = require('../src/database')
 
 router.post('/incidencias', async (req, res, next) => {
-  // Parámetro id del usuario para listarlo
   const { titulo, lugar, categoria, descripcion, foto, id_usuario: id_usuarios } = req.body
-  // Empesamos con el try
-
   const newIncidencia = {
     titulo,
     lugar,
@@ -21,14 +18,8 @@ router.post('/incidencias', async (req, res, next) => {
   }
   console.log(newIncidencia)
   try {
-    // Se accede a la BD y se seleciona  al usuarios a través de su id única
-    // Los datos del usuario se guarda en la variable user
     const a = await pool.query('INSERT INTO incidencias set ? ', newIncidencia)
-    // const incidencia = await pool.query('SELECT * FROM incidencias WHERE name = ?', [newUser.name])
-    // Respuesta a la peticion
-    console.log(a)
     res.status(200).json({
-      // Se devuelve el usuario al Frontend
       a
     })
 
@@ -40,18 +31,11 @@ router.post('/incidencias', async (req, res, next) => {
   }
 })
 router.get('/incidencias/:id', async (req, res, next) => {
-  // Parámetro id del usuario para listarlo
   const { id } = req.params
-  // Empesamos con el try
 
   try {
-    // Se accede a la BD y se seleciona  al usuarios a través de su id única
-    // Los datos del usuario se guarda en la variable user
     const incidencias = await pool.query('SELECT * FROM incidencias WHERE id_usuarios = ?', [id])
-    // const incidencia = await pool.query('SELECT * FROM incidencias WHERE name = ?', [newUser.name])
-    // Respuesta a la peticion
     res.status(200).json({
-      // Se devuelve el usuario al Frontend
       incidencias
     })
 
