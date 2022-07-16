@@ -58,8 +58,6 @@ router.get('/users/:id', async (req, res, next) => {
   }
 })
 
-
-
 router.delete('/users/:id', async (req, res, next) => {
   // Parámetro id del usuario para listarlo
   const { id } = req.params
@@ -174,7 +172,5 @@ router.post('/register', async (req, res, next) => {
     next(e)
   }
 })
-
-
 
 module.exports = router
