@@ -12,10 +12,12 @@ let corsOptions = {
 // Para detectar por donde se usa la api
 // Se importa el helmet
 let helmet = require('helmet')
+// const formidable = require('express-formidable')
 
+let app = express() // Compliant
+// app.use(formidable())
 // Para la proteccion de la apio
 // Se crea la app de express
-let app = express() // Compliant
 // Se crea una instancia de express
 // Se usa el helmet
 app.use(helmet.hidePoweredBy())
@@ -27,7 +29,7 @@ const cors = require('cors')
 app.use(cors(corsOptions))
 // Para manejar las opciones
 // Se usan las urlencoded
-app.use(express.urlencoded({extended: true, limit: '8mb'}))
+app.use(express.urlencoded({extended: true}))
 // Se usa el json
 app.use(express.json())
 
@@ -36,6 +38,7 @@ const users = require('./routes/users')
 // Importamos la ruta login
 const login = require('./routes/login')
 const incidencia = require('./routes/incidencias')
+const images = require('./routes/images')
 
 // Importamos la ruta not found
 const notFound = require('./middleware/notFound')
@@ -46,6 +49,7 @@ const errors = require('./middleware/errors')
 app.use(login)
 // Se usa la ruta users
 app.use(users)
+app.use(images)
 app.use(incidencia)
 // Se usa la ruta course
 // Se usa la ruta suggestion

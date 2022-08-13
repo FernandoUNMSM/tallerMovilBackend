@@ -46,6 +46,20 @@ router.get('/incidencias/:id', async (req, res, next) => {
     next(err)
   }
 })
+router.get('/incidencias', async (req, res, next) => {
+  try {
+    const incidencias = await pool.query('SELECT * FROM incidencias')
+    res.status(200).json({
+      incidencias
+    })
+
+    // Manejo de errror
+    // EMpezamos con el catch
+  } catch (err) {
+    // Envio a middleware
+    next(err)
+  }
+})
 
 // Metodo get para eliminar la unica incidencia.
 router.delete('/incident/:id', async (req, res, next) => {
